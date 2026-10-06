@@ -1,3 +1,11 @@
+# Next.js
+/.next/
+/out/
+/build
+*.tsbuildinfo
+
+# Env files
+.env*.local
 
 # Playwright
 node_modules/
