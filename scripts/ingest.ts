@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import child_process from 'node:child_process';
 import { createClient } from '@supabase/supabase-js';
 import { ingestPatchDataset } from '../lib/ingestion/engine.ts';
 import { validatePatchDataset } from '../lib/ingestion/validation.ts';
@@ -58,8 +59,31 @@ async function run() {
   let adminKey: string;
 
   if (target === 'remote') {
-    const envUrl = process.env.SUPABASE_URL;
-    const envKey = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+    let envUrl = process.env.SUPABASE_URL;
+    let envKey = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!envUrl || !envKey) {
+      try {
+        const refPath = path.resolve('supabase/.temp/project-ref');
+        const projectRef = fs.existsSync(refPath) ? fs.readFileSync(refPath, 'utf8').trim() : 'nzaytawkoyscjovgtstt';
+        if (!envUrl) {
+          envUrl = `https://${projectRef}.supabase.co`;
+        }
+        if (!envKey) {
+          const out = child_process.execSync(
+            `npx supabase projects api-keys --project-ref ${projectRef} --reveal -o json`,
+            { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] }
+          );
+          const keys = JSON.parse(out);
+          const secretKeyObj = keys.find((k: any) => k.name === 'service_role') || keys.find((k: any) => k.type === 'secret');
+          if (secretKeyObj && secretKeyObj.api_key) {
+            envKey = secretKeyObj.api_key;
+          }
+        }
+      } catch {
+        // Fallback handled below
+      }
+    }
 
     if (!envUrl) {
       console.error('ERROR: SUPABASE_URL environment variable is required for remote ingestion.');
@@ -129,6 +153,18 @@ async function run() {
   console.log(`  - Echo Patch Data:       ${report.counts.echoPatchData}`);
   console.log(`  - Sonatas:               ${report.counts.sonatas}`);
   console.log(`  - Sonata Patch Data:     ${report.counts.sonataPatchData}`);
+  console.log(`  - Enemies:               ${report.counts.enemies}`);
+  console.log(`  - Enemy Resistances:     ${report.counts.enemyResistances}`);
+  console.log(`  - Enemy Modifiers:       ${report.counts.enemyModifiers}`);
+  console.log(`  - Area Effects:          ${report.counts.areaEffects}`);
+  console.log(`  - ToA Cycles:            ${report.counts.toaCycles}`);
+  console.log(`  - ToA Zones:             ${report.counts.toaZones}`);
+  console.log(`  - ToA Towers:            ${report.counts.toaTowers}`);
+  console.log(`  - ToA Stages:            ${report.counts.toaStages}`);
+  console.log(`  - Stage Area Effects:    ${report.counts.stageAreaEffects}`);
+  console.log(`  - Challenge Goals:       ${report.counts.challengeGoals}`);
+  console.log(`  - ToA Waves:             ${report.counts.toaWaves}`);
+  console.log(`  - ToA Enemy Instances:   ${report.counts.toaEnemyInstances}`);
   console.log('\nProvenance Sources:');
   report.provenanceSourcesUsed.forEach(s => console.log(`  - ${s}`));
   console.log('\nExternal URLs:');

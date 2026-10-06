@@ -174,6 +174,101 @@ export interface SonataInput {
   patch_data: SonataPatchDataInput;
 }
 
+export type EnemyClass = 'Common' | 'Elite' | 'Overlord' | 'Calamity';
+
+export type ResistanceElement =
+  | 'Glacio'
+  | 'Fusion'
+  | 'Electro'
+  | 'Aero'
+  | 'Spectro'
+  | 'Havoc'
+  | 'Physical';
+
+export type ModifierType =
+  | 'SHIELD_BAR'
+  | 'ENRAGE_RESISTANCE'
+  | 'DAMAGE_IMMUNITY'
+  | 'STAT_SCALING';
+
+export interface EnemyResistanceInput {
+  element: ResistanceElement;
+  resistance_ratio: number;
+  provenance_source_name: string;
+}
+
+export interface EnemyModifierInput {
+  modifier_type: ModifierType;
+  parameters?: Record<string, unknown>;
+  is_active?: boolean;
+  provenance_source_name: string;
+}
+
+export interface EnemyInput {
+  name: string;
+  enemy_class: EnemyClass;
+  code: string;
+  provenance_source_name?: string;
+  resistances?: EnemyResistanceInput[];
+  modifiers?: EnemyModifierInput[];
+}
+
+export interface AreaEffectInput {
+  source_id: string;
+  name: string;
+  description: string;
+  gameplay_effect: GameplayEffectInput;
+}
+
+export interface ToAEnemyInstanceInput {
+  enemy_code: string;
+  level: number;
+  spawn_order: number;
+}
+
+export interface ToAWaveInput {
+  wave_index: number;
+  enemy_instances: ToAEnemyInstanceInput[];
+}
+
+export interface ChallengeGoalInput {
+  goal_order: number;
+  target_time_seconds: number;
+  points?: number;
+}
+
+export interface ToAStageInput {
+  stage_index: number;
+  vigor_cost: number;
+  difficulty?: number;
+  area_effect_source_ids: string[];
+  challenge_goals: ChallengeGoalInput[];
+  waves: ToAWaveInput[];
+}
+
+export interface ToATowerInput {
+  tower_order: number;
+  tower_name: string;
+  area_num?: number;
+  stages: ToAStageInput[];
+}
+
+export type ToAZoneType = 'StableZone' | 'ExperimentalZone' | 'HazardZone';
+
+export interface ToAZoneInput {
+  zone_type: ToAZoneType;
+  towers: ToATowerInput[];
+}
+
+export interface ToACycleInput {
+  cycle_code: string;
+  cycle_name: string;
+  start_time: string;
+  end_time: string;
+  provenance_source_name: string;
+  zones: ToAZoneInput[];
+}
+
 export interface PatchDataset {
   patch: PatchInput;
   provenance_sources: ProvenanceSourceInput[];
@@ -183,6 +278,9 @@ export interface PatchDataset {
   weapons?: WeaponInput[];
   echoes?: EchoInput[];
   sonatas?: SonataInput[];
+  enemies?: EnemyInput[];
+  area_effects?: AreaEffectInput[];
+  toa_cycles?: ToACycleInput[];
 }
 
 export interface IngestionCounts {
@@ -204,6 +302,18 @@ export interface IngestionCounts {
   echoPatchData: number;
   sonatas: number;
   sonataPatchData: number;
+  enemies: number;
+  enemyResistances: number;
+  enemyModifiers: number;
+  areaEffects: number;
+  toaCycles: number;
+  toaZones: number;
+  toaTowers: number;
+  toaStages: number;
+  stageAreaEffects: number;
+  challengeGoals: number;
+  toaWaves: number;
+  toaEnemyInstances: number;
 }
 
 export interface IngestionReport {
@@ -215,3 +325,4 @@ export interface IngestionReport {
   omissions: string[];
   durationMs: number;
 }
+

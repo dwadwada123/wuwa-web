@@ -90,7 +90,7 @@ VALUES (
 -- ToA 3.7 Stage hierarchy fixtures
 INSERT INTO public.toa_cycles (id, patch_id, cycle_name, start_time, end_time)
 VALUES ('cccccccc-3737-3737-3737-373737373737', '11111111-1111-1111-1111-111111111111', 'Cycle 3.7', now(), now() + interval '14 days')
-ON CONFLICT (id) DO NOTHING;
+ON CONFLICT (id, patch_id) DO NOTHING;
 
 INSERT INTO public.toa_zones (id, cycle_id, patch_id, zone_type)
 VALUES ('00000003-3737-3737-3737-000000000001', 'cccccccc-3737-3737-3737-373737373737', '11111111-1111-1111-1111-111111111111', 'HazardZone')

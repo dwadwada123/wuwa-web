@@ -38,6 +38,11 @@ test('Ingestion - Parsing and Structure Integrity', () => {
   assert.equal(suoming.element, 'Electro');
   assert.equal(suoming.weapon_type, 'Sword');
   assert.equal(suoming.rarity, 5);
+
+  // Verify ToA Season 40 data is present
+  assert.equal(dataset.enemies?.length, 83, 'Enemies count must be 83 (70 existing + 13 ToA additions)');
+  assert.ok(dataset.area_effects && dataset.area_effects.length >= 9, 'Must have at least 9 area effects');
+  assert.equal(dataset.toa_cycles?.length, 1, 'Must have 1 ToA cycle');
 });
 
 test('Ingestion - Validation Layer Passes Valid Dataset', () => {
@@ -315,6 +320,287 @@ test('Ingestion - Deterministic UUID Generator Consistency', () => {
   assert.match(id1, /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/);
 });
 
+test('Ingestion - Valid Enemy Parsing', () => {
+  const dataset = loadTestDataset();
+  assert.ok(dataset.enemies && dataset.enemies.length >= 60, 'Must have at least 60 enemies in dataset');
+  assert.equal(dataset.enemies.length, 83, 'Patch 3.7 dataset must contain exactly 83 canonical enemies (70 existing + 13 ToA additions)');
+
+  const classes = dataset.enemies.reduce((acc, e) => {
+    acc[e.enemy_class] = (acc[e.enemy_class] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  assert.equal(classes.Calamity, 11, 'Must have 11 Calamity bosses');
+  assert.equal(classes.Overlord, 5, 'Must have 5 Overlord bosses');
+  assert.equal(classes.Elite, 28, 'Must have 28 Elite enemies');
+  assert.equal(classes.Common, 39, 'Must have 39 Common enemies');
+
+  // Verify key 3.7 additions
+  assert.ok(dataset.enemies.some(e => e.name === 'Formrender' && e.enemy_class === 'Elite'));
+  assert.ok(dataset.enemies.some(e => e.name === 'Soulfrayer' && e.enemy_class === 'Elite'));
+  assert.ok(dataset.enemies.some(e => e.name === 'Skywatch Lancer' && e.enemy_class === 'Common'));
+  assert.ok(dataset.enemies.some(e => e.name === 'Bloomburst Puppet' && e.enemy_class === 'Common'));
+  assert.ok(dataset.enemies.some(e => e.name === 'Jade Nether Serpent' && e.enemy_class === 'Common'));
+  assert.ok(dataset.enemies.some(e => e.name === 'Suhsin the Inevitable' && e.enemy_class === 'Calamity'));
+
+  // Verify resistance completeness (7 elements per enemy)
+  for (const enemy of dataset.enemies) {
+    assert.ok(enemy.resistances, `Enemy ${enemy.name} must have resistances`);
+    assert.equal(enemy.resistances.length, 7, `Enemy ${enemy.name} must have 7 elemental resistances`);
+  }
+});
+
+test('Ingestion - Invalid Enemy Class Rejected', () => {
+  const dataset = loadTestDataset();
+  const corrupted = JSON.parse(JSON.stringify(dataset));
+  corrupted.enemies[0].enemy_class = 'Mythic';
+
+  const result = validatePatchDataset(corrupted);
+  assert.equal(result.isValid, false);
+  assert.ok(result.errors.some(e => e.message.includes('Invalid enemy class: Mythic')));
+});
+
+test('Ingestion - Invalid Resistance Element Rejected', () => {
+  const dataset = loadTestDataset();
+  const corrupted = JSON.parse(JSON.stringify(dataset));
+  corrupted.enemies[0].resistances[0].element = 'Dark';
+
+  const result = validatePatchDataset(corrupted);
+  assert.equal(result.isValid, false);
+  assert.ok(result.errors.some(e => e.message.includes('Invalid resistance element: Dark')));
+});
+
+test('Ingestion - Out-of-Range Resistance Rejected', () => {
+  const dataset = loadTestDataset();
+  const corruptedHigh = JSON.parse(JSON.stringify(dataset));
+  corruptedHigh.enemies[0].resistances[0].resistance_ratio = 2.5;
+
+  const resultHigh = validatePatchDataset(corruptedHigh);
+  assert.equal(resultHigh.isValid, false);
+  assert.ok(resultHigh.errors.some(e => e.message.includes('Resistance ratio must be a number between -1.0000 and 2.0000')));
+
+  const corruptedLow = JSON.parse(JSON.stringify(dataset));
+  corruptedLow.enemies[0].resistances[0].resistance_ratio = -1.5;
+
+  const resultLow = validatePatchDataset(corruptedLow);
+  assert.equal(resultLow.isValid, false);
+  assert.ok(resultLow.errors.some(e => e.message.includes('Resistance ratio must be a number between -1.0000 and 2.0000')));
+});
+
+test('Ingestion - Invalid Modifier Type Rejected', () => {
+  const dataset = loadTestDataset();
+  const corrupted = JSON.parse(JSON.stringify(dataset));
+  corrupted.enemies[0].modifiers.push({
+    modifier_type: 'BERSERK_RAMPAGE',
+    parameters: {},
+    is_active: true,
+    provenance_source_name: dataset.provenance_sources[0].source_name
+  });
+
+  const result = validatePatchDataset(corrupted);
+  assert.equal(result.isValid, false);
+  assert.ok(result.errors.some(e => e.message.includes('Invalid modifier type: BERSERK_RAMPAGE')));
+});
+
+test('Ingestion - Missing Provenance on Enemy Data Rejected', () => {
+  const dataset = loadTestDataset();
+  const corrupted = JSON.parse(JSON.stringify(dataset));
+  corrupted.enemies[0].resistances[0].provenance_source_name = 'Nonexistent Source';
+
+  const result = validatePatchDataset(corrupted);
+  assert.equal(result.isValid, false);
+  assert.ok(result.errors.some(e => e.message.includes('Missing or unregistered provenance source for resistance: Nonexistent Source')));
+});
+
+test('Ingestion - Duplicate Enemy Identity Rejected', () => {
+  const dataset = loadTestDataset();
+  const corrupted = JSON.parse(JSON.stringify(dataset));
+  const clone = JSON.parse(JSON.stringify(corrupted.enemies[0]));
+  corrupted.enemies.push(clone);
+
+  const result = validatePatchDataset(corrupted);
+  assert.equal(result.isValid, false);
+  assert.ok(result.errors.some(e => e.message.includes('Duplicate enemy identity') || e.message.includes('Duplicate enemy code')));
+});
+
+test('Ingestion - Deterministic UUID Generator for Enemies Consistency', () => {
+  const id1 = deterministicUuid('enemy:CROWNLESS');
+  const id2 = deterministicUuid('enemy:CROWNLESS');
+  const id3 = deterministicUuid('enemy:BELL_BORNE_GEOCHELONE');
+
+  assert.equal(id1, id2, 'Identical enemy codes must produce identical UUIDs');
+  assert.notEqual(id1, id3, 'Distinct enemy codes must produce distinct UUIDs');
+  assert.match(id1, /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/);
+
+  const resId1 = deterministicUuid('enemy_resistance:3.7:CROWNLESS:Havoc');
+  const resId2 = deterministicUuid('enemy_resistance:3.7:CROWNLESS:Havoc');
+  assert.equal(resId1, resId2);
+
+  const modId1 = deterministicUuid('enemy_modifier:3.7:CROWNLESS:ENRAGE_RESISTANCE');
+  const modId2 = deterministicUuid('enemy_modifier:3.7:CROWNLESS:ENRAGE_RESISTANCE');
+  assert.equal(modId1, modId2);
+});
+
+test('Ingestion - Patch Consistency for Enemy Resistances and Modifiers', () => {
+  const dataset = loadTestDataset();
+  assert.equal(dataset.patch.version, '3.7');
+
+  for (const enemy of dataset.enemies || []) {
+    for (const res of enemy.resistances || []) {
+      assert.ok(res.element, `Resistance must define element on enemy ${enemy.code}`);
+      assert.ok(typeof res.resistance_ratio === 'number', `Resistance ratio must be numeric on enemy ${enemy.code}`);
+      assert.ok(res.provenance_source_name, `Resistance must specify provenance on enemy ${enemy.code}`);
+    }
+    for (const mod of enemy.modifiers || []) {
+      assert.ok(mod.modifier_type, `Modifier must specify modifier_type on enemy ${enemy.code}`);
+      assert.ok(mod.provenance_source_name, `Modifier must specify provenance on enemy ${enemy.code}`);
+    }
+  }
+});
+
+test('Ingestion - Deterministic ToA Cycle Identity & Cross-Patch Compatibility', async () => {
+  const supabase = createClient(LOCAL_SUPABASE_URL, LOCAL_SERVICE_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false }
+  });
+
+  const cycleId1 = deterministicUuid('toa-cycle:season:40');
+  const cycleId2 = deterministicUuid('toa-cycle:season:40');
+  assert.equal(cycleId1, cycleId2, 'Same natural key must produce identical cycle ID repeatedly');
+
+  // Verify cross-patch snapshot coexistence: Season 40 on Patch 3.6 and Patch 3.7
+  const patch36Id = deterministicUuid('patch:3.6-test-fixture');
+  const patch37Id = deterministicUuid('patch:3.7-test-fixture');
+
+  try {
+    const { error: patch36Error } = await supabase.from('patches').upsert({
+      id: patch36Id,
+      version: '3.6-test-fixture',
+      release_date: '2026-08-15'
+    }, { onConflict: 'version' });
+    assert.equal(patch36Error, null, `Fixture patch 3.6 upsert error: ${patch36Error?.message}`);
+
+    const { error: patch37Error } = await supabase.from('patches').upsert({
+      id: patch37Id,
+      version: '3.7-test-fixture',
+      release_date: '2026-09-30'
+    }, { onConflict: 'version' });
+    assert.equal(patch37Error, null, `Fixture patch 3.7 upsert error: ${patch37Error?.message}`);
+
+    // Insert Season 40 snapshot for 3.6
+    const { error: cycle36Error } = await supabase.from('toa_cycles').upsert({
+      id: cycleId1,
+      patch_id: patch36Id,
+      cycle_name: 'Hazard Zone (Season 40) - 3.6 Snapshot',
+      start_time: '2026-09-14T04:00:00+08:00',
+      end_time: '2026-10-12T03:59:59+08:00'
+    }, { onConflict: 'id, patch_id' });
+    assert.equal(cycle36Error, null, `Cycle 3.6 error: ${cycle36Error?.message}`);
+
+    // Insert Season 40 snapshot for 3.7
+    const { error: cycle37Error } = await supabase.from('toa_cycles').upsert({
+      id: cycleId1,
+      patch_id: patch37Id,
+      cycle_name: 'Hazard Zone (Season 40) - 3.7 Snapshot',
+      start_time: '2026-09-14T04:00:00+08:00',
+      end_time: '2026-10-12T03:59:59+08:00'
+    }, { onConflict: 'id, patch_id' });
+    assert.equal(cycle37Error, null, `Cycle 3.7 error: ${cycle37Error?.message}`);
+
+    // Verify both snapshots coexist with the same logical cycle ID
+    const { data: rows, error: selectError } = await supabase
+      .from('toa_cycles')
+      .select('id, patch_id, cycle_name')
+      .eq('id', cycleId1);
+
+    assert.equal(selectError, null);
+    assert.ok(rows && rows.length >= 2, 'Both patch snapshots must coexist for the same logical cycle');
+  } finally {
+    // Clean up test fixtures in correct order (child before parent)
+    await supabase.from('toa_cycles').delete().in('patch_id', [patch36Id, patch37Id]);
+    await supabase.from('patches').delete().in('id', [patch36Id, patch37Id]);
+  }
+});
+
+test('Ingestion - ToA Structure Validation (Towers, Floors, Costs, Goals)', () => {
+  const dataset = loadTestDataset();
+  assert.ok(dataset.toa_cycles && dataset.toa_cycles.length === 1);
+
+  const cycle = dataset.toa_cycles[0];
+  assert.equal(cycle.cycle_code, 'season:40');
+  assert.equal(cycle.cycle_name, 'Hazard Zone (Season 40)');
+  assert.equal(cycle.zones.length, 1);
+
+  const zone = cycle.zones[0];
+  assert.equal(zone.zone_type, 'HazardZone');
+  assert.equal(zone.towers.length, 3, 'Must have exactly 3 towers');
+
+  const resonant = zone.towers.find(t => t.tower_order === 1);
+  const hazard = zone.towers.find(t => t.tower_order === 2);
+  const echoing = zone.towers.find(t => t.tower_order === 3);
+
+  assert.ok(resonant && hazard && echoing, 'Must contain Resonant, Hazard, and Echoing towers');
+  assert.equal(resonant.stages.length, 4);
+  assert.equal(hazard.stages.length, 4);
+  assert.equal(echoing.stages.length, 4);
+
+  // Vigor costs: Resonant [1,2,3,4], Hazard [5,5,5,5], Echoing [1,2,3,4] -> Total = 40
+  assert.deepEqual(resonant.stages.map(s => s.vigor_cost), [1, 2, 3, 4]);
+  assert.deepEqual(hazard.stages.map(s => s.vigor_cost), [5, 5, 5, 5]);
+  assert.deepEqual(echoing.stages.map(s => s.vigor_cost), [1, 2, 3, 4]);
+
+  const totalVigor = zone.towers.reduce(
+    (sum, t) => sum + t.stages.reduce((sSum, st) => sSum + st.vigor_cost, 0),
+    0
+  );
+  assert.equal(totalVigor, 40, 'Total Vigor across all 12 stages must be exactly 40');
+
+  // Challenge goal thresholds
+  assert.deepEqual(resonant.stages[0].challenge_goals.map(g => g.target_time_seconds), [0, 90, 150]);
+  assert.deepEqual(resonant.stages[1].challenge_goals.map(g => g.target_time_seconds), [0, 90, 150]);
+  assert.deepEqual(resonant.stages[2].challenge_goals.map(g => g.target_time_seconds), [0, 120, 180]);
+  assert.deepEqual(resonant.stages[3].challenge_goals.map(g => g.target_time_seconds), [0, 120, 180]);
+
+  assert.deepEqual(hazard.stages[0].challenge_goals.map(g => g.target_time_seconds), [90, 150, 180]);
+  assert.deepEqual(hazard.stages[1].challenge_goals.map(g => g.target_time_seconds), [90, 150, 180]);
+  assert.deepEqual(hazard.stages[2].challenge_goals.map(g => g.target_time_seconds), [60, 120, 150]);
+  assert.deepEqual(hazard.stages[3].challenge_goals.map(g => g.target_time_seconds), [60, 120, 150]);
+
+  assert.deepEqual(echoing.stages[0].challenge_goals.map(g => g.target_time_seconds), [0, 90, 150]);
+  assert.deepEqual(echoing.stages[1].challenge_goals.map(g => g.target_time_seconds), [0, 90, 150]);
+  assert.deepEqual(echoing.stages[2].challenge_goals.map(g => g.target_time_seconds), [0, 120, 180]);
+  assert.deepEqual(echoing.stages[3].challenge_goals.map(g => g.target_time_seconds), [0, 120, 180]);
+
+  // Completion goal semantics: target_time_seconds === 0 (not 1)
+  assert.equal(resonant.stages[0].challenge_goals[0].target_time_seconds, 0);
+  assert.equal(echoing.stages[0].challenge_goals[0].target_time_seconds, 0);
+
+  // Area effects preservation
+  assert.deepEqual(resonant.stages[0].area_effect_source_ids, ['92007113', '92008110']);
+  assert.deepEqual(hazard.stages[2].area_effect_source_ids, ['92008205', '92008196', '92008197']);
+  assert.deepEqual(echoing.stages[0].area_effect_source_ids, ['92007115', '92008030']);
+
+  // Enemy instances count
+  let enemyInstanceCount = 0;
+  for (const t of zone.towers) {
+    for (const s of t.stages) {
+      for (const w of s.waves) {
+        enemyInstanceCount += w.enemy_instances.length;
+      }
+    }
+  }
+  assert.equal(enemyInstanceCount, 27, 'Total enemy instances across 12 stages must be 27');
+});
+
+test('Ingestion - Validation Layer Rejects Negative Target Time Seconds', () => {
+  const dataset = loadTestDataset();
+  const corrupted = JSON.parse(JSON.stringify(dataset));
+  corrupted.toa_cycles[0].zones[0].towers[0].stages[0].challenge_goals[0].target_time_seconds = -1;
+
+  const result = validatePatchDataset(corrupted);
+  assert.equal(result.isValid, false);
+  assert.ok(result.errors.some(e => e.message.includes('target_time_seconds must be a non-negative integer (>= 0)')));
+});
+
 test('Ingestion - Deterministic Ingestion & Idempotency Guarantee', async () => {
   const supabase = createClient(LOCAL_SUPABASE_URL, LOCAL_SERVICE_KEY, {
     auth: { persistSession: false, autoRefreshToken: false }
@@ -347,7 +633,19 @@ test('Ingestion - Deterministic Ingestion & Idempotency Guarantee', async () => 
       echoes,
       echoPatchData,
       sonatas,
-      sonataPatchData
+      sonataPatchData,
+      enemies,
+      enemyResistances,
+      enemyModifiers,
+      areaEffects,
+      toaCycles,
+      toaZones,
+      toaTowers,
+      toaStages,
+      stageAreaEffects,
+      challengeGoals,
+      toaWaves,
+      toaEnemyInstances
     ] = await Promise.all([
       supabase.from('patches').select('count', { count: 'exact' }),
       supabase.from('provenance_sources').select('count', { count: 'exact' }),
@@ -366,7 +664,19 @@ test('Ingestion - Deterministic Ingestion & Idempotency Guarantee', async () => 
       supabase.from('echoes').select('count', { count: 'exact' }),
       supabase.from('echo_patch_data').select('count', { count: 'exact' }),
       supabase.from('sonatas').select('count', { count: 'exact' }),
-      supabase.from('sonata_patch_data').select('count', { count: 'exact' })
+      supabase.from('sonata_patch_data').select('count', { count: 'exact' }),
+      supabase.from('enemies').select('count', { count: 'exact' }),
+      supabase.from('enemy_resistances').select('count', { count: 'exact' }),
+      supabase.from('enemy_modifiers').select('count', { count: 'exact' }),
+      supabase.from('area_effects').select('count', { count: 'exact' }),
+      supabase.from('toa_cycles').select('count', { count: 'exact' }),
+      supabase.from('toa_zones').select('count', { count: 'exact' }),
+      supabase.from('toa_towers').select('count', { count: 'exact' }),
+      supabase.from('toa_stages').select('count', { count: 'exact' }),
+      supabase.from('stage_area_effects').select('count', { count: 'exact' }),
+      supabase.from('challenge_goals').select('count', { count: 'exact' }),
+      supabase.from('toa_waves').select('count', { count: 'exact' }),
+      supabase.from('toa_enemy_instances').select('count', { count: 'exact' })
     ]);
 
     return {
@@ -387,7 +697,19 @@ test('Ingestion - Deterministic Ingestion & Idempotency Guarantee', async () => 
       echoes: echoes.count,
       echoPatchData: echoPatchData.count,
       sonatas: sonatas.count,
-      sonataPatchData: sonataPatchData.count
+      sonataPatchData: sonataPatchData.count,
+      enemies: enemies.count,
+      enemyResistances: enemyResistances.count,
+      enemyModifiers: enemyModifiers.count,
+      areaEffects: areaEffects.count,
+      toaCycles: toaCycles.count,
+      toaZones: toaZones.count,
+      toaTowers: toaTowers.count,
+      toaStages: toaStages.count,
+      stageAreaEffects: stageAreaEffects.count,
+      challengeGoals: challengeGoals.count,
+      toaWaves: toaWaves.count,
+      toaEnemyInstances: toaEnemyInstances.count
     };
   }
 
@@ -405,6 +727,18 @@ test('Ingestion - Deterministic Ingestion & Idempotency Guarantee', async () => 
   assert.ok(countsAfterFirst.echoPatchData! >= 40);
   assert.equal(countsAfterFirst.sonatas, 12);
   assert.equal(countsAfterFirst.sonataPatchData, 12);
+  assert.equal(countsAfterFirst.enemies, 83);
+  assert.equal(countsAfterFirst.enemyResistances, 581);
+  assert.equal(countsAfterFirst.enemyModifiers, 30);
+  assert.equal(countsAfterFirst.areaEffects, 11);
+  assert.equal(countsAfterFirst.toaCycles, 1);
+  assert.equal(countsAfterFirst.toaZones, 1);
+  assert.equal(countsAfterFirst.toaTowers, 3);
+  assert.equal(countsAfterFirst.toaStages, 12);
+  assert.equal(countsAfterFirst.stageAreaEffects, 26);
+  assert.equal(countsAfterFirst.challengeGoals, 36);
+  assert.equal(countsAfterFirst.toaWaves, 12);
+  assert.equal(countsAfterFirst.toaEnemyInstances, 27);
 
   // Second ingestion execution (Idempotency test)
   const secondReport = await ingestPatchDataset(dataset, supabase);

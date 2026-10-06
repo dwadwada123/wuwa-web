@@ -9,7 +9,10 @@ import type {
   ProvenanceStatus,
   AbilityCategory,
   GameplayEffectCategory,
-  GameplayEffectTarget
+  GameplayEffectTarget,
+  EnemyClass,
+  ResistanceElement,
+  ModifierType
 } from './types';
 
 export const VALID_ELEMENTS = new Set<Element>([
@@ -19,6 +22,30 @@ export const VALID_ELEMENTS = new Set<Element>([
   'Aero',
   'Spectro',
   'Havoc'
+]);
+
+export const VALID_ENEMY_CLASSES = new Set<EnemyClass>([
+  'Common',
+  'Elite',
+  'Overlord',
+  'Calamity'
+]);
+
+export const VALID_RESISTANCE_ELEMENTS = new Set<ResistanceElement>([
+  'Glacio',
+  'Fusion',
+  'Electro',
+  'Aero',
+  'Spectro',
+  'Havoc',
+  'Physical'
+]);
+
+export const VALID_MODIFIER_TYPES = new Set<ModifierType>([
+  'SHIELD_BAR',
+  'ENRAGE_RESISTANCE',
+  'DAMAGE_IMMUNITY',
+  'STAT_SCALING'
 ]);
 
 export const VALID_WEAPON_TYPES = new Set<WeaponType>([
@@ -52,6 +79,12 @@ export const VALID_CLASSIFICATIONS = new Set<Classification>([
   'DAMAGE_FORMULA',
   'TOA_STAGE_DATA',
   'SUBSTAT_CURVE'
+]);
+
+export const VALID_ZONE_TYPES = new Set<string>([
+  'StableZone',
+  'ExperimentalZone',
+  'HazardZone'
 ]);
 
 export const VALID_PROVENANCE_STATUSES = new Set<ProvenanceStatus>([
@@ -575,6 +608,355 @@ export function validatePatchDataset(data: unknown): ValidationResult {
               message: `Missing or unregistered provenance source for sonata: ${pd.provenance_source_name}`
             });
           }
+        }
+      });
+    }
+  }
+
+  // 8. Enemies, Resistances & Modifiers Validation
+  if (dataset.enemies) {
+    if (!Array.isArray(dataset.enemies)) {
+      errors.push({ path: 'enemies', message: 'enemies must be an array' });
+    } else {
+      const enemyNames = new Set<string>();
+      const enemyCodes = new Set<string>();
+
+      dataset.enemies.forEach((enemy, eIdx) => {
+        const ePath = `enemies[${eIdx}]`;
+
+        if (!enemy.name || typeof enemy.name !== 'string' || enemy.name.trim() === '') {
+          errors.push({ path: `${ePath}.name`, message: 'Enemy name is required' });
+        } else {
+          if (enemyNames.has(enemy.name)) {
+            errors.push({ path: `${ePath}.name`, message: `Duplicate enemy identity: ${enemy.name}` });
+          }
+          enemyNames.add(enemy.name);
+        }
+
+        if (!enemy.code || typeof enemy.code !== 'string' || enemy.code.trim() === '') {
+          errors.push({ path: `${ePath}.code`, message: 'Enemy code is required' });
+        } else {
+          if (enemyCodes.has(enemy.code)) {
+            errors.push({ path: `${ePath}.code`, message: `Duplicate enemy code: ${enemy.code}` });
+          }
+          enemyCodes.add(enemy.code);
+        }
+
+        if (!VALID_ENEMY_CLASSES.has(enemy.enemy_class)) {
+          errors.push({
+            path: `${ePath}.enemy_class`,
+            message: `Invalid enemy class: ${enemy.enemy_class}`
+          });
+        }
+
+        if (enemy.provenance_source_name && !provenanceNames.has(enemy.provenance_source_name)) {
+          errors.push({
+            path: `${ePath}.provenance_source_name`,
+            message: `Missing or unregistered provenance source for enemy: ${enemy.provenance_source_name}`
+          });
+        }
+
+        // Resistances
+        if (enemy.resistances) {
+          if (!Array.isArray(enemy.resistances)) {
+            errors.push({ path: `${ePath}.resistances`, message: 'resistances must be an array' });
+          } else {
+            const elementsSeen = new Set<string>();
+            enemy.resistances.forEach((res, rIdx) => {
+              const rPath = `${ePath}.resistances[${rIdx}]`;
+
+              if (!VALID_RESISTANCE_ELEMENTS.has(res.element)) {
+                errors.push({
+                  path: `${rPath}.element`,
+                  message: `Invalid resistance element: ${res.element}`
+                });
+              } else {
+                if (elementsSeen.has(res.element)) {
+                  errors.push({
+                    path: `${rPath}.element`,
+                    message: `Duplicate resistance element for enemy: ${res.element}`
+                  });
+                }
+                elementsSeen.add(res.element);
+              }
+
+              if (
+                typeof res.resistance_ratio !== 'number' ||
+                Number.isNaN(res.resistance_ratio) ||
+                res.resistance_ratio < -1.0 ||
+                res.resistance_ratio > 2.0
+              ) {
+                errors.push({
+                  path: `${rPath}.resistance_ratio`,
+                  message: `Resistance ratio must be a number between -1.0000 and 2.0000, got: ${res.resistance_ratio}`
+                });
+              }
+
+              if (!res.provenance_source_name || !provenanceNames.has(res.provenance_source_name)) {
+                errors.push({
+                  path: `${rPath}.provenance_source_name`,
+                  message: `Missing or unregistered provenance source for resistance: ${res.provenance_source_name}`
+                });
+              }
+            });
+          }
+        }
+
+        // Modifiers
+        if (enemy.modifiers) {
+          if (!Array.isArray(enemy.modifiers)) {
+            errors.push({ path: `${ePath}.modifiers`, message: 'modifiers must be an array' });
+          } else {
+            const modifierTypesSeen = new Set<string>();
+            enemy.modifiers.forEach((mod, mIdx) => {
+              const mPath = `${ePath}.modifiers[${mIdx}]`;
+
+              if (!VALID_MODIFIER_TYPES.has(mod.modifier_type)) {
+                errors.push({
+                  path: `${mPath}.modifier_type`,
+                  message: `Invalid modifier type: ${mod.modifier_type}`
+                });
+              } else {
+                if (modifierTypesSeen.has(mod.modifier_type)) {
+                  errors.push({
+                    path: `${mPath}.modifier_type`,
+                    message: `Duplicate modifier type for enemy: ${mod.modifier_type}`
+                  });
+                }
+                modifierTypesSeen.add(mod.modifier_type);
+              }
+
+              if (mod.parameters !== undefined && (typeof mod.parameters !== 'object' || mod.parameters === null || Array.isArray(mod.parameters))) {
+                errors.push({
+                  path: `${mPath}.parameters`,
+                  message: 'Modifier parameters must be a valid object'
+                });
+              }
+
+              if (!mod.provenance_source_name || !provenanceNames.has(mod.provenance_source_name)) {
+                errors.push({
+                  path: `${mPath}.provenance_source_name`,
+                  message: `Missing or unregistered provenance source for modifier: ${mod.provenance_source_name}`
+                });
+              }
+            });
+          }
+        }
+      });
+    }
+  }
+
+  // 9. Area Effects Validation
+  const areaEffectSourceIds = new Set<string>();
+  if (dataset.area_effects) {
+    if (!Array.isArray(dataset.area_effects)) {
+      errors.push({ path: 'area_effects', message: 'area_effects must be an array' });
+    } else {
+      dataset.area_effects.forEach((ae, idx) => {
+        const aePath = `area_effects[${idx}]`;
+        if (!ae.source_id || typeof ae.source_id !== 'string') {
+          errors.push({ path: `${aePath}.source_id`, message: 'Area effect source_id is required' });
+        } else {
+          if (areaEffectSourceIds.has(ae.source_id)) {
+            errors.push({ path: `${aePath}.source_id`, message: `Duplicate area effect source_id: ${ae.source_id}` });
+          }
+          areaEffectSourceIds.add(ae.source_id);
+        }
+
+        if (!ae.name || typeof ae.name !== 'string') {
+          errors.push({ path: `${aePath}.name`, message: 'Area effect name is required' });
+        }
+
+        if (!ae.description || typeof ae.description !== 'string') {
+          errors.push({ path: `${aePath}.description`, message: 'Area effect description is required' });
+        }
+
+        if (!ae.gameplay_effect) {
+          errors.push({ path: `${aePath}.gameplay_effect`, message: 'Area effect gameplay_effect is required' });
+        } else {
+          if (!VALID_EFFECT_CATEGORIES.has(ae.gameplay_effect.category)) {
+            errors.push({ path: `${aePath}.gameplay_effect.category`, message: `Invalid category: ${ae.gameplay_effect.category}` });
+          }
+          if (!VALID_EFFECT_TARGETS.has(ae.gameplay_effect.target)) {
+            errors.push({ path: `${aePath}.gameplay_effect.target`, message: `Invalid target: ${ae.gameplay_effect.target}` });
+          }
+          if (!ae.gameplay_effect.provenance_source_name || !provenanceNames.has(ae.gameplay_effect.provenance_source_name)) {
+            errors.push({ path: `${aePath}.gameplay_effect.provenance_source_name`, message: `Unregistered provenance source: ${ae.gameplay_effect.provenance_source_name}` });
+          }
+        }
+      });
+    }
+  }
+
+  // 10. Tower of Adversity Cycles Validation
+  if (dataset.toa_cycles) {
+    if (!Array.isArray(dataset.toa_cycles)) {
+      errors.push({ path: 'toa_cycles', message: 'toa_cycles must be an array' });
+    } else {
+      const cycleCodes = new Set<string>();
+      dataset.toa_cycles.forEach((cycle, cIdx) => {
+        const cPath = `toa_cycles[${cIdx}]`;
+
+        if (!cycle.cycle_code) {
+          errors.push({ path: `${cPath}.cycle_code`, message: 'cycle_code is required' });
+        } else {
+          if (cycleCodes.has(cycle.cycle_code)) {
+            errors.push({ path: `${cPath}.cycle_code`, message: `Duplicate cycle_code: ${cycle.cycle_code}` });
+          }
+          cycleCodes.add(cycle.cycle_code);
+        }
+
+        if (!cycle.cycle_name) {
+          errors.push({ path: `${cPath}.cycle_name`, message: 'cycle_name is required' });
+        }
+
+        if (!cycle.start_time || isNaN(Date.parse(cycle.start_time))) {
+          errors.push({ path: `${cPath}.start_time`, message: 'Valid ISO start_time is required' });
+        }
+        if (!cycle.end_time || isNaN(Date.parse(cycle.end_time))) {
+          errors.push({ path: `${cPath}.end_time`, message: 'Valid ISO end_time is required' });
+        }
+        if (cycle.start_time && cycle.end_time && Date.parse(cycle.start_time) >= Date.parse(cycle.end_time)) {
+          errors.push({ path: `${cPath}.end_time`, message: 'end_time must be after start_time' });
+        }
+
+        if (!cycle.provenance_source_name || !provenanceNames.has(cycle.provenance_source_name)) {
+          errors.push({ path: `${cPath}.provenance_source_name`, message: `Unregistered provenance source: ${cycle.provenance_source_name}` });
+        }
+
+        if (!Array.isArray(cycle.zones) || cycle.zones.length === 0) {
+          errors.push({ path: `${cPath}.zones`, message: 'Cycle must contain at least one zone' });
+        } else {
+          const zoneTypesSeen = new Set<string>();
+          cycle.zones.forEach((zone, zIdx) => {
+            const zPath = `${cPath}.zones[${zIdx}]`;
+            if (!VALID_ZONE_TYPES.has(zone.zone_type)) {
+              errors.push({ path: `${zPath}.zone_type`, message: `Invalid zone_type: ${zone.zone_type}` });
+            } else {
+              if (zoneTypesSeen.has(zone.zone_type)) {
+                errors.push({ path: `${zPath}.zone_type`, message: `Duplicate zone_type in cycle: ${zone.zone_type}` });
+              }
+              zoneTypesSeen.add(zone.zone_type);
+            }
+
+            if (!Array.isArray(zone.towers) || zone.towers.length === 0) {
+              errors.push({ path: `${zPath}.towers`, message: 'Zone must contain at least one tower' });
+            } else {
+              const towerOrdersSeen = new Set<number>();
+              zone.towers.forEach((tower, tIdx) => {
+                const tPath = `${zPath}.towers[${tIdx}]`;
+                if (!Number.isInteger(tower.tower_order) || tower.tower_order <= 0) {
+                  errors.push({ path: `${tPath}.tower_order`, message: 'tower_order must be a positive integer' });
+                } else {
+                  if (towerOrdersSeen.has(tower.tower_order)) {
+                    errors.push({ path: `${tPath}.tower_order`, message: `Duplicate tower_order in zone: ${tower.tower_order}` });
+                  }
+                  towerOrdersSeen.add(tower.tower_order);
+                }
+
+                if (!tower.tower_name) {
+                  errors.push({ path: `${tPath}.tower_name`, message: 'tower_name is required' });
+                }
+
+                if (!Array.isArray(tower.stages) || tower.stages.length === 0) {
+                  errors.push({ path: `${tPath}.stages`, message: 'Tower must contain at least one stage' });
+                } else {
+                  const stageIndicesSeen = new Set<number>();
+                  tower.stages.forEach((stage, sIdx) => {
+                    const sPath = `${tPath}.stages[${sIdx}]`;
+                    if (!Number.isInteger(stage.stage_index) || stage.stage_index <= 0) {
+                      errors.push({ path: `${sPath}.stage_index`, message: 'stage_index must be a positive integer' });
+                    } else {
+                      if (stageIndicesSeen.has(stage.stage_index)) {
+                        errors.push({ path: `${sPath}.stage_index`, message: `Duplicate stage_index in tower: ${stage.stage_index}` });
+                      }
+                      stageIndicesSeen.add(stage.stage_index);
+                    }
+
+                    if (!Number.isInteger(stage.vigor_cost) || stage.vigor_cost <= 0) {
+                      errors.push({ path: `${sPath}.vigor_cost`, message: 'vigor_cost must be a positive integer' });
+                    }
+
+                    if (stage.area_effect_source_ids) {
+                      if (!Array.isArray(stage.area_effect_source_ids)) {
+                        errors.push({ path: `${sPath}.area_effect_source_ids`, message: 'area_effect_source_ids must be an array' });
+                      } else {
+                        stage.area_effect_source_ids.forEach((affId, aIdx) => {
+                          if (!areaEffectSourceIds.has(affId)) {
+                            errors.push({ path: `${sPath}.area_effect_source_ids[${aIdx}]`, message: `Unknown area_effect source_id: ${affId}` });
+                          }
+                        });
+                      }
+                    }
+
+                    if (!Array.isArray(stage.challenge_goals) || stage.challenge_goals.length === 0) {
+                      errors.push({ path: `${sPath}.challenge_goals`, message: 'Stage must contain challenge_goals' });
+                    } else {
+                      const goalOrdersSeen = new Set<number>();
+                      stage.challenge_goals.forEach((goal, gIdx) => {
+                        const gPath = `${sPath}.challenge_goals[${gIdx}]`;
+                        if (!Number.isInteger(goal.goal_order) || goal.goal_order <= 0) {
+                          errors.push({ path: `${gPath}.goal_order`, message: 'goal_order must be a positive integer' });
+                        } else {
+                          if (goalOrdersSeen.has(goal.goal_order)) {
+                            errors.push({ path: `${gPath}.goal_order`, message: `Duplicate goal_order in stage: ${goal.goal_order}` });
+                          }
+                          goalOrdersSeen.add(goal.goal_order);
+                        }
+
+                        if (!Number.isInteger(goal.target_time_seconds) || goal.target_time_seconds < 0) {
+                          errors.push({ path: `${gPath}.target_time_seconds`, message: 'target_time_seconds must be a non-negative integer (>= 0)' });
+                        }
+                      });
+                    }
+
+                    if (!Array.isArray(stage.waves) || stage.waves.length === 0) {
+                      errors.push({ path: `${sPath}.waves`, message: 'Stage must contain at least one wave' });
+                    } else {
+                      const waveIndicesSeen = new Set<number>();
+                      stage.waves.forEach((wave, wIdx) => {
+                        const wPath = `${sPath}.waves[${wIdx}]`;
+                        if (!Number.isInteger(wave.wave_index) || wave.wave_index <= 0) {
+                          errors.push({ path: `${wPath}.wave_index`, message: 'wave_index must be a positive integer' });
+                        } else {
+                          if (waveIndicesSeen.has(wave.wave_index)) {
+                            errors.push({ path: `${wPath}.wave_index`, message: `Duplicate wave_index in stage: ${wave.wave_index}` });
+                          }
+                          waveIndicesSeen.add(wave.wave_index);
+                        }
+
+                        if (!Array.isArray(wave.enemy_instances) || wave.enemy_instances.length === 0) {
+                          errors.push({ path: `${wPath}.enemy_instances`, message: 'Wave must contain at least one enemy instance' });
+                        } else {
+                          const spawnOrdersSeen = new Set<number>();
+                          wave.enemy_instances.forEach((inst, iIdx) => {
+                            const iPath = `${wPath}.enemy_instances[${iIdx}]`;
+                            const enemyKnown = dataset.enemies?.some(e => e.code === inst.enemy_code);
+                            if (!enemyKnown) {
+                              errors.push({ path: `${iPath}.enemy_code`, message: `Unknown enemy_code: ${inst.enemy_code}` });
+                            }
+
+                            if (!Number.isInteger(inst.level) || inst.level < 1 || inst.level > 120) {
+                              errors.push({ path: `${iPath}.level`, message: 'Enemy instance level must be between 1 and 120' });
+                            }
+
+                            if (!Number.isInteger(inst.spawn_order) || inst.spawn_order <= 0) {
+                              errors.push({ path: `${iPath}.spawn_order`, message: 'spawn_order must be a positive integer' });
+                            } else {
+                              if (spawnOrdersSeen.has(inst.spawn_order)) {
+                                errors.push({ path: `${iPath}.spawn_order`, message: `Duplicate spawn_order in wave: ${inst.spawn_order}` });
+                              }
+                              spawnOrdersSeen.add(inst.spawn_order);
+                            }
+                          });
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            }
+          });
         }
       });
     }

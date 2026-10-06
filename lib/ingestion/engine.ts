@@ -56,7 +56,19 @@ export async function ingestPatchDataset(
     echoes: 0,
     echoPatchData: 0,
     sonatas: 0,
-    sonataPatchData: 0
+    sonataPatchData: 0,
+    enemies: 0,
+    enemyResistances: 0,
+    enemyModifiers: 0,
+    areaEffects: 0,
+    toaCycles: 0,
+    toaZones: 0,
+    toaTowers: 0,
+    toaStages: 0,
+    stageAreaEffects: 0,
+    challengeGoals: 0,
+    toaWaves: 0,
+    toaEnemyInstances: 0
   };
 
   // 2. Ingest Provenance Sources
@@ -661,6 +673,342 @@ export async function ingestPatchDataset(
     }
   }
 
+  // 10. Ingest Enemies, Enemy Resistances & Enemy Modifiers
+  const enemyCodeMap = new Map<string, string>();
+  if (dataset.enemies && dataset.enemies.length > 0) {
+    for (const e of dataset.enemies) {
+      // 10a. Canonical Enemy Identity
+      const enemyId = deterministicUuid(`enemy:${e.code}`);
+      enemyCodeMap.set(e.code, enemyId);
+      const { data: enemyRow, error: enemyError } = await supabase
+        .from('enemies')
+        .upsert(
+          {
+            id: enemyId,
+            name: e.name,
+            enemy_class: e.enemy_class,
+            code: e.code
+          },
+          { onConflict: 'code' }
+        )
+        .select('id, code')
+        .single();
+
+      if (enemyError || !enemyRow) {
+        throw new Error(`Failed to upsert enemy ${e.code}: ${enemyError?.message}`);
+      }
+
+      counts.enemies++;
+
+      // 10b. Enemy Resistances
+      if (e.resistances && e.resistances.length > 0) {
+        for (const r of e.resistances) {
+          const resProvId = provenanceMap.get(r.provenance_source_name);
+          if (!resProvId) {
+            throw new Error(`Provenance source ${r.provenance_source_name} for enemy ${e.code} resistance ${r.element} not found`);
+          }
+
+          const resistanceId = deterministicUuid(`enemy_resistance:${dataset.patch.version}:${e.code}:${r.element}`);
+          const { error: resError } = await supabase
+            .from('enemy_resistances')
+            .upsert(
+              {
+                id: resistanceId,
+                enemy_id: enemyId,
+                patch_id: patchId,
+                element: r.element,
+                resistance_ratio: r.resistance_ratio,
+                provenance_id: resProvId
+              },
+              { onConflict: 'enemy_id, patch_id, element' }
+            );
+
+          if (resError) {
+            throw new Error(`Failed to upsert enemy resistance for ${e.code} [${r.element}]: ${resError.message}`);
+          }
+
+          counts.enemyResistances++;
+        }
+      }
+
+      // 10c. Enemy Modifiers
+      if (e.modifiers && e.modifiers.length > 0) {
+        for (const m of e.modifiers) {
+          const modProvId = provenanceMap.get(m.provenance_source_name);
+          if (!modProvId) {
+            throw new Error(`Provenance source ${m.provenance_source_name} for enemy ${e.code} modifier ${m.modifier_type} not found`);
+          }
+
+          const modifierId = deterministicUuid(`enemy_modifier:${dataset.patch.version}:${e.code}:${m.modifier_type}`);
+          const { error: modError } = await supabase
+            .from('enemy_modifiers')
+            .upsert(
+              {
+                id: modifierId,
+                enemy_id: enemyId,
+                patch_id: patchId,
+                modifier_type: m.modifier_type,
+                parameters: (m.parameters ?? {}) as any,
+                provenance_id: modProvId,
+                is_active: m.is_active ?? true
+              },
+              { onConflict: 'enemy_id, patch_id, modifier_type' }
+            );
+
+          if (modError) {
+            throw new Error(`Failed to upsert enemy modifier for ${e.code} [${m.modifier_type}]: ${modError.message}`);
+          }
+
+          counts.enemyModifiers++;
+        }
+      }
+    }
+  }
+
+  // 11. Ingest Area Effects & Backing Gameplay Effects
+  const areaEffectMap = new Map<string, string>();
+  if (dataset.area_effects && dataset.area_effects.length > 0) {
+    for (const ae of dataset.area_effects) {
+      const geProvId = provenanceMap.get(ae.gameplay_effect.provenance_source_name);
+      if (!geProvId) {
+        throw new Error(`Provenance source ${ae.gameplay_effect.provenance_source_name} for area effect ${ae.source_id} not found`);
+      }
+
+      const gameplayEffectId = deterministicUuid(`gameplay_effect:area:${dataset.patch.version}:${ae.source_id}`);
+      const { error: geError } = await supabase
+        .from('gameplay_effects')
+        .upsert(
+          {
+            id: gameplayEffectId,
+            patch_id: patchId,
+            category: ae.gameplay_effect.category,
+            target: ae.gameplay_effect.target,
+            condition_expression: (ae.gameplay_effect.condition_expression ?? {}) as any,
+            detail_expression: (ae.gameplay_effect.detail_expression ?? {}) as any,
+            provenance_id: geProvId
+          },
+          { onConflict: 'id, patch_id' }
+        );
+
+      if (geError) {
+        throw new Error(`Failed to upsert gameplay effect for area effect ${ae.source_id}: ${geError.message}`);
+      }
+      counts.gameplayEffects++;
+
+      const areaEffectId = deterministicUuid(`area_effect:${ae.source_id}`);
+      const { error: aeError } = await supabase
+        .from('area_effects')
+        .upsert(
+          {
+            id: areaEffectId,
+            patch_id: patchId,
+            effect_id: gameplayEffectId,
+            name: ae.name,
+            description: ae.description
+          },
+          { onConflict: 'id, patch_id' }
+        );
+
+      if (aeError) {
+        throw new Error(`Failed to upsert area effect ${ae.source_id}: ${aeError.message}`);
+      }
+      counts.areaEffects++;
+      areaEffectMap.set(ae.source_id, areaEffectId);
+    }
+  }
+
+  // 12. Ingest Tower of Adversity Cycles, Zones, Towers, Stages, Effects, Goals, Waves & Enemy Instances
+  if (dataset.toa_cycles && dataset.toa_cycles.length > 0) {
+    for (const cycle of dataset.toa_cycles) {
+      const cycleProvId = provenanceMap.get(cycle.provenance_source_name);
+      if (!cycleProvId) {
+        throw new Error(`Provenance source ${cycle.provenance_source_name} for ToA cycle ${cycle.cycle_code} not found`);
+      }
+
+      // 12a. toa_cycles (Deterministic logical ID, composite PK with patch_id)
+      const cycleId = deterministicUuid(`toa-cycle:${cycle.cycle_code}`);
+      const { error: cycleError } = await supabase
+        .from('toa_cycles')
+        .upsert(
+          {
+            id: cycleId,
+            patch_id: patchId,
+            cycle_name: cycle.cycle_name,
+            start_time: cycle.start_time,
+            end_time: cycle.end_time
+          },
+          { onConflict: 'id, patch_id' }
+        );
+
+      if (cycleError) {
+        throw new Error(`Failed to upsert ToA cycle ${cycle.cycle_code}: ${cycleError.message}`);
+      }
+      counts.toaCycles++;
+
+      // 12b. toa_zones
+      for (const zone of cycle.zones) {
+        const zoneId = deterministicUuid(`toa-zone:${cycle.cycle_code}:${zone.zone_type}`);
+        const { error: zoneError } = await supabase
+          .from('toa_zones')
+          .upsert(
+            {
+              id: zoneId,
+              cycle_id: cycleId,
+              patch_id: patchId,
+              zone_type: zone.zone_type
+            },
+            { onConflict: 'id, patch_id' }
+          );
+
+        if (zoneError) {
+          throw new Error(`Failed to upsert ToA zone ${zone.zone_type}: ${zoneError.message}`);
+        }
+        counts.toaZones++;
+
+        // 12c. toa_towers
+        for (const tower of zone.towers) {
+          const towerId = deterministicUuid(`toa-tower:${cycle.cycle_code}:${zone.zone_type}:${tower.tower_order}`);
+          const { error: towerError } = await supabase
+            .from('toa_towers')
+            .upsert(
+              {
+                id: towerId,
+                zone_id: zoneId,
+                patch_id: patchId,
+                tower_name: tower.tower_name,
+                tower_order: tower.tower_order
+              },
+              { onConflict: 'zone_id, tower_order' }
+            );
+
+          if (towerError) {
+            throw new Error(`Failed to upsert ToA tower ${tower.tower_name}: ${towerError.message}`);
+          }
+          counts.toaTowers++;
+
+          // 12d. toa_stages
+          for (const stage of tower.stages) {
+            const stageId = deterministicUuid(`toa-stage:${cycle.cycle_code}:${tower.tower_order}:${stage.stage_index}`);
+            const { error: stageError } = await supabase
+              .from('toa_stages')
+              .upsert(
+                {
+                  id: stageId,
+                  tower_id: towerId,
+                  patch_id: patchId,
+                  stage_index: stage.stage_index,
+                  vigor_cost: stage.vigor_cost
+                },
+                { onConflict: 'tower_id, stage_index' }
+              );
+
+            if (stageError) {
+              throw new Error(`Failed to upsert ToA stage ${stage.stage_index}: ${stageError.message}`);
+            }
+            counts.toaStages++;
+
+            // 12e. stage_area_effects
+            if (stage.area_effect_source_ids && stage.area_effect_source_ids.length > 0) {
+              for (let effIdx = 0; effIdx < stage.area_effect_source_ids.length; effIdx++) {
+                const srcId = stage.area_effect_source_ids[effIdx];
+                const areaEffId = areaEffectMap.get(srcId);
+                if (!areaEffId) {
+                  throw new Error(`Area effect source ID ${srcId} not found in areaEffectMap`);
+                }
+
+                const stageEffId = deterministicUuid(`stage_area_effect:${stageId}:${areaEffId}`);
+                const { error: saeError } = await supabase
+                  .from('stage_area_effects')
+                  .upsert(
+                    {
+                      id: stageEffId,
+                      stage_id: stageId,
+                      area_effect_id: areaEffId,
+                      patch_id: patchId,
+                      effect_order: effIdx + 1
+                    },
+                    { onConflict: 'stage_id, area_effect_id' }
+                  );
+
+                if (saeError) {
+                  throw new Error(`Failed to upsert stage area effect: ${saeError.message}`);
+                }
+                counts.stageAreaEffects++;
+              }
+            }
+
+            // 12f. challenge_goals
+            for (const goal of stage.challenge_goals) {
+              const goalId = deterministicUuid(`challenge_goal:${stageId}:${goal.goal_order}`);
+              const { error: goalError } = await supabase
+                .from('challenge_goals')
+                .upsert(
+                  {
+                    id: goalId,
+                    stage_id: stageId,
+                    patch_id: patchId,
+                    goal_order: goal.goal_order,
+                    target_time_seconds: goal.target_time_seconds,
+                    points: goal.points ?? 1
+                  },
+                  { onConflict: 'stage_id, goal_order' }
+                );
+
+              if (goalError) {
+                throw new Error(`Failed to upsert challenge goal ${goal.goal_order}: ${goalError.message}`);
+              }
+              counts.challengeGoals++;
+            }
+
+            // 12g. toa_waves & toa_enemy_instances
+            for (const wave of stage.waves) {
+              const waveId = deterministicUuid(`toa-wave:${stageId}:${wave.wave_index}`);
+              const { error: waveError } = await supabase
+                .from('toa_waves')
+                .upsert(
+                  {
+                    id: waveId,
+                    stage_id: stageId,
+                    patch_id: patchId,
+                    wave_index: wave.wave_index
+                  },
+                  { onConflict: 'stage_id, wave_index' }
+                );
+
+              if (waveError) {
+                throw new Error(`Failed to upsert ToA wave ${wave.wave_index}: ${waveError.message}`);
+              }
+              counts.toaWaves++;
+
+              for (const inst of wave.enemy_instances) {
+                const enemyId = enemyCodeMap.get(inst.enemy_code) || deterministicUuid(`enemy:${inst.enemy_code}`);
+                const instId = deterministicUuid(`toa_enemy_instance:${waveId}:${inst.spawn_order}`);
+                const { error: instError } = await supabase
+                  .from('toa_enemy_instances')
+                  .upsert(
+                    {
+                      id: instId,
+                      wave_id: waveId,
+                      enemy_id: enemyId,
+                      patch_id: patchId,
+                      level: inst.level,
+                      spawn_order: inst.spawn_order
+                    },
+                    { onConflict: 'wave_id, spawn_order' }
+                  );
+
+                if (instError) {
+                  throw new Error(`Failed to upsert ToA enemy instance ${inst.spawn_order}: ${instError.message}`);
+                }
+                counts.toaEnemyInstances++;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   const durationMs = Date.now() - startTime;
 
   return {
@@ -671,7 +1019,8 @@ export async function ingestPatchDataset(
     externalSources: dataset.provenance_sources.map(p => p.url).filter(Boolean) as string[],
     omissions: [
       'Complex multi-stage resource gauges and dynamic stacking mechanisms (e.g. Camellya Blossom points, Jinhsi Incandescence) deferred to dedicated rotation simulator phase per instruction E.',
-      'Unverified numerical tuning curves for unreleased 3.8 preview assets omitted.'
+      'Unverified numerical tuning curves for unreleased 3.8 preview assets omitted.',
+      'Complex boss scripting transitions (cinematic immunity windows, mid-fight dialog cutscenes) omitted from structured modifiers to avoid unverified schema forcing.'
     ],
     durationMs
   };

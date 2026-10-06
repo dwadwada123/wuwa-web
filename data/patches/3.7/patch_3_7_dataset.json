@@ -41,6 +41,15 @@
       "confidence": "HIGH",
       "classification": "CORE_MECHANIC",
       "status": "ACTIVE"
+    },
+    {
+      "source_name": "api-v2.encore.moe ToA Datamine (Patch 3.7)",
+      "url": "https://api-v2.encore.moe/api/en/toa/40",
+      "source_type": "COMMUNITY_DATAMINE",
+      "verification_date": "2026-10-06",
+      "confidence": "HIGH",
+      "classification": "TOA_STAGE_DATA",
+      "status": "ACTIVE"
     }
   ],
   "functional_roles": [
@@ -10550,6 +10559,4703 @@
           "provenance_source_name": "Kuro Games Official 3.7 Release Announcement"
         }
       }
+    }
+  ],
+  "enemies": [
+    {
+      "name": "Crownless",
+      "enemy_class": "Calamity",
+      "code": "CROWNLESS",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "ENRAGE_RESISTANCE",
+          "parameters": {
+            "phase": 2,
+            "resistance_bonus": 0.2,
+            "trigger": "WINGED_ASCENSION"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        },
+        {
+          "modifier_type": "STAT_SCALING",
+          "parameters": {
+            "scaling_type": "CALAMITY_BOSS",
+            "level_hp_curve": "CALAMITY_CURVE"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Thundering Mephis",
+      "enemy_class": "Calamity",
+      "code": "THUNDERING_MEPHIS",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "ENRAGE_RESISTANCE",
+          "parameters": {
+            "phase": 2,
+            "resistance_bonus": 0.2,
+            "trigger": "THUNDER_PILLAR_SYNCHRONIZATION"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        },
+        {
+          "modifier_type": "STAT_SCALING",
+          "parameters": {
+            "scaling_type": "CALAMITY_BOSS",
+            "level_hp_curve": "CALAMITY_CURVE"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Mourning Aix",
+      "enemy_class": "Calamity",
+      "code": "MOURNING_AIX",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "ENRAGE_RESISTANCE",
+          "parameters": {
+            "phase": 2,
+            "resistance_bonus": 0.2,
+            "trigger": "AERIAL_BOMBARDMENT"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        },
+        {
+          "modifier_type": "STAT_SCALING",
+          "parameters": {
+            "scaling_type": "CALAMITY_BOSS",
+            "level_hp_curve": "CALAMITY_CURVE"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Feilian Beringal",
+      "enemy_class": "Calamity",
+      "code": "FEILIAN_BERINGAL",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "ENRAGE_RESISTANCE",
+          "parameters": {
+            "phase": 2,
+            "resistance_bonus": 0.2,
+            "trigger": "ROAR_AND_SLAM"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        },
+        {
+          "modifier_type": "STAT_SCALING",
+          "parameters": {
+            "scaling_type": "CALAMITY_BOSS",
+            "level_hp_curve": "CALAMITY_CURVE"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Inferno Rider",
+      "enemy_class": "Calamity",
+      "code": "INFERNO_RIDER",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "ENRAGE_RESISTANCE",
+          "parameters": {
+            "phase": 2,
+            "resistance_bonus": 0.2,
+            "trigger": "DISMOUNT_BERSERK"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        },
+        {
+          "modifier_type": "STAT_SCALING",
+          "parameters": {
+            "scaling_type": "CALAMITY_BOSS",
+            "level_hp_curve": "CALAMITY_CURVE"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Bell-Borne Geochelone",
+      "enemy_class": "Calamity",
+      "code": "BELL_BORNE_GEOCHELONE",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "SHIELD_BAR",
+          "parameters": {
+            "shield_type": "VIBRATION_SHIELD",
+            "damage_reduction": 0.5,
+            "break_mechanic": "VIBRATION_STRENGTH_DEPLETION"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        },
+        {
+          "modifier_type": "STAT_SCALING",
+          "parameters": {
+            "scaling_type": "CALAMITY_BOSS",
+            "level_hp_curve": "CALAMITY_CURVE"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Lampylumen Myriad",
+      "enemy_class": "Calamity",
+      "code": "LAMPYLUMEN_MYRIAD",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "STAT_SCALING",
+          "parameters": {
+            "scaling_type": "CALAMITY_BOSS",
+            "level_hp_curve": "CALAMITY_CURVE"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Dreamless",
+      "enemy_class": "Calamity",
+      "code": "DREAMLESS",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "DAMAGE_IMMUNITY",
+          "parameters": {
+            "phase": "TRANSITION",
+            "trigger": "METEOR_STORM",
+            "description": "Temporary damage immunity during phase transition animation"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        },
+        {
+          "modifier_type": "STAT_SCALING",
+          "parameters": {
+            "scaling_type": "CALAMITY_BOSS",
+            "level_hp_curve": "CALAMITY_CURVE"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Jue",
+      "enemy_class": "Calamity",
+      "code": "JUE",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "STAT_SCALING",
+          "parameters": {
+            "scaling_type": "CALAMITY_BOSS",
+            "level_hp_curve": "CALAMITY_CURVE"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Fallacy of No Return",
+      "enemy_class": "Calamity",
+      "code": "FALLACY_OF_NO_RETURN",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "STAT_SCALING",
+          "parameters": {
+            "scaling_type": "CALAMITY_BOSS",
+            "level_hp_curve": "CALAMITY_CURVE"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Suhsin the Inevitable",
+      "enemy_class": "Calamity",
+      "code": "SUHSIN_THE_INEVITABLE",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "SHIELD_BAR",
+          "parameters": {
+            "shield_type": "TEMPORAL_BARRIER",
+            "phase": 2,
+            "description": "Absorptive barrier during temporal distortion phase"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        },
+        {
+          "modifier_type": "STAT_SCALING",
+          "parameters": {
+            "scaling_type": "CALAMITY_BOSS",
+            "level_hp_curve": "CALAMITY_CURVE"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Tempest Mephis",
+      "enemy_class": "Overlord",
+      "code": "TEMPEST_MEPHIS",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "ENRAGE_RESISTANCE",
+          "parameters": {
+            "phase": 2,
+            "resistance_bonus": 0.2,
+            "trigger": "SHADOW_CLONE_SPLIT"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        },
+        {
+          "modifier_type": "STAT_SCALING",
+          "parameters": {
+            "scaling_type": "OVERLORD_BOSS",
+            "level_hp_curve": "OVERLORD_CURVE"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Impermanence Heron",
+      "enemy_class": "Overlord",
+      "code": "IMPERMANENCE_HERON",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "STAT_SCALING",
+          "parameters": {
+            "scaling_type": "OVERLORD_BOSS",
+            "level_hp_curve": "OVERLORD_CURVE"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Mech Abomination",
+      "enemy_class": "Overlord",
+      "code": "MECH_ABOMINATION",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "STAT_SCALING",
+          "parameters": {
+            "scaling_type": "OVERLORD_BOSS",
+            "level_hp_curve": "OVERLORD_CURVE"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Scar",
+      "enemy_class": "Overlord",
+      "code": "SCAR",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "STAT_SCALING",
+          "parameters": {
+            "scaling_type": "OVERLORD_BOSS",
+            "level_hp_curve": "OVERLORD_CURVE"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Formrender",
+      "enemy_class": "Elite",
+      "code": "FORMRENDER",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Soulfrayer",
+      "enemy_class": "Elite",
+      "code": "SOULFRAYER",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Chasm Guardian",
+      "enemy_class": "Elite",
+      "code": "CHASM_GUARDIAN",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "SHIELD_BAR",
+          "parameters": {
+            "shield_type": "DIRECTIONAL_SHIELD",
+            "coverage_angle_deg": 180,
+            "damage_reduction": 0.8
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Flautist",
+      "enemy_class": "Elite",
+      "code": "FLAUTIST",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Tambourinist",
+      "enemy_class": "Elite",
+      "code": "TAMBOURINIST",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Violet-Feathered Heron",
+      "enemy_class": "Elite",
+      "code": "VIOLET_FEATHERED_HERON",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Cyan-Feathered Heron",
+      "enemy_class": "Elite",
+      "code": "CYAN_FEATHERED_HERON",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Autopuppet Scout",
+      "enemy_class": "Elite",
+      "code": "AUTOPUPPET_SCOUT",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Glacio Dreadmane",
+      "enemy_class": "Elite",
+      "code": "GLACIO_DREADMANE",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Havoc Dreadmane",
+      "enemy_class": "Elite",
+      "code": "HAVOC_DREADMANE",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Hoochief Cyclone",
+      "enemy_class": "Elite",
+      "code": "HOOCHIEF_CYCLONE",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Rocksteady Guardian",
+      "enemy_class": "Elite",
+      "code": "ROCKSTEADY_GUARDIAN",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "SHIELD_BAR",
+          "parameters": {
+            "shield_type": "PARRY_SHIELD",
+            "retaliation": true,
+            "damage_reduction": 0.7
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Roseshroom",
+      "enemy_class": "Elite",
+      "code": "ROSESHROOM",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Spearback",
+      "enemy_class": "Elite",
+      "code": "SPEARBACK",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Lightcrusher",
+      "enemy_class": "Elite",
+      "code": "LIGHTCRUSHER",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Lumahoof",
+      "enemy_class": "Elite",
+      "code": "LUMAHOOF",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Glacio Predator",
+      "enemy_class": "Elite",
+      "code": "GLACIO_PREDATOR",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Havoc Warrior",
+      "enemy_class": "Elite",
+      "code": "HAVOC_WARRIOR",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Stonewall Bracer",
+      "enemy_class": "Elite",
+      "code": "STONEWALL_BRACER",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Fractsidus Executioner",
+      "enemy_class": "Elite",
+      "code": "FRACTSIDUS_EXECUTIONER",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Exile Leader",
+      "enemy_class": "Elite",
+      "code": "EXILE_LEADER",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Skywatch Lancer",
+      "enemy_class": "Common",
+      "code": "SKYWATCH_LANCER",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Bloomburst Puppet",
+      "enemy_class": "Common",
+      "code": "BLOOMBURST_PUPPET",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Jade Nether Serpent",
+      "enemy_class": "Common",
+      "code": "JADE_NETHER_SERPENT",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Glacio Prism",
+      "enemy_class": "Common",
+      "code": "GLACIO_PRISM",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "DAMAGE_IMMUNITY",
+          "parameters": {
+            "immune_element": "Glacio",
+            "ratio": 1,
+            "source": "Elemental Prism Passive"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Fusion Prism",
+      "enemy_class": "Common",
+      "code": "FUSION_PRISM",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "DAMAGE_IMMUNITY",
+          "parameters": {
+            "immune_element": "Fusion",
+            "ratio": 1,
+            "source": "Elemental Prism Passive"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Spectro Prism",
+      "enemy_class": "Common",
+      "code": "SPECTRO_PRISM",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "DAMAGE_IMMUNITY",
+          "parameters": {
+            "immune_element": "Spectro",
+            "ratio": 1,
+            "source": "Elemental Prism Passive"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Havoc Prism",
+      "enemy_class": "Common",
+      "code": "HAVOC_PRISM",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": [
+        {
+          "modifier_type": "DAMAGE_IMMUNITY",
+          "parameters": {
+            "immune_element": "Havoc",
+            "ratio": 1,
+            "source": "Elemental Prism Passive"
+          },
+          "is_active": true,
+          "provenance_source_name": "Prydwen Institute Community Theorycrafting (Patch 3.7)"
+        }
+      ]
+    },
+    {
+      "name": "Baby Viridblaze Saurian",
+      "enemy_class": "Common",
+      "code": "BABY_VIRIDBLAZE_SAURIAN",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Chirpuff",
+      "enemy_class": "Common",
+      "code": "CHIRPUFF",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Cruisewing",
+      "enemy_class": "Common",
+      "code": "CRUISEWING",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Diamondclaw",
+      "enemy_class": "Common",
+      "code": "DIAMONDCLAW",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Dwarf Cassowary",
+      "enemy_class": "Common",
+      "code": "DWARF_CASSOWARY",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Excarat",
+      "enemy_class": "Common",
+      "code": "EXCARAT",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Fission Junrock",
+      "enemy_class": "Common",
+      "code": "FISSION_JUNROCK",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Fusion Dreadmane",
+      "enemy_class": "Common",
+      "code": "FUSION_DREADMANE",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Gulpuff",
+      "enemy_class": "Common",
+      "code": "GULPUFF",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Hoartoise",
+      "enemy_class": "Common",
+      "code": "HOARTOISE",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Sabyr Boar",
+      "enemy_class": "Common",
+      "code": "SABYR_BOAR",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Snip Snap",
+      "enemy_class": "Common",
+      "code": "SNIP_SNAP",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Tick Tack",
+      "enemy_class": "Common",
+      "code": "TICK_TACK",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Traffic Illuminator",
+      "enemy_class": "Common",
+      "code": "TRAFFIC_ILLUMINATOR",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Whiff Whaff",
+      "enemy_class": "Common",
+      "code": "WHIFF_WHAFF",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Zig Zag",
+      "enemy_class": "Common",
+      "code": "ZIG_ZAG",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Clang Bang",
+      "enemy_class": "Common",
+      "code": "CLANG_BANG",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Lava Ganglion",
+      "enemy_class": "Common",
+      "code": "LAVA_GANGLION",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Vanguard Junrock",
+      "enemy_class": "Common",
+      "code": "VANGUARD_JUNROCK",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Fusion Warrior",
+      "enemy_class": "Common",
+      "code": "FUSION_WARRIOR",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Impulse Predator",
+      "enemy_class": "Common",
+      "code": "IMPULSE_PREDATOR",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Pneuma Predator",
+      "enemy_class": "Common",
+      "code": "PNEUMA_PREDATOR",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Hooscamp",
+      "enemy_class": "Common",
+      "code": "HOOSCAMP",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Exile Commoner",
+      "enemy_class": "Common",
+      "code": "EXILE_COMMONER",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Exile Craftsman",
+      "enemy_class": "Common",
+      "code": "EXILE_CRAFTSMAN",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Fractsidus Gunmaster",
+      "enemy_class": "Common",
+      "code": "FRACTSIDUS_GUNMASTER",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Fractsidus Smuggler",
+      "enemy_class": "Common",
+      "code": "FRACTSIDUS_SMUGGLER",
+      "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)",
+      "resistances": [
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.4,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        },
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.1,
+          "provenance_source_name": "Arikatsu/WutheringWaves_Data (Branch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Electro Drake",
+      "enemy_class": "Common",
+      "code": "ELECTRO_DRAKE",
+      "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+      "resistances": [
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.6,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Electro Predator",
+      "enemy_class": "Common",
+      "code": "ELECTRO_PREDATOR",
+      "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+      "resistances": [
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.6,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Voltscourge Stalker",
+      "enemy_class": "Common",
+      "code": "VOLTSCOURGE_STALKER",
+      "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+      "resistances": [
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.6,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Vitreum Dancer",
+      "enemy_class": "Elite",
+      "code": "VITREUM_DANCER",
+      "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+      "resistances": [
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.6,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Questless Knight",
+      "enemy_class": "Elite",
+      "code": "QUESTLESS_KNIGHT",
+      "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+      "resistances": [
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.6,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Capitaneus",
+      "enemy_class": "Elite",
+      "code": "CAPITANEUS",
+      "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+      "resistances": [
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.6,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Voidwing Moth",
+      "enemy_class": "Elite",
+      "code": "VOIDWING_MOTH",
+      "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+      "resistances": [
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.6,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Hyvatia",
+      "enemy_class": "Overlord",
+      "code": "HYVATIA",
+      "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+      "resistances": [
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.6,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Glacio Drake",
+      "enemy_class": "Common",
+      "code": "GLACIO_DRAKE",
+      "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+      "resistances": [
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.6,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Calcified Junrock",
+      "enemy_class": "Common",
+      "code": "CALCIFIED_JUNROCK",
+      "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+      "resistances": [
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.6,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Abyssal Patricius",
+      "enemy_class": "Elite",
+      "code": "ABYSSAL_PATRICIUS",
+      "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+      "resistances": [
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.6,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Abyssal Gladius",
+      "enemy_class": "Elite",
+      "code": "ABYSSAL_GLADIUS",
+      "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+      "resistances": [
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.6,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "Abyssal Mercator",
+      "enemy_class": "Elite",
+      "code": "ABYSSAL_MERCATOR",
+      "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+      "resistances": [
+        {
+          "element": "Physical",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Glacio",
+          "resistance_ratio": 0.6,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Fusion",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Electro",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Aero",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Spectro",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        {
+          "element": "Havoc",
+          "resistance_ratio": 0.2,
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      ],
+      "modifiers": []
+    }
+  ],
+  "area_effects": [
+    {
+      "source_id": "92007113",
+      "name": "Resonant Tower Aero Shred",
+      "description": "Enemy Aero RES decreases by 10%",
+      "gameplay_effect": {
+        "category": "RES_SHRED",
+        "target": "ENEMY",
+        "detail_expression": {
+          "element": "Aero",
+          "res_shred": 0.1
+        },
+        "provenance_source_name": "api-v2.encore.moe ToA Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "source_id": "92008110",
+      "name": "Resonant Tower DEF Ignore & Negative Status Amp",
+      "description": "Resonators ignore 25% of the enemy's DEF when dealing damage. When enemies are affected by Negative Statuses, their DMG taken is Amplified by 20%.",
+      "gameplay_effect": {
+        "category": "DEF_SHRED",
+        "target": "ENEMY",
+        "detail_expression": {
+          "def_ignore": 0.25,
+          "negative_status_dmg_amplify": 0.2
+        },
+        "provenance_source_name": "api-v2.encore.moe ToA Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "source_id": "92007152",
+      "name": "Hazard Tower Electro/Fusion RES Shred & Havoc/Glacio RES Up",
+      "description": "Enemies' Electro RES and Fusion RES are decreased by 10%, and their Havoc RES and Glacio RES are increased by 10%.",
+      "gameplay_effect": {
+        "category": "RES_SHRED",
+        "target": "ENEMY",
+        "detail_expression": {
+          "electro_res_shred": 0.1,
+          "fusion_res_shred": 0.1,
+          "havoc_res_increase": 0.1,
+          "glacio_res_increase": 0.1
+        },
+        "provenance_source_name": "api-v2.encore.moe ToA Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "source_id": "92008195",
+      "name": "Hazard Tower ATK & Intro All DMG Buff",
+      "description": "ATK is increased by 30%. Resonators gain 30% All DMG Bonus for 10s upon casting Intro Skill.",
+      "gameplay_effect": {
+        "category": "STAT_BUFF",
+        "target": "TEAM",
+        "detail_expression": {
+          "atk_percent": 0.3,
+          "intro_all_dmg_bonus": 0.3,
+          "intro_duration_seconds": 10
+        },
+        "provenance_source_name": "api-v2.encore.moe ToA Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "source_id": "92007116",
+      "name": "Hazard Tower Electro/Fusion RES Shred (Prompt Corroboration)",
+      "description": "Enemies' Electro RES and Fusion RES are decreased by 10%, and their Havoc RES and Glacio RES are increased by 10%.",
+      "gameplay_effect": {
+        "category": "RES_SHRED",
+        "target": "ENEMY",
+        "detail_expression": {
+          "electro_res_shred": 0.1,
+          "fusion_res_shred": 0.1,
+          "havoc_res_increase": 0.1,
+          "glacio_res_increase": 0.1
+        },
+        "provenance_source_name": "api-v2.encore.moe ToA Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "source_id": "92008020",
+      "name": "Hazard Tower ATK & Intro DMG (Prompt Corroboration)",
+      "description": "ATK is increased by 30%. Resonators gain 30% All DMG Bonus for 10s upon casting Intro Skill.",
+      "gameplay_effect": {
+        "category": "STAT_BUFF",
+        "target": "TEAM",
+        "detail_expression": {
+          "atk_percent": 0.3,
+          "intro_all_dmg_bonus": 0.3,
+          "intro_duration_seconds": 10
+        },
+        "provenance_source_name": "api-v2.encore.moe ToA Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "source_id": "92008205",
+      "name": "Hazard Tower Ramp Total DMG",
+      "description": "60s after the battle starts, after a Resonator's attacks hit an enemy, that enemy takes 5% more total DMG. This value increases by 5% every 5s, up to a maximum of 60%.",
+      "gameplay_effect": {
+        "category": "DMG_AMPLIFY",
+        "target": "ENEMY",
+        "detail_expression": {
+          "delay_seconds": 60,
+          "ramp_per_5s": 0.05,
+          "max_total_dmg_amp": 0.6
+        },
+        "provenance_source_name": "api-v2.encore.moe ToA Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "source_id": "92008196",
+      "name": "Hazard Tower All-Attribute RES Increase",
+      "description": "Enemies' All-Attribute RES is increased by 15%. The Electro or Fusion DMG taken by the enemies are not effected by this effect.",
+      "gameplay_effect": {
+        "category": "RES_SHRED",
+        "target": "ENEMY",
+        "detail_expression": {
+          "all_res_increase_except_electro_fusion": 0.15
+        },
+        "provenance_source_name": "api-v2.encore.moe ToA Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "source_id": "92008197",
+      "name": "Hazard Tower Total & Electro DMG / Shield Fusion Amp",
+      "description": "Enemies take 20% more total DMG and 50% more total Electro DMG. Resonators gain 12% Fusion DMG Bonus for 3s upon gaining Shield, stacking up to 10 times. Retriggering the effect resets its duration.",
+      "gameplay_effect": {
+        "category": "DMG_AMPLIFY",
+        "target": "TEAM",
+        "detail_expression": {
+          "total_dmg_amp": 0.2,
+          "electro_total_dmg_amp": 0.5,
+          "shield_fusion_dmg_bonus_per_stack": 0.12,
+          "max_stacks": 10,
+          "stack_duration_seconds": 3
+        },
+        "provenance_source_name": "api-v2.encore.moe ToA Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "source_id": "92007115",
+      "name": "Echoing Tower Havoc RES Shred",
+      "description": "Enemy Havoc RES decreases by 10%",
+      "gameplay_effect": {
+        "category": "RES_SHRED",
+        "target": "ENEMY",
+        "detail_expression": {
+          "element": "Havoc",
+          "res_shred": 0.1
+        },
+        "provenance_source_name": "api-v2.encore.moe ToA Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "source_id": "92008030",
+      "name": "Echoing Tower Intro ATK & Skill Liberation Buff",
+      "description": "Casting Intro Skill increases ATK by 20% for 15s. Casting Resonance Skill grants 30% Resonance Liberation DMG Bonus for 5s. Retriggering these effects resets their durations.",
+      "gameplay_effect": {
+        "category": "STAT_BUFF",
+        "target": "TEAM",
+        "detail_expression": {
+          "intro_atk_percent": 0.2,
+          "intro_atk_duration_seconds": 15,
+          "skill_liberation_dmg_bonus": 0.3,
+          "skill_liberation_duration_seconds": 5
+        },
+        "provenance_source_name": "api-v2.encore.moe ToA Datamine (Patch 3.7)"
+      }
+    }
+  ],
+  "toa_cycles": [
+    {
+      "cycle_code": "season:40",
+      "cycle_name": "Hazard Zone (Season 40)",
+      "start_time": "2026-09-14T04:00:00+08:00",
+      "end_time": "2026-10-12T03:59:59+08:00",
+      "provenance_source_name": "api-v2.encore.moe ToA Datamine (Patch 3.7)",
+      "zones": [
+        {
+          "zone_type": "HazardZone",
+          "towers": [
+            {
+              "tower_order": 1,
+              "tower_name": "Resonant Tower",
+              "area_num": 1,
+              "stages": [
+                {
+                  "stage_index": 1,
+                  "vigor_cost": 1,
+                  "difficulty": 3,
+                  "area_effect_source_ids": [
+                    "92007113",
+                    "92008110"
+                  ],
+                  "challenge_goals": [
+                    {
+                      "goal_order": 1,
+                      "target_time_seconds": 0,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 2,
+                      "target_time_seconds": 90,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 3,
+                      "target_time_seconds": 150,
+                      "points": 1
+                    }
+                  ],
+                  "waves": [
+                    {
+                      "wave_index": 1,
+                      "enemy_instances": [
+                        {
+                          "enemy_code": "ELECTRO_DRAKE",
+                          "level": 70,
+                          "spawn_order": 1
+                        },
+                        {
+                          "enemy_code": "ELECTRO_PREDATOR",
+                          "level": 70,
+                          "spawn_order": 2
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "stage_index": 2,
+                  "vigor_cost": 2,
+                  "difficulty": 3,
+                  "area_effect_source_ids": [
+                    "92007113",
+                    "92008110"
+                  ],
+                  "challenge_goals": [
+                    {
+                      "goal_order": 1,
+                      "target_time_seconds": 0,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 2,
+                      "target_time_seconds": 90,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 3,
+                      "target_time_seconds": 150,
+                      "points": 1
+                    }
+                  ],
+                  "waves": [
+                    {
+                      "wave_index": 1,
+                      "enemy_instances": [
+                        {
+                          "enemy_code": "VOLTSCOURGE_STALKER",
+                          "level": 75,
+                          "spawn_order": 1
+                        },
+                        {
+                          "enemy_code": "VIOLET_FEATHERED_HERON",
+                          "level": 75,
+                          "spawn_order": 2
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "stage_index": 3,
+                  "vigor_cost": 3,
+                  "difficulty": 3,
+                  "area_effect_source_ids": [
+                    "92007113",
+                    "92008110"
+                  ],
+                  "challenge_goals": [
+                    {
+                      "goal_order": 1,
+                      "target_time_seconds": 0,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 2,
+                      "target_time_seconds": 120,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 3,
+                      "target_time_seconds": 180,
+                      "points": 1
+                    }
+                  ],
+                  "waves": [
+                    {
+                      "wave_index": 1,
+                      "enemy_instances": [
+                        {
+                          "enemy_code": "STONEWALL_BRACER",
+                          "level": 80,
+                          "spawn_order": 1
+                        },
+                        {
+                          "enemy_code": "VITREUM_DANCER",
+                          "level": 80,
+                          "spawn_order": 2
+                        },
+                        {
+                          "enemy_code": "FLAUTIST",
+                          "level": 80,
+                          "spawn_order": 3
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "stage_index": 4,
+                  "vigor_cost": 4,
+                  "difficulty": 3,
+                  "area_effect_source_ids": [
+                    "92007113",
+                    "92008110"
+                  ],
+                  "challenge_goals": [
+                    {
+                      "goal_order": 1,
+                      "target_time_seconds": 0,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 2,
+                      "target_time_seconds": 120,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 3,
+                      "target_time_seconds": 180,
+                      "points": 1
+                    }
+                  ],
+                  "waves": [
+                    {
+                      "wave_index": 1,
+                      "enemy_instances": [
+                        {
+                          "enemy_code": "QUESTLESS_KNIGHT",
+                          "level": 90,
+                          "spawn_order": 1
+                        },
+                        {
+                          "enemy_code": "MECH_ABOMINATION",
+                          "level": 90,
+                          "spawn_order": 2
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tower_order": 2,
+              "tower_name": "Hazard Tower",
+              "area_num": 2,
+              "stages": [
+                {
+                  "stage_index": 1,
+                  "vigor_cost": 5,
+                  "difficulty": 3,
+                  "area_effect_source_ids": [
+                    "92007152",
+                    "92008195"
+                  ],
+                  "challenge_goals": [
+                    {
+                      "goal_order": 1,
+                      "target_time_seconds": 90,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 2,
+                      "target_time_seconds": 150,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 3,
+                      "target_time_seconds": 180,
+                      "points": 1
+                    }
+                  ],
+                  "waves": [
+                    {
+                      "wave_index": 1,
+                      "enemy_instances": [
+                        {
+                          "enemy_code": "IMPERMANENCE_HERON",
+                          "level": 100,
+                          "spawn_order": 1
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "stage_index": 2,
+                  "vigor_cost": 5,
+                  "difficulty": 3,
+                  "area_effect_source_ids": [
+                    "92007152",
+                    "92008195"
+                  ],
+                  "challenge_goals": [
+                    {
+                      "goal_order": 1,
+                      "target_time_seconds": 90,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 2,
+                      "target_time_seconds": 150,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 3,
+                      "target_time_seconds": 180,
+                      "points": 1
+                    }
+                  ],
+                  "waves": [
+                    {
+                      "wave_index": 1,
+                      "enemy_instances": [
+                        {
+                          "enemy_code": "AUTOPUPPET_SCOUT",
+                          "level": 100,
+                          "spawn_order": 1
+                        },
+                        {
+                          "enemy_code": "GLACIO_DREADMANE",
+                          "level": 75,
+                          "spawn_order": 2
+                        },
+                        {
+                          "enemy_code": "SCAR",
+                          "level": 100,
+                          "spawn_order": 3
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "stage_index": 3,
+                  "vigor_cost": 5,
+                  "difficulty": 3,
+                  "area_effect_source_ids": [
+                    "92008205",
+                    "92008196",
+                    "92008197"
+                  ],
+                  "challenge_goals": [
+                    {
+                      "goal_order": 1,
+                      "target_time_seconds": 60,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 2,
+                      "target_time_seconds": 120,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 3,
+                      "target_time_seconds": 150,
+                      "points": 1
+                    }
+                  ],
+                  "waves": [
+                    {
+                      "wave_index": 1,
+                      "enemy_instances": [
+                        {
+                          "enemy_code": "CAPITANEUS",
+                          "level": 100,
+                          "spawn_order": 1
+                        },
+                        {
+                          "enemy_code": "CRUISEWING",
+                          "level": 100,
+                          "spawn_order": 2
+                        },
+                        {
+                          "enemy_code": "VOIDWING_MOTH",
+                          "level": 100,
+                          "spawn_order": 3
+                        },
+                        {
+                          "enemy_code": "LIGHTCRUSHER",
+                          "level": 100,
+                          "spawn_order": 4
+                        },
+                        {
+                          "enemy_code": "FALLACY_OF_NO_RETURN",
+                          "level": 100,
+                          "spawn_order": 5
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "stage_index": 4,
+                  "vigor_cost": 5,
+                  "difficulty": 3,
+                  "area_effect_source_ids": [
+                    "92008205",
+                    "92008196",
+                    "92008197"
+                  ],
+                  "challenge_goals": [
+                    {
+                      "goal_order": 1,
+                      "target_time_seconds": 60,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 2,
+                      "target_time_seconds": 120,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 3,
+                      "target_time_seconds": 150,
+                      "points": 1
+                    }
+                  ],
+                  "waves": [
+                    {
+                      "wave_index": 1,
+                      "enemy_instances": [
+                        {
+                          "enemy_code": "HYVATIA",
+                          "level": 100,
+                          "spawn_order": 1
+                        },
+                        {
+                          "enemy_code": "MOURNING_AIX",
+                          "level": 100,
+                          "spawn_order": 2
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tower_order": 3,
+              "tower_name": "Echoing Tower",
+              "area_num": 3,
+              "stages": [
+                {
+                  "stage_index": 1,
+                  "vigor_cost": 1,
+                  "difficulty": 3,
+                  "area_effect_source_ids": [
+                    "92007115",
+                    "92008030"
+                  ],
+                  "challenge_goals": [
+                    {
+                      "goal_order": 1,
+                      "target_time_seconds": 0,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 2,
+                      "target_time_seconds": 90,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 3,
+                      "target_time_seconds": 150,
+                      "points": 1
+                    }
+                  ],
+                  "waves": [
+                    {
+                      "wave_index": 1,
+                      "enemy_instances": [
+                        {
+                          "enemy_code": "GLACIO_DRAKE",
+                          "level": 70,
+                          "spawn_order": 1
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "stage_index": 2,
+                  "vigor_cost": 2,
+                  "difficulty": 3,
+                  "area_effect_source_ids": [
+                    "92007115",
+                    "92008030"
+                  ],
+                  "challenge_goals": [
+                    {
+                      "goal_order": 1,
+                      "target_time_seconds": 0,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 2,
+                      "target_time_seconds": 90,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 3,
+                      "target_time_seconds": 150,
+                      "points": 1
+                    }
+                  ],
+                  "waves": [
+                    {
+                      "wave_index": 1,
+                      "enemy_instances": [
+                        {
+                          "enemy_code": "GLACIO_DREADMANE",
+                          "level": 75,
+                          "spawn_order": 1
+                        },
+                        {
+                          "enemy_code": "CALCIFIED_JUNROCK",
+                          "level": 75,
+                          "spawn_order": 2
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "stage_index": 3,
+                  "vigor_cost": 3,
+                  "difficulty": 3,
+                  "area_effect_source_ids": [
+                    "92007115",
+                    "92008030"
+                  ],
+                  "challenge_goals": [
+                    {
+                      "goal_order": 1,
+                      "target_time_seconds": 0,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 2,
+                      "target_time_seconds": 120,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 3,
+                      "target_time_seconds": 180,
+                      "points": 1
+                    }
+                  ],
+                  "waves": [
+                    {
+                      "wave_index": 1,
+                      "enemy_instances": [
+                        {
+                          "enemy_code": "ABYSSAL_PATRICIUS",
+                          "level": 80,
+                          "spawn_order": 1
+                        },
+                        {
+                          "enemy_code": "ABYSSAL_GLADIUS",
+                          "level": 80,
+                          "spawn_order": 2
+                        },
+                        {
+                          "enemy_code": "ABYSSAL_MERCATOR",
+                          "level": 80,
+                          "spawn_order": 3
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "stage_index": 4,
+                  "vigor_cost": 4,
+                  "difficulty": 3,
+                  "area_effect_source_ids": [
+                    "92007115",
+                    "92008030"
+                  ],
+                  "challenge_goals": [
+                    {
+                      "goal_order": 1,
+                      "target_time_seconds": 0,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 2,
+                      "target_time_seconds": 120,
+                      "points": 1
+                    },
+                    {
+                      "goal_order": 3,
+                      "target_time_seconds": 180,
+                      "points": 1
+                    }
+                  ],
+                  "waves": [
+                    {
+                      "wave_index": 1,
+                      "enemy_instances": [
+                        {
+                          "enemy_code": "LAMPYLUMEN_MYRIAD",
+                          "level": 90,
+                          "spawn_order": 1
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }
