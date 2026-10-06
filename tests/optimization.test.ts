@@ -178,6 +178,7 @@ test('Global Optimizer - EXACT Mode vs Exhaustive Oracle on Small Fixtures', () 
   const exactResult = optimizeToA(optContext, { mode: 'EXACT' });
 
   assert.equal(exactResult.status, 'OPTIMAL');
+  assert.equal(exactResult.optimality, 'FULL_LEXICOGRAPHIC_PROVEN');
   assert.equal(exactResult.status, oracleResult.status);
   assert.equal(exactResult.totalScore, oracleResult.totalScore);
   assert.equal(exactResult.assignments.length, oracleResult.assignments.length);
@@ -314,6 +315,7 @@ test('Global Optimizer - Exhaustive Oracle on Randomized Small Problems', () => 
     );
 
     if (oracleResult.status === 'OPTIMAL') {
+      assert.equal(exactResult.optimality, 'FULL_LEXICOGRAPHIC_PROVEN');
       assert.equal(
         exactResult.totalScore,
         oracleResult.totalScore,
@@ -545,6 +547,7 @@ test('Global Optimizer - Opportunity Cost & Greedy Counterexample', () => {
   const result = optimizeToA(context, { mode: 'EXACT' });
 
   assert.equal(result.status, 'OPTIMAL');
+  assert.equal(result.optimality, 'FULL_LEXICOGRAPHIC_PROVEN');
   assert.equal(
     result.totalScore,
     1770,
@@ -594,6 +597,7 @@ test('Global Optimizer - Vigor Boundary & Accounting Rules', () => {
   };
   const feasibleResult = optimizeToA(feasibleContext, { mode: 'EXACT' });
   assert.equal(feasibleResult.status, 'OPTIMAL');
+  assert.equal(feasibleResult.optimality, 'FULL_LEXICOGRAPHIC_PROVEN');
   assert.equal(feasibleResult.totalVigorConsumed, (5 + 5) * 3);
 
   // Adding another 1-vigor stage with capacity 10 -> INFEASIBLE (10 + 1 = 11 > 10)
@@ -607,6 +611,7 @@ test('Global Optimizer - Vigor Boundary & Accounting Rules', () => {
   };
   const infeasibleResult = optimizeToA(infeasibleContext, { mode: 'EXACT' });
   assert.equal(infeasibleResult.status, 'INFEASIBLE');
+  assert.equal(infeasibleResult.optimality, undefined);
   assert.ok(infeasibleResult.infeasibilityReasons && infeasibleResult.infeasibilityReasons.length > 0);
 });
 
@@ -678,9 +683,17 @@ test('Global Optimizer - Season 40 Regression (12 Stages in BEST_EFFORT Mode)', 
 
   assert.equal(res12.mode, 'BEST_EFFORT');
   assert.equal(res12.status, 'BEST_FOUND');
+  assert.equal(res12.totalScore, 7388);
+  assert.equal(res12.globalPrimaryUpperBound, 7388);
+  assert.equal(res12.optimality, 'PRIMARY_PROVEN');
+  assert.notEqual(res12.optimality, 'FULL_LEXICOGRAPHIC_PROVEN');
   assert.equal(res12.assignments.length, 12, 'All 12 Season 40 stages must be assigned');
-  assert.ok(res12.totalScore > 0);
   assert.ok(res12.evidence.length === 12, 'Evidence provided for each assigned stage');
+
+  // Verify Vigor constraint satisfied for every resonator
+  for (const v of res12.vigorUsage) {
+    assert.ok(v.used <= v.capacity, `Resonator ${v.resonatorId} exceeded capacity (${v.used} > ${v.capacity})`);
+  }
 
   // Verify total vigor consumed matches expected floor vigor costs
   const expectedTotalVigorCost = fullSeason40Stages.reduce((s, st) => s + st.vigorCost, 0) * 3;
@@ -737,4 +750,155 @@ test('Global Optimizer - 50-Resonator Performance Benchmark (12 Stages)', () => 
     optDuration < 5000,
     `12-stage global optimization took ${optDuration.toFixed(2)}ms (must be well under 5s)`
   );
+});
+
+/**
+ * Optimality Semantics Classification (Cases A, B, C, D)
+ */
+test('Global Optimizer - Optimality Semantics Classification (Cases A, B, C, D)', () => {
+  // Case A: Found score < global upper bound in BEST_EFFORT mode -> NOT_PROVEN
+  // In the 2-stage opportunity cost fixture, Stage 1 max=900, Stage 2 max=890 -> globalPrimaryUpperBound = 1790.
+  // Due to vigor limits, optimal score is 1770 (< 1790).
+  const char1: Resonator = {
+    id: 'char-1-opt',
+    name: 'Hero 1 Opt',
+    element: 'Aero',
+    weaponType: 'Sword',
+    rarity: 5,
+    releaseDate: '2024-05-22',
+    baseHpLvl90: 10000,
+    baseAtkLvl90: 400,
+    baseDefLvl90: 1000,
+    roles: [{ code: 'MAIN_DPS', label: 'Main DPS', isPrimary: true }],
+    combatTags: [],
+    abilities: [],
+  };
+  const char2: Resonator = {
+    id: 'char-2-opt',
+    name: 'Hero 2 Opt',
+    element: 'Glacio',
+    weaponType: 'Sword',
+    rarity: 5,
+    releaseDate: '2024-05-22',
+    baseHpLvl90: 10000,
+    baseAtkLvl90: 400,
+    baseDefLvl90: 1000,
+    roles: [{ code: 'MAIN_DPS', label: 'Main DPS', isPrimary: true }],
+    combatTags: [],
+    abilities: [],
+  };
+  const filler1: Resonator = { ...char1, id: 'filler-1-opt', name: 'Filler 1 Opt' };
+  const filler2: Resonator = { ...char2, id: 'filler-2-opt', name: 'Filler 2 Opt' };
+  const teamA: TeamCandidate = {
+    id: 'team-A-opt',
+    members: [{ resonator: char1 }, { resonator: filler1 }, { resonator: filler2 }],
+  };
+  const teamB: TeamCandidate = {
+    id: 'team-B-opt',
+    members: [{ resonator: char2 }, { resonator: filler1 }, { resonator: filler2 }],
+  };
+  const stage1: ToAStage = {
+    id: 'stage-1-opt',
+    patchId: patchContext37.patchId,
+    stageIndex: 1,
+    vigorCost: 5,
+    areaEffects: [],
+    challengeGoals: [],
+    waves: [],
+  };
+  const stage2: ToAStage = {
+    id: 'stage-2-opt',
+    patchId: patchContext37.patchId,
+    stageIndex: 2,
+    vigorCost: 5,
+    areaEffects: [],
+    challengeGoals: [],
+    waves: [],
+  };
+  const mockScore = (totalScore: number) => ({
+    candidateKey: 'mock',
+    stageKey: 'mock',
+    valid: true,
+    totalScore,
+    dimensions: {
+      roleCoverage: { score: 100, maxScore: 100, weight: 120, weightedScore: 120, evidence: [] },
+      elementalMatchup: { score: 100, maxScore: 100, weight: 160, weightedScore: 160, evidence: [] },
+      enemyMatchup: { score: 100, maxScore: 100, weight: 100, weightedScore: 100, evidence: [] },
+      stageBuffCompatibility: { score: 100, maxScore: 100, weight: 180, weightedScore: 180, evidence: [] },
+      offensiveSynergy: { score: 100, maxScore: 100, weight: 140, weightedScore: 140, evidence: [] },
+      sustain: { score: 100, maxScore: 100, weight: 80, weightedScore: 80, evidence: [] },
+      resistanceUtility: { score: 100, maxScore: 100, weight: 100, weightedScore: 100, evidence: [] },
+      coordinatedAttackSynergy: { score: 100, maxScore: 100, weight: 60, weightedScore: 60, evidence: [] },
+      resourceSynergy: { score: 100, maxScore: 100, weight: 60, weightedScore: 60, evidence: [] },
+    },
+    evidence: [],
+    warnings: [],
+  });
+  const scores = [
+    { ...mockScore(900), candidateKey: 'team-A-opt', stageKey: `${patchContext37.patchId}:stage-1-opt` },
+    { ...mockScore(890), candidateKey: 'team-A-opt', stageKey: `${patchContext37.patchId}:stage-2-opt` },
+    { ...mockScore(880), candidateKey: 'team-B-opt', stageKey: `${patchContext37.patchId}:stage-1-opt` },
+    { ...mockScore(100), candidateKey: 'team-B-opt', stageKey: `${patchContext37.patchId}:stage-2-opt` },
+  ];
+
+  const caseAContext: ToAOptimizationContext = {
+    cycleId: 'cycle-case-a',
+    patchId: patchContext37.patchId,
+    stages: [stage1, stage2],
+    candidates: [teamA, teamB],
+    scores,
+    roster: { resonatorIds: ['char-1-opt', 'char-2-opt', 'filler-1-opt', 'filler-2-opt'] },
+    vigorCapacities: { 'char-1-opt': 5, 'char-2-opt': 5, 'filler-1-opt': 10, 'filler-2-opt': 10 },
+  };
+
+  const caseAResult = optimizeToA(caseAContext, { mode: 'BEST_EFFORT' });
+  assert.equal(caseAResult.status, 'BEST_FOUND');
+  assert.equal(caseAResult.globalPrimaryUpperBound, 1790);
+  assert.equal(caseAResult.totalScore, 1770);
+  assert.ok(caseAResult.totalScore < caseAResult.globalPrimaryUpperBound!);
+  assert.equal(caseAResult.optimality, 'NOT_PROVEN', 'Case A: score < UB in BEST_EFFORT must yield NOT_PROVEN');
+
+  // Case B: Found score == global upper bound in BEST_EFFORT mode -> PRIMARY_PROVEN
+  const roster4: OwnedRoster = {
+    resonatorIds: [jinhsi.id, verina.id, jianxin.id, yangyang.id],
+  };
+  const candidates4 = generateTeamCandidates(roster4, {
+    patchContext: patchContext37,
+    availableResonators: availableResonatorsList,
+  });
+  const caseBContext: ToAOptimizationContext = {
+    cycleId: 'cycle-case-b',
+    patchId: patchContext37.patchId,
+    stages: [resonantTowerFloor1, resonantTowerFloor4],
+    candidates: candidates4,
+    roster: roster4,
+    defaultVigorCapacity: 10,
+  };
+  const caseBResult = optimizeToA(caseBContext, { mode: 'BEST_EFFORT' });
+  assert.equal(caseBResult.status, 'BEST_FOUND');
+  assert.equal(caseBResult.totalScore, caseBResult.globalPrimaryUpperBound);
+  assert.equal(caseBResult.optimality, 'PRIMARY_PROVEN', 'Case B: score == UB in BEST_EFFORT must yield PRIMARY_PROVEN');
+  assert.notEqual(caseBResult.optimality, 'FULL_LEXICOGRAPHIC_PROVEN', 'Case B: Must NOT claim FULL_LEXICOGRAPHIC_PROVEN');
+
+  // Case C: Exhaustive exact search proves all tie-breaks -> FULL_LEXICOGRAPHIC_PROVEN
+  const caseCResult = optimizeToA(caseBContext, { mode: 'EXACT' });
+  assert.equal(caseCResult.status, 'OPTIMAL');
+  assert.equal(caseCResult.optimality, 'FULL_LEXICOGRAPHIC_PROVEN', 'Case C: Exhaustive EXACT search must yield FULL_LEXICOGRAPHIC_PROVEN');
+
+  // Case D: Infeasible -> status = INFEASIBLE, optimality is undefined
+  const caseDContext: ToAOptimizationContext = {
+    cycleId: 'cycle-case-d',
+    patchId: patchContext37.patchId,
+    stages: [
+      { ...hazardTowerFloor1, id: 'stage-d1', vigorCost: 5 },
+      { ...hazardTowerFloor2, id: 'stage-d2', vigorCost: 5 },
+      { ...resonantTowerFloor1, id: 'stage-d3', vigorCost: 5 },
+    ],
+    candidates: [teamA],
+    roster: { resonatorIds: ['char-1-opt', 'filler-1-opt', 'filler-2-opt'] },
+    defaultVigorCapacity: 10,
+  };
+  const caseDResult = optimizeToA(caseDContext, { mode: 'EXACT' });
+  assert.equal(caseDResult.status, 'INFEASIBLE');
+  assert.equal(caseDResult.optimality, undefined, 'Case D: Infeasible must yield undefined optimality');
 });

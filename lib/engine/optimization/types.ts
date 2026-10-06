@@ -60,6 +60,11 @@ export type OptimizationMode = 'EXACT' | 'BEST_EFFORT';
 
 export type OptimizationStatus = 'OPTIMAL' | 'INFEASIBLE' | 'BEST_FOUND';
 
+export type OptimizationOptimality =
+  | 'PRIMARY_PROVEN'
+  | 'FULL_LEXICOGRAPHIC_PROVEN'
+  | 'NOT_PROVEN';
+
 export interface OptimizationOptions {
   mode: OptimizationMode;
   maxSearchStates?: number; // heuristic search budget (for BEST_EFFORT mode)
@@ -69,6 +74,8 @@ export interface OptimizationOptions {
 export interface ToAOptimizationResult {
   status: OptimizationStatus;
   mode: OptimizationMode;
+  optimality?: OptimizationOptimality;
+  globalPrimaryUpperBound?: number;
   totalScore: number;
   assignments: StageAssignment[];
   vigorUsage: ResonatorVigorUsage[];

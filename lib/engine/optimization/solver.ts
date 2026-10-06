@@ -24,6 +24,7 @@ import type {
   OptimizationOptions,
   OptimizationMode,
   OptimizationStatus,
+  OptimizationOptimality,
   StageAssignment,
   OptimizationObjectiveBreakdown,
 } from './types.ts';
@@ -47,10 +48,12 @@ const DEFAULT_BEST_EFFORT_SEARCH_STATES = 200_000;
  * - Admissible primary upper bound pruning only (remainingUpperBound < bestPrimaryScore).
  * - No unsafe secondary buff pruning.
  * - Status is strictly 'OPTIMAL' or 'INFEASIBLE'.
+ * - Optimality is 'FULL_LEXICOGRAPHIC_PROVEN' when complete search finishes.
  *
  * In BEST_EFFORT mode:
  * - Heuristic candidate reduction (maxCandidatesPerStage) and search-state budget are permitted.
  * - Status is strictly 'BEST_FOUND' or 'INFEASIBLE' (never 'OPTIMAL').
+ * - Optimality is 'PRIMARY_PROVEN' if foundPrimaryScore === globalPrimaryUpperBound, else 'NOT_PROVEN'.
  */
 export function optimizeToA(
   context: ToAOptimizationContext,
@@ -67,6 +70,8 @@ export function optimizeToA(
     return {
       status: isExact ? 'OPTIMAL' : 'BEST_FOUND',
       mode,
+      optimality: isExact ? 'FULL_LEXICOGRAPHIC_PROVEN' : 'PRIMARY_PROVEN',
+      globalPrimaryUpperBound: 0,
       totalScore: 0,
       assignments: [],
       vigorUsage: [],
@@ -233,6 +238,8 @@ export function optimizeToA(
     return {
       status: 'INFEASIBLE',
       mode,
+      optimality: undefined,
+      globalPrimaryUpperBound: 0,
       totalScore: 0,
       assignments: [],
       vigorUsage: vigorTracker.getVigorUsageSummary(),
@@ -272,6 +279,8 @@ export function optimizeToA(
     const maxScore = candidates[0]?.score.totalScore ?? 0;
     suffixMaxScore[i] = suffixMaxScore[i + 1] + maxScore;
   }
+
+  const globalPrimaryUpperBound = suffixMaxScore[0];
 
   // 5. Greedy Warm-Start Heuristic
   // Establishes an initial lower bound before branch-and-bound starts,
@@ -392,6 +401,8 @@ export function optimizeToA(
     return {
       status: 'INFEASIBLE',
       mode,
+      optimality: undefined,
+      globalPrimaryUpperBound,
       totalScore: 0,
       assignments: [],
       vigorUsage: vigorTracker.getVigorUsageSummary(),
@@ -430,9 +441,19 @@ export function optimizeToA(
   // Status honesty: ONLY OPTIMAL from EXACT mode; BEST_FOUND from BEST_EFFORT mode
   const finalStatus: OptimizationStatus = isExact ? 'OPTIMAL' : 'BEST_FOUND';
 
+  // Optimality classification:
+  // - FULL_LEXICOGRAPHIC_PROVEN: Exhaustive complete search proven in EXACT mode.
+  // - PRIMARY_PROVEN: Feasible assignment achieves the exact admissible global primary upper bound.
+  // - NOT_PROVEN: Primary upper bound not reached / tie-breaks not exhaustively searched.
+  const optimality: OptimizationOptimality = isExact
+    ? 'FULL_LEXICOGRAPHIC_PROVEN'
+    : (bestBreakdown.primaryScore === globalPrimaryUpperBound ? 'PRIMARY_PROVEN' : 'NOT_PROVEN');
+
   return {
     status: finalStatus,
     mode,
+    optimality,
+    globalPrimaryUpperBound,
     totalScore: bestBreakdown.primaryScore,
     assignments: bestAssignments,
     vigorUsage: finalTracker.getVigorUsageSummary(),
