@@ -7,6 +7,7 @@ import {
   sortTeamStageScores,
   generateTeamCandidates,
   TEAM_SCORING_CONFIG,
+  getElementalBandScore,
 } from '../lib/engine/index.ts';
 
 import type {
@@ -181,6 +182,75 @@ test('Team Scoring - Elemental Matchup Dimension Sensitivity', () => {
     aeroScore.dimensions.elementalMatchup.score > electroScore.dimensions.elementalMatchup.score,
     `Aero team under Aero buff (${aeroScore.dimensions.elementalMatchup.score}) must score higher on elementalMatchup than Electro team facing 40% Electro RES (${electroScore.dimensions.elementalMatchup.score})`
   );
+});
+
+test('Team Scoring - Elemental Matchup Total Gap-Free Partition', () => {
+  // 1. Negative resistance (e.g. -15%, -10%, -1%)
+  const neg15 = getElementalBandScore(-0.15);
+  assert.equal(neg15.score, 100);
+  assert.equal(neg15.status, 'strongly advantaged');
+
+  const neg10 = getElementalBandScore(-0.10);
+  assert.equal(neg10.score, 100);
+  assert.equal(neg10.status, 'strongly advantaged');
+
+  // 2. Exactly 0%
+  const zero = getElementalBandScore(0.00);
+  assert.equal(zero.score, 100);
+  assert.equal(zero.status, 'strongly advantaged');
+
+  // 3. Exactly 10%
+  const ten = getElementalBandScore(0.10);
+  assert.equal(ten.score, 85);
+  assert.equal(ten.status, 'advantaged');
+
+  // 4. Exactly 20%
+  const twenty = getElementalBandScore(0.20);
+  assert.equal(twenty.score, 70);
+  assert.equal(twenty.status, 'neutral');
+
+  // 5. Exactly 30%
+  const thirty = getElementalBandScore(0.30);
+  assert.equal(thirty.score, 50);
+  assert.equal(thirty.status, 'moderately resisted');
+
+  // 6. Between 30% and 40% (e.g. 31%, 35%, 39%)
+  const thirtyOne = getElementalBandScore(0.31);
+  assert.equal(thirtyOne.score, 35);
+  assert.equal(thirtyOne.status, 'resisted');
+
+  const thirtyFive = getElementalBandScore(0.35);
+  assert.equal(thirtyFive.score, 35);
+  assert.equal(thirtyFive.status, 'resisted');
+
+  const thirtyNine = getElementalBandScore(0.39);
+  assert.equal(thirtyNine.score, 35);
+  assert.equal(thirtyNine.status, 'resisted');
+
+  // 7. Exactly 40%
+  const forty = getElementalBandScore(0.40);
+  assert.equal(forty.score, 20);
+  assert.equal(forty.status, 'heavily resisted');
+
+  // 8. Greater than 40% (e.g. 45%, 60%, 100%)
+  const fortyFive = getElementalBandScore(0.45);
+  assert.equal(fortyFive.score, 10);
+  assert.equal(fortyFive.status, 'severely resisted');
+
+  const sixty = getElementalBandScore(0.60);
+  assert.equal(sixty.score, 10);
+  assert.equal(sixty.status, 'severely resisted');
+
+  // 9. Monotonic descent verification across sample continuum: lower resistance >= score
+  const samplePoints = [-0.50, -0.20, -0.05, 0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.60, 1.00];
+  for (let i = 0; i < samplePoints.length - 1; i++) {
+    const s1 = getElementalBandScore(samplePoints[i]).score;
+    const s2 = getElementalBandScore(samplePoints[i + 1]).score;
+    assert.ok(
+      s1 >= s2,
+      `Monotonicity check failed: ${samplePoints[i]} (${s1}) must be >= ${samplePoints[i + 1]} (${s2})`
+    );
+  }
 });
 
 test('Team Scoring - Stage Buff Compatibility Dimension', () => {
