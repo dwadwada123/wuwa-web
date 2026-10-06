@@ -21,6 +21,9 @@ import { generateOptimizationEvidence } from './evidence.ts';
 import type {
   ToAOptimizationContext,
   ToAOptimizationResult,
+  OptimizationOptions,
+  OptimizationMode,
+  OptimizationStatus,
   StageAssignment,
   OptimizationObjectiveBreakdown,
 } from './types.ts';
@@ -32,21 +35,38 @@ interface ScoredCandidateEntry {
   resonatorIds: string[];
 }
 
-const DEFAULT_LARGE_POOL_STAGE_LIMIT = 30;
-const MAX_SEARCH_STATES_SAFETY_LIMIT = 200_000;
+const DEFAULT_BEST_EFFORT_SEARCH_STATES = 200_000;
 
 /**
  * Optimizes team candidate assignments globally across all requested ToA stages.
+ *
+ * In EXACT mode:
+ * - Only provably lossless Exact Triple Dominance is retained.
+ * - Heuristic candidate truncation (maxCandidatesPerStage) is disabled.
+ * - No arbitrary search-state safety limit is enforced.
+ * - Admissible primary upper bound pruning only (remainingUpperBound < bestPrimaryScore).
+ * - No unsafe secondary buff pruning.
+ * - Status is strictly 'OPTIMAL' or 'INFEASIBLE'.
+ *
+ * In BEST_EFFORT mode:
+ * - Heuristic candidate reduction (maxCandidatesPerStage) and search-state budget are permitted.
+ * - Status is strictly 'BEST_FOUND' or 'INFEASIBLE' (never 'OPTIMAL').
  */
-export function optimizeToA(context: ToAOptimizationContext): ToAOptimizationResult {
+export function optimizeToA(
+  context: ToAOptimizationContext,
+  options: OptimizationOptions = { mode: 'EXACT' }
+): ToAOptimizationResult {
   const startTime = performance.now();
   const stages = context.stages;
+  const mode: OptimizationMode = options.mode || 'EXACT';
+  const isExact = mode === 'EXACT';
 
   // 1. Edge Case: No stages requested
   if (stages.length === 0) {
     const emptyBreakdown = computeObjectiveBreakdown([]);
     return {
-      status: 'OPTIMAL',
+      status: isExact ? 'OPTIMAL' : 'BEST_FOUND',
+      mode,
       totalScore: 0,
       assignments: [],
       vigorUsage: [],
@@ -106,8 +126,11 @@ export function optimizeToA(context: ToAOptimizationContext): ToAOptimizationRes
   const stageCandidatesMap = new Map<string, ScoredCandidateEntry[]>();
   const infeasibilityReasons: string[] = [];
 
-  // Determine stage candidate limit if explicitly configured
-  const stageLimit = context.maxCandidatesPerStage;
+  // In EXACT mode: heuristic candidate truncation is strictly forbidden.
+  // In BEST_EFFORT mode: heuristic limit may be enforced.
+  const stageLimit = isExact
+    ? undefined
+    : (options.maxCandidatesPerStage ?? context.maxCandidatesPerStage);
 
   for (const stage of stages) {
     const bestPerResonatorTriple = new Map<string, ScoredCandidateEntry>();
@@ -134,6 +157,7 @@ export function optimizeToA(context: ToAOptimizationContext): ToAOptimizationRes
       const existing = bestPerResonatorTriple.get(tripleKey);
 
       // Safe dominance reduction: If same 3 resonators, keep highest score
+      // (Provably lossless because identical resonator triples consume identical Vigor)
       if (
         !existing ||
         score.totalScore > existing.score.totalScore ||
@@ -161,8 +185,9 @@ export function optimizeToA(context: ToAOptimizationContext): ToAOptimizationRes
     });
 
     let finalCandidates = stageCandidates;
+
+    // Apply heuristic diversity reduction ONLY in BEST_EFFORT mode
     if (stageLimit && stageCandidates.length > stageLimit) {
-      // Ensure diverse resonator representation across the candidate pool for this stage
       const selected: ScoredCandidateEntry[] = [];
       const selectedKeys = new Set<string>();
       const resUsageCount = new Map<string, number>();
@@ -207,6 +232,7 @@ export function optimizeToA(context: ToAOptimizationContext): ToAOptimizationRes
   if (infeasibilityReasons.length > 0) {
     return {
       status: 'INFEASIBLE',
+      mode,
       totalScore: 0,
       assignments: [],
       vigorUsage: vigorTracker.getVigorUsageSummary(),
@@ -236,24 +262,20 @@ export function optimizeToA(context: ToAOptimizationContext): ToAOptimizationRes
     return aLen - bLen;
   });
 
-  // 4. Precompute Suffix Max Scores for Upper Bound Bounding
+  // 4. Precompute Suffix Max Scores for Admissible Upper Bound Pruning
   const numStages = sortedStages.length;
   const suffixMaxScore = new Float64Array(numStages + 1);
-  const suffixMaxBuffScore = new Float64Array(numStages + 1);
 
   for (let i = numStages - 1; i >= 0; i--) {
     const sId = sortedStages[i].id;
     const candidates = stageCandidatesMap.get(sId)!;
     const maxScore = candidates[0]?.score.totalScore ?? 0;
-    const maxBuffScore = candidates[0]?.score.dimensions.stageBuffCompatibility.weightedScore ?? 0;
-
     suffixMaxScore[i] = suffixMaxScore[i + 1] + maxScore;
-    suffixMaxBuffScore[i] = suffixMaxBuffScore[i + 1] + maxBuffScore;
   }
 
   // 5. Greedy Warm-Start Heuristic
   // Establishes an initial lower bound before branch-and-bound starts,
-  // allowing immediate aggressive upper-bound pruning.
+  // enabling immediate admissible upper-bound pruning.
   let bestAssignments: StageAssignment[] | null = null;
   let bestBreakdown: OptimizationObjectiveBreakdown | null = null;
 
@@ -294,12 +316,18 @@ export function optimizeToA(context: ToAOptimizationContext): ToAOptimizationRes
   let searchStatesExplored = 0;
   let prunedStatesCount = 0;
 
+  // In EXACT mode: no artificial search-state limit is enforced (unbounded complete search).
+  // In BEST_EFFORT mode: search budget is enforced.
+  const maxSearchStates = isExact
+    ? Infinity
+    : (options.maxSearchStates ?? DEFAULT_BEST_EFFORT_SEARCH_STATES);
+
   const currentAssignments: StageAssignment[] = [];
 
-  function search(stageIdx: number, currentScore: number, currentBuffScore: number): void {
+  function search(stageIdx: number, currentScore: number): void {
     searchStatesExplored++;
 
-    if (searchStatesExplored > MAX_SEARCH_STATES_SAFETY_LIMIT) {
+    if (!isExact && searchStatesExplored > maxSearchStates) {
       prunedStatesCount++;
       return;
     }
@@ -314,20 +342,14 @@ export function optimizeToA(context: ToAOptimizationContext): ToAOptimizationRes
       return;
     }
 
-    // Upper Bound Pruning
+    // Admissible Primary Upper Bound Pruning:
+    // upperBound = currentScore + sum(max candidate score for remaining stages).
+    // Prune strictly when remainingUpperBound < bestPrimaryScore.
+    // Never prune when remainingUpperBound === bestPrimaryScore based on secondary objectives.
     const remainingUpperBound = currentScore + suffixMaxScore[stageIdx];
-    if (bestBreakdown) {
-      if (remainingUpperBound < bestBreakdown.primaryScore) {
-        prunedStatesCount++;
-        return;
-      }
-      if (
-        remainingUpperBound === bestBreakdown.primaryScore &&
-        currentBuffScore + suffixMaxBuffScore[stageIdx] < bestBreakdown.totalStageBuffScore
-      ) {
-        prunedStatesCount++;
-        return;
-      }
+    if (bestBreakdown && remainingUpperBound < bestBreakdown.primaryScore) {
+      prunedStatesCount++;
+      return;
     }
 
     const currentStage = sortedStages[stageIdx];
@@ -351,10 +373,8 @@ export function optimizeToA(context: ToAOptimizationContext): ToAOptimizationRes
         teamScore: entry.score,
       });
 
-      const buffContribution = entry.score.dimensions.stageBuffCompatibility.weightedScore;
-
       // Recurse to next stage
-      search(stageIdx + 1, currentScore + entry.score.totalScore, currentBuffScore + buffContribution);
+      search(stageIdx + 1, currentScore + entry.score.totalScore);
 
       // Backtrack
       currentAssignments.pop();
@@ -363,7 +383,7 @@ export function optimizeToA(context: ToAOptimizationContext): ToAOptimizationRes
   }
 
   // Execute branch-and-bound
-  search(0, 0, 0);
+  search(0, 0);
 
   const durationMs = performance.now() - startTime;
 
@@ -371,6 +391,7 @@ export function optimizeToA(context: ToAOptimizationContext): ToAOptimizationRes
   if (!bestAssignments || !bestBreakdown) {
     return {
       status: 'INFEASIBLE',
+      mode,
       totalScore: 0,
       assignments: [],
       vigorUsage: vigorTracker.getVigorUsageSummary(),
@@ -406,8 +427,12 @@ export function optimizeToA(context: ToAOptimizationContext): ToAOptimizationRes
 
   const finalEvidence = generateOptimizationEvidence(bestAssignments);
 
+  // Status honesty: ONLY OPTIMAL from EXACT mode; BEST_FOUND from BEST_EFFORT mode
+  const finalStatus: OptimizationStatus = isExact ? 'OPTIMAL' : 'BEST_FOUND';
+
   return {
-    status: 'OPTIMAL',
+    status: finalStatus,
+    mode,
     totalScore: bestBreakdown.primaryScore,
     assignments: bestAssignments,
     vigorUsage: finalTracker.getVigorUsageSummary(),

@@ -56,10 +56,19 @@ export interface OptimizationMetrics {
   durationMs: number;
 }
 
-export type OptimizationStatus = 'OPTIMAL' | 'INFEASIBLE';
+export type OptimizationMode = 'EXACT' | 'BEST_EFFORT';
+
+export type OptimizationStatus = 'OPTIMAL' | 'INFEASIBLE' | 'BEST_FOUND';
+
+export interface OptimizationOptions {
+  mode: OptimizationMode;
+  maxSearchStates?: number; // heuristic search budget (for BEST_EFFORT mode)
+  maxCandidatesPerStage?: number; // heuristic candidate reduction per stage (for BEST_EFFORT mode)
+}
 
 export interface ToAOptimizationResult {
   status: OptimizationStatus;
+  mode: OptimizationMode;
   totalScore: number;
   assignments: StageAssignment[];
   vigorUsage: ResonatorVigorUsage[];
@@ -80,5 +89,6 @@ export interface ToAOptimizationContext {
   roster: OwnedRoster;
   defaultVigorCapacity?: number; // default: 10
   vigorCapacities?: Map<string, number> | Record<string, number>;
-  maxCandidatesPerStage?: number; // optional limit for safe candidate reduction in large searches
+  maxCandidatesPerStage?: number; // heuristic candidate reduction per stage (BEST_EFFORT mode only)
 }
+
