@@ -6,3 +6,4 @@ export * from './enemy.ts';
 export * from './toa.ts';
 export * from './team.ts';
 export * from './rules.ts';
+export * from './user-inventory.ts';

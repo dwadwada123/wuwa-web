@@ -10,12 +10,20 @@ import type {
   UnmatchedStageBuff,
 } from './rules.ts';
 import type { ToAStage } from './toa.ts';
+import type {
+  OwnedResonator,
+  OwnedWeapon,
+  OwnedResonatorLoadout,
+} from './user-inventory.ts';
 
 export interface OwnedRoster {
   userId?: string;
   resonatorIds: string[];
   weaponIds?: string[];
   echoIds?: string[];
+  resonators?: OwnedResonator[];
+  weapons?: OwnedWeapon[];
+  loadouts?: OwnedResonatorLoadout[];
 }
 
 export interface TeamCandidate {

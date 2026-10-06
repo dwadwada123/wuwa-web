@@ -60,12 +60,20 @@ export default async function AccountPage() {
         </div>
 
         <div className="mt-8 flex items-center justify-between border-t border-border pt-6">
-          <Link
-            href="/"
-            className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-          >
-            &larr; Back to Home
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/"
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
+              &larr; Home
+            </Link>
+            <Link
+              href="/inventory"
+              className="rounded-lg bg-primary/20 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/30 transition-colors"
+            >
+              Manage Inventory
+            </Link>
+          </div>
 
           <form action={signOut}>
             <button

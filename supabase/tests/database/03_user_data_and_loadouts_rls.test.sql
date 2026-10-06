@@ -5,7 +5,7 @@
 -- ============================================================================
 
 BEGIN;
-SELECT plan(17);
+SELECT plan(20);
 
 -- ----------------------------------------------------------------------------
 -- Part 1: Verify RLS is enabled on all 3 user operational tables
@@ -228,6 +228,35 @@ SELECT lives_ok(
   $$DELETE FROM public.user_resonators
     WHERE id = '44444444-aaaa-1111-1111-000000000001'$$,
   'User Alpha can delete own resonator'
+);
+
+-- ----------------------------------------------------------------------------
+-- Part 6: Unauthenticated Protection (anon role is completely denied)
+-- ----------------------------------------------------------------------------
+SELECT tests.clear_authentication();
+
+-- Assertion 18: anon cannot select from user_weapons
+SELECT throws_ok(
+  $$SELECT count(*) FROM public.user_weapons$$,
+  '42501',
+  NULL,
+  'anon role cannot select from user_weapons'
+);
+
+-- Assertion 19: anon cannot select from user_resonators
+SELECT throws_ok(
+  $$SELECT count(*) FROM public.user_resonators$$,
+  '42501',
+  NULL,
+  'anon role cannot select from user_resonators'
+);
+
+-- Assertion 20: anon cannot select from user_resonator_loadouts
+SELECT throws_ok(
+  $$SELECT count(*) FROM public.user_resonator_loadouts$$,
+  '42501',
+  NULL,
+  'anon role cannot select from user_resonator_loadouts'
 );
 
 SELECT * FROM finish();

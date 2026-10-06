@@ -30,6 +30,12 @@ export default function HomePage() {
               Register
             </Link>
             <Link
+              href="/inventory"
+              className="rounded-lg bg-primary/20 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/30 transition-colors"
+            >
+              Inventory
+            </Link>
+            <Link
               href="/account"
               className="rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
             >

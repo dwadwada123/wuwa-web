@@ -11,3 +11,4 @@ export * from './team-generation/index.ts';
 export * from './scoring/index.ts';
 export * from './optimization/index.ts';
 export * from './explanation/index.ts';
+export * from './adapters/inventory-adapter.ts';
