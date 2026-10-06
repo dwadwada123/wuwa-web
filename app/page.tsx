@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Database } from "@/lib/db/database.types";
 
 // Type verification to ensure generated database types integrate properly
@@ -8,11 +9,33 @@ export default function HomePage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6 sm:p-12">
       <div className="w-full max-w-2xl rounded-2xl border border-border bg-card p-8 shadow-2xl">
-        <div className="flex items-center gap-3">
-          <span className="flex h-3 w-3 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            System Online
-          </span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="flex h-3 w-3 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              System Online
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/auth/login"
+              className="rounded-lg bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/20 transition-colors"
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/auth/sign-up"
+              className="rounded-lg bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground hover:bg-secondary/80 transition-colors"
+            >
+              Register
+            </Link>
+            <Link
+              href="/account"
+              className="rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Account
+            </Link>
+          </div>
         </div>
 
         <h1 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
