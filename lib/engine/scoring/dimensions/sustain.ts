@@ -6,7 +6,7 @@
  */
 
 import type { TeamCandidate, ToAStage, TeamValidationReport } from '../../../domain/types/index.ts';
-import { evaluateEnemyMatchup } from '../../rules/enemy-matchup.ts';
+import { getStageEnemySummary } from './enemy-matchup.ts';
 import type { ScoreDimension } from '../types.ts';
 import { TEAM_SCORING_CONFIG } from '../config.ts';
 
@@ -15,7 +15,7 @@ export function scoreSustain(
   stage: ToAStage,
   report: TeamValidationReport
 ): ScoreDimension {
-  const enemyFacts = evaluateEnemyMatchup(candidate, stage);
+  const enemyFacts = getStageEnemySummary(stage);
   const evidence: string[] = [];
 
   const isHighThreat = enemyFacts.bossPresence || stage.vigorCost >= 4 || stage.stageIndex >= 4;

@@ -39,6 +39,10 @@ export function canonicalizeTeamMembers(
  * Generates the canonical key directly from a TeamCandidate.
  */
 export function getCandidateKey(candidate: TeamCandidate): string {
+  const customKey = (candidate as unknown as { canonicalKey?: string }).canonicalKey;
+  if (customKey) {
+    return customKey;
+  }
   const ids = candidate.members.map((m) => m.resonator.id);
   return createCanonicalTeamKey(ids);
 }

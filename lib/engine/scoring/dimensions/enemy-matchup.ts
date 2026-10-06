@@ -6,16 +6,55 @@
  */
 
 import type { TeamCandidate, ToAStage, TeamValidationReport } from '../../../domain/types/index.ts';
-import { evaluateEnemyMatchup } from '../../rules/enemy-matchup.ts';
 import type { ScoreDimension } from '../types.ts';
 import { TEAM_SCORING_CONFIG } from '../config.ts';
+
+export interface StageEnemySummary {
+  bossPresence: boolean;
+  enemyCount: number;
+  waveCount: number;
+  hasShieldBar: boolean;
+}
+
+const stageEnemySummaryCache = new WeakMap<ToAStage, StageEnemySummary>();
+
+export function getStageEnemySummary(stage: ToAStage): StageEnemySummary {
+  let cached = stageEnemySummaryCache.get(stage);
+  if (!cached) {
+    let enemyCount = 0;
+    let bossPresence = false;
+    let hasShieldBar = false;
+
+    for (const wave of stage.waves) {
+      enemyCount += wave.enemyInstances.length;
+      for (const inst of wave.enemyInstances) {
+        const cls = inst.enemy.enemyClass;
+        if (cls === 'Overlord' || cls === 'Calamity') {
+          bossPresence = true;
+        }
+        if (inst.enemy.modifiers?.some((m) => m.modifierType === 'SHIELD_BAR' && m.isActive)) {
+          hasShieldBar = true;
+        }
+      }
+    }
+
+    cached = {
+      bossPresence,
+      enemyCount,
+      waveCount: stage.waves.length,
+      hasShieldBar,
+    };
+    stageEnemySummaryCache.set(stage, cached);
+  }
+  return cached;
+}
 
 export function scoreEnemyMatchup(
   candidate: TeamCandidate,
   stage: ToAStage,
   report: TeamValidationReport
 ): ScoreDimension {
-  const facts = evaluateEnemyMatchup(candidate, stage);
+  const facts = getStageEnemySummary(stage);
   const evidence: string[] = [];
 
   let rawScore = 50; // Baseline

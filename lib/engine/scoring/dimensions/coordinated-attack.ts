@@ -5,7 +5,6 @@
  */
 
 import type { TeamCandidate, ToAStage, TeamValidationReport } from '../../../domain/types/index.ts';
-import { evaluateStageBuffCompatibility } from '../../rules/stage-compatibility.ts';
 import type { ScoreDimension } from '../types.ts';
 import { TEAM_SCORING_CONFIG } from '../config.ts';
 
@@ -14,7 +13,6 @@ export function scoreCoordinatedAttackSynergy(
   stage: ToAStage,
   report: TeamValidationReport
 ): ScoreDimension {
-  const compat = evaluateStageBuffCompatibility(candidate, stage);
   const evidence: string[] = [];
 
   const stageHasCoordBuff = stage.areaEffects.some(

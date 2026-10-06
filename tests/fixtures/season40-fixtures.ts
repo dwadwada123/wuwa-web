@@ -2,10 +2,10 @@
  * Canonical Patch 3.7 Season 40 ToA Stage Fixtures
  *
  * Grounded in canonical data/patches/3.7/patch_3_7_dataset.json.
- * Represents all 6 required regression stages across Resonant, Hazard, and Echoing towers.
+ * Represents all stages across Resonant, Hazard, and Echoing towers.
  */
 
-import type { ToAStage, AreaEffect, Enemy, GameplayEffect } from '../../lib/domain/types/index.ts';
+import type { ToAStage, AreaEffect, Enemy } from '../../lib/domain/types/index.ts';
 
 const patchId = 'patch-3-7-uuid';
 
@@ -223,19 +223,53 @@ export const commonDrakeEnemy: Enemy = {
   modifiers: [],
 };
 
-// 6 Canonical Season 40 Stages
+// ==========================================
+// RESONANT TOWER (4 STAGES, VIGOR 1, 2, 3, 4)
+// ==========================================
 export const resonantTowerFloor1: ToAStage = {
   id: 'toa-resonant-floor-1',
   patchId,
   stageIndex: 1,
   vigorCost: 1,
   areaEffects: [areaEffectResonantAeroShred, areaEffectResonantDefIgnore],
-  challengeGoals: [{ id: 'cg-1', goalOrder: 1, targetTimeSeconds: 150, points: 1 }],
+  challengeGoals: [{ id: 'cg-r1', goalOrder: 1, targetTimeSeconds: 150, points: 1 }],
   waves: [
     {
-      id: 'w-1',
+      id: 'w-r1',
       waveIndex: 1,
-      enemyInstances: [{ id: 'inst-1', level: 70, spawnOrder: 1, enemy: commonDrakeEnemy }],
+      enemyInstances: [{ id: 'inst-r1', level: 70, spawnOrder: 1, enemy: commonDrakeEnemy }],
+    },
+  ],
+};
+
+export const resonantTowerFloor2: ToAStage = {
+  id: 'toa-resonant-floor-2',
+  patchId,
+  stageIndex: 2,
+  vigorCost: 2,
+  areaEffects: [areaEffectResonantAeroShred, areaEffectResonantDefIgnore],
+  challengeGoals: [{ id: 'cg-r2', goalOrder: 1, targetTimeSeconds: 150, points: 1 }],
+  waves: [
+    {
+      id: 'w-r2',
+      waveIndex: 1,
+      enemyInstances: [{ id: 'inst-r2', level: 75, spawnOrder: 1, enemy: commonDrakeEnemy }],
+    },
+  ],
+};
+
+export const resonantTowerFloor3: ToAStage = {
+  id: 'toa-resonant-floor-3',
+  patchId,
+  stageIndex: 3,
+  vigorCost: 3,
+  areaEffects: [areaEffectResonantAeroShred, areaEffectResonantDefIgnore],
+  challengeGoals: [{ id: 'cg-r3', goalOrder: 1, targetTimeSeconds: 180, points: 1 }],
+  waves: [
+    {
+      id: 'w-r3',
+      waveIndex: 1,
+      enemyInstances: [{ id: 'inst-r3', level: 80, spawnOrder: 1, enemy: commonDrakeEnemy }],
     },
   ],
 };
@@ -246,16 +280,19 @@ export const resonantTowerFloor4: ToAStage = {
   stageIndex: 4,
   vigorCost: 4,
   areaEffects: [areaEffectResonantAeroShred, areaEffectResonantDefIgnore],
-  challengeGoals: [{ id: 'cg-4', goalOrder: 1, targetTimeSeconds: 180, points: 1 }],
+  challengeGoals: [{ id: 'cg-r4', goalOrder: 1, targetTimeSeconds: 180, points: 1 }],
   waves: [
     {
-      id: 'w-4',
+      id: 'w-r4',
       waveIndex: 1,
-      enemyInstances: [{ id: 'inst-4', level: 90, spawnOrder: 1, enemy: mechAbominationBoss }],
+      enemyInstances: [{ id: 'inst-r4', level: 90, spawnOrder: 1, enemy: mechAbominationBoss }],
     },
   ],
 };
 
+// ==========================================
+// HAZARD TOWER (4 STAGES, VIGOR 5, 5, 5, 5)
+// ==========================================
 export const hazardTowerFloor1: ToAStage = {
   id: 'toa-hazard-floor-1',
   patchId,
@@ -268,6 +305,22 @@ export const hazardTowerFloor1: ToAStage = {
       id: 'w-h1',
       waveIndex: 1,
       enemyInstances: [{ id: 'inst-h1', level: 100, spawnOrder: 1, enemy: impermanenceHeronBoss }],
+    },
+  ],
+};
+
+export const hazardTowerFloor2: ToAStage = {
+  id: 'toa-hazard-floor-2',
+  patchId,
+  stageIndex: 2,
+  vigorCost: 5,
+  areaEffects: [areaEffectHazardElectroFusionShred, areaEffectHazardAtkIntroBuff],
+  challengeGoals: [{ id: 'cg-h2', goalOrder: 1, targetTimeSeconds: 180, points: 1 }],
+  waves: [
+    {
+      id: 'w-h2',
+      waveIndex: 1,
+      enemyInstances: [{ id: 'inst-h2', level: 100, spawnOrder: 1, enemy: impermanenceHeronBoss }],
     },
   ],
 };
@@ -292,6 +345,29 @@ export const hazardTowerFloor3: ToAStage = {
   ],
 };
 
+export const hazardTowerFloor4: ToAStage = {
+  id: 'toa-hazard-floor-4',
+  patchId,
+  stageIndex: 4,
+  vigorCost: 5,
+  areaEffects: [
+    areaEffectHazardRampTotalDmg,
+    areaEffectHazardAllResIncrease,
+    areaEffectHazardElectroShieldFusionAmp,
+  ],
+  challengeGoals: [{ id: 'cg-h4', goalOrder: 1, targetTimeSeconds: 150, points: 1 }],
+  waves: [
+    {
+      id: 'w-h4',
+      waveIndex: 1,
+      enemyInstances: [{ id: 'inst-h4', level: 100, spawnOrder: 1, enemy: fallacyOfNoReturnBoss }],
+    },
+  ],
+};
+
+// ==========================================
+// ECHOING TOWER (4 STAGES, VIGOR 1, 2, 3, 4)
+// ==========================================
 export const echoingTowerFloor1: ToAStage = {
   id: 'toa-echoing-floor-1',
   patchId,
@@ -304,6 +380,38 @@ export const echoingTowerFloor1: ToAStage = {
       id: 'w-e1',
       waveIndex: 1,
       enemyInstances: [{ id: 'inst-e1', level: 70, spawnOrder: 1, enemy: commonDrakeEnemy }],
+    },
+  ],
+};
+
+export const echoingTowerFloor2: ToAStage = {
+  id: 'toa-echoing-floor-2',
+  patchId,
+  stageIndex: 2,
+  vigorCost: 2,
+  areaEffects: [areaEffectEchoingHavocShred, areaEffectEchoingIntroSkillBuff],
+  challengeGoals: [{ id: 'cg-e2', goalOrder: 1, targetTimeSeconds: 150, points: 1 }],
+  waves: [
+    {
+      id: 'w-e2',
+      waveIndex: 1,
+      enemyInstances: [{ id: 'inst-e2', level: 75, spawnOrder: 1, enemy: commonDrakeEnemy }],
+    },
+  ],
+};
+
+export const echoingTowerFloor3: ToAStage = {
+  id: 'toa-echoing-floor-3',
+  patchId,
+  stageIndex: 3,
+  vigorCost: 3,
+  areaEffects: [areaEffectEchoingHavocShred, areaEffectEchoingIntroSkillBuff],
+  challengeGoals: [{ id: 'cg-e3', goalOrder: 1, targetTimeSeconds: 180, points: 1 }],
+  waves: [
+    {
+      id: 'w-e3',
+      waveIndex: 1,
+      enemyInstances: [{ id: 'inst-e3', level: 80, spawnOrder: 1, enemy: commonDrakeEnemy }],
     },
   ],
 };
@@ -324,11 +432,28 @@ export const echoingTowerFloor4: ToAStage = {
   ],
 };
 
+// 6 Regression Stages
 export const allSeason40Stages = [
   resonantTowerFloor1,
   resonantTowerFloor4,
   hazardTowerFloor1,
   hazardTowerFloor3,
   echoingTowerFloor1,
+  echoingTowerFloor4,
+];
+
+// Full 12 Canonical Season 40 Stages
+export const fullSeason40Stages = [
+  resonantTowerFloor1,
+  resonantTowerFloor2,
+  resonantTowerFloor3,
+  resonantTowerFloor4,
+  hazardTowerFloor1,
+  hazardTowerFloor2,
+  hazardTowerFloor3,
+  hazardTowerFloor4,
+  echoingTowerFloor1,
+  echoingTowerFloor2,
+  echoingTowerFloor3,
   echoingTowerFloor4,
 ];

@@ -9,6 +9,8 @@ import type {
   TeamCandidate,
   ToAStage,
   RuleEvaluationContext,
+  TeamValidationReport,
+  RuleViolation,
 } from '../../domain/types/index.ts';
 import { evaluateTeam } from '../evaluator.ts';
 import { getCandidateKey } from '../team-generation/canonicalize.ts';
@@ -35,6 +37,18 @@ function createZeroDimension(weight: number, evidence: string[]): ScoreDimension
   };
 }
 
+interface StaticCandidateScoreData {
+  roster: unknown;
+  report: TeamValidationReport;
+  roleCoverage: ScoreDimension;
+  offensiveSynergy: ScoreDimension;
+  resistanceUtility: ScoreDimension;
+  resourceSynergy: ScoreDimension;
+  candidateKey: string;
+}
+
+const candidateStaticCache = new WeakMap<TeamCandidate, StaticCandidateScoreData>();
+
 /**
  * Pure evaluation function scoring a candidate team against a specific ToA stage.
  */
@@ -43,22 +57,51 @@ export function scoreTeamForStage(
   stage: ToAStage,
   context: TeamScoringContext
 ): TeamStageScore {
-  const candidateKey = getCandidateKey(candidate);
+  let staticData = candidateStaticCache.get(candidate);
+  if (!staticData || staticData.roster !== context.roster) {
+    const ruleContext: RuleEvaluationContext = {
+      patchContext: context.patchContext,
+      roster: context.roster,
+    };
+    const report = evaluateTeam(candidate, ruleContext);
+    const roleCoverage = scoreRoleCoverage(candidate, report);
+    const offensiveSynergy = scoreOffensiveSynergy(candidate, report);
+    const resistanceUtility = scoreResistanceUtility(candidate, report);
+    const resourceSynergy = scoreResourceSynergy(candidate, report);
+    staticData = {
+      roster: context.roster,
+      report,
+      roleCoverage,
+      offensiveSynergy,
+      resistanceUtility,
+      resourceSynergy,
+      candidateKey: getCandidateKey(candidate),
+    };
+    candidateStaticCache.set(candidate, staticData);
+  }
+
+  const {
+    report,
+    roleCoverage,
+    offensiveSynergy,
+    resistanceUtility,
+    resourceSynergy,
+    candidateKey,
+  } = staticData;
   const stageKey = `${stage.patchId}:${stage.id}`;
 
-  const ruleContext: RuleEvaluationContext = {
-    patchContext: context.patchContext,
-    roster: context.roster,
-  };
-
-  // Phase 4A deterministic evaluation
-  const report = evaluateTeam(candidate, ruleContext, stage);
+  const patchMismatch = stage.patchId !== context.patchContext.patchId;
 
   // If hard-invalid, return zero score and documented violations
-  if (!report.isValid) {
+  if (!report.isValid || patchMismatch) {
     const hardEvidence = report.violations.map(
-      (v) => `HARD REJECTION [${v.ruleId}]: ${v.reason}`
+      (v: RuleViolation) => `HARD REJECTION [${v.ruleId}]: ${v.reason}`
     );
+    if (patchMismatch) {
+      hardEvidence.push(
+        `HARD REJECTION [RULE_STAGE_PATCH_ISOLATION]: Stage patch ${stage.patchId} does not match active patch ${context.patchContext.patchId}.`
+      );
+    }
 
     return {
       candidateKey,
@@ -108,16 +151,12 @@ export function scoreTeamForStage(
     };
   }
 
-  // Evaluate all 9 dimensions
-  const roleCoverage = scoreRoleCoverage(candidate, report);
+  // Evaluate the remaining 5 stage-dependent dimensions
   const elementalMatchup = scoreElementalMatchup(candidate, stage);
   const enemyMatchup = scoreEnemyMatchup(candidate, stage, report);
   const stageBuffCompatibility = scoreStageBuffCompatibility(candidate, stage);
-  const offensiveSynergy = scoreOffensiveSynergy(candidate, report);
   const sustain = scoreSustain(candidate, stage, report);
-  const resistanceUtility = scoreResistanceUtility(candidate, report);
   const coordinatedAttackSynergy = scoreCoordinatedAttackSynergy(candidate, stage, report);
-  const resourceSynergy = scoreResourceSynergy(candidate, report);
 
   // Sum exact integer weighted contributions
   const totalScore =
@@ -162,6 +201,6 @@ export function scoreTeamForStage(
       resourceSynergy,
     },
     evidence: summaryEvidence,
-    warnings: report.violations.filter((v) => v.severity === 'SOFT'),
+    warnings: report.violations.filter((v: RuleViolation) => v.severity === 'SOFT'),
   };
 }

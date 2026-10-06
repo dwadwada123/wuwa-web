@@ -9,3 +9,4 @@ export * from './rules/enemy-matchup.ts';
 export * from './rules/patch-isolation.ts';
 export * from './team-generation/index.ts';
 export * from './scoring/index.ts';
+export * from './optimization/index.ts';
