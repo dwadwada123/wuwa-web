@@ -75,3 +75,8 @@ export interface TeamGenerationContext {
   builds?: Map<string, ResonatorBuild> | ResonatorBuild[] | Record<string, ResonatorBuild>;
   stage?: ToAStage;
 }
+
+export interface TeamScoringContext {
+  patchContext: PatchContext;
+  roster: OwnedRoster;
+}
