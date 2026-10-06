@@ -332,6 +332,23 @@ export const chasmGuardianElite: Enemy = {
   modifiers: [],
 };
 
+export const mourningAixBoss: Enemy = {
+  id: 'enemy-mourning-aix',
+  name: 'Mourning Aix',
+  code: 'BOSS_MOURNING_AIX',
+  enemyClass: 'Overlord',
+  resistances: [
+    { element: 'Spectro', resistanceRatio: 0.40 },
+    { element: 'Glacio', resistanceRatio: 0.20 },
+    { element: 'Aero', resistanceRatio: 0.20 },
+    { element: 'Fusion', resistanceRatio: 0.20 },
+    { element: 'Electro', resistanceRatio: 0.20 },
+    { element: 'Havoc', resistanceRatio: 0.20 },
+    { element: 'Physical', resistanceRatio: 0.20 },
+  ],
+  modifiers: [],
+};
+
 // 6. ToA Stages Fixtures
 export const stageHazardZone37: ToAStage = {
   id: 'toa-stage-hazard-f4-p37',
@@ -419,6 +436,59 @@ export const stageHazardZone37: ToAStage = {
   ],
 };
 
+export const stageResonantTower37: ToAStage = {
+  id: 'toa-stage-resonant-f4-p37',
+  patchId: 'patch-3-7-uuid',
+  stageIndex: 4,
+  vigorCost: 4,
+  areaEffects: [
+    {
+      id: 'area-eff-glacio-boost',
+      sourceId: 'src-glacio-tower',
+      name: 'Frostbite Resonator',
+      description: 'Glacio RES is reduced by 10% and Glacio DMG is increased by 20%.',
+      gameplayEffect: {
+        id: 'ge-glacio-res-buff',
+        patchId: 'patch-3-7-uuid',
+        category: 'RES_SHRED',
+        target: 'ENEMY',
+        detailExpression: { element: 'Glacio', modifier: -0.10 },
+      },
+    },
+    {
+      id: 'area-eff-coord-boost',
+      sourceId: 'src-coord-tower',
+      name: 'Harmonic Sync',
+      description: 'When triggering a coordinated attack, team members gain 15% Crit Rate.',
+      gameplayEffect: {
+        id: 'ge-coord-boost',
+        patchId: 'patch-3-7-uuid',
+        category: 'COORDINATED_ATTACK',
+        target: 'TEAM',
+        detailExpression: { crit_rate: 0.15 },
+      },
+    },
+  ],
+  challengeGoals: [
+    { id: 'cg-r1', goalOrder: 1, targetTimeSeconds: 180, points: 1 },
+    { id: 'cg-r2', goalOrder: 2, targetTimeSeconds: 120, points: 1 },
+  ],
+  waves: [
+    {
+      id: 'wave-r1',
+      waveIndex: 1,
+      enemyInstances: [
+        {
+          id: 'inst-r1',
+          level: 100,
+          spawnOrder: 1,
+          enemy: mourningAixBoss,
+        },
+      ],
+    },
+  ],
+};
+
 export const stageHazardZone36: ToAStage = {
   id: 'toa-stage-hazard-f4-p36',
   patchId: 'patch-3-6-uuid', // Different patch ID
@@ -442,3 +512,53 @@ export const partialOwnedRoster: OwnedRoster = {
   resonatorIds: ['res-jinhsi', 'res-verina'], // Jianxin and Yangyang missing
   weaponIds: ['weapon-age-of-harvest'],
 };
+
+export const availableResonatorsList: Resonator[] = [
+  jinhsi,
+  verina,
+  jianxin,
+  yangyang,
+  futureResonator,
+];
+
+/**
+ * Creates a synthetic roster and resonator set of N characters for benchmark testing.
+ */
+export function createSyntheticRoster(count: number): {
+  roster: OwnedRoster;
+  resonators: Resonator[];
+} {
+  const elements = ['Glacio', 'Fusion', 'Electro', 'Aero', 'Spectro', 'Havoc'] as const;
+  const weapons = ['Broadblade', 'Sword', 'Pistols', 'Gauntlets', 'Rectifier'] as const;
+
+  const resonators: Resonator[] = [];
+  const resonatorIds: string[] = [];
+
+  for (let i = 1; i <= count; i++) {
+    const id = `res-synth-${String(i).padStart(3, '0')}`;
+    resonatorIds.push(id);
+
+    resonators.push({
+      id,
+      name: `Synthetic Hero ${i}`,
+      element: elements[i % elements.length],
+      weaponType: weapons[i % weapons.length],
+      rarity: i % 2 === 0 ? 5 : 4,
+      releaseDate: '2024-05-22', // released well before snapshot 2026-09-14
+      baseHpLvl90: 10000,
+      baseAtkLvl90: 400,
+      baseDefLvl90: 1100,
+      roles: [{ code: i % 3 === 0 ? 'MAIN_DPS' : i % 3 === 1 ? 'SUB_DPS' : 'SUPPORT', label: 'Role', isPrimary: true }],
+      combatTags: [{ code: 'TEST_TAG', label: 'Test Tag' }],
+      abilities: [],
+    });
+  }
+
+  return {
+    roster: {
+      userId: 'bench-user',
+      resonatorIds,
+    },
+    resonators,
+  };
+}

@@ -7,3 +7,4 @@ export * from './rules/elemental-matchup.ts';
 export * from './rules/stage-compatibility.ts';
 export * from './rules/enemy-matchup.ts';
 export * from './rules/patch-isolation.ts';
+export * from './team-generation/index.ts';
