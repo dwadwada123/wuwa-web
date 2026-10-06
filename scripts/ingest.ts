@@ -1,0 +1,138 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { createClient } from '@supabase/supabase-js';
+import { ingestPatchDataset } from '../lib/ingestion/engine.ts';
+import { validatePatchDataset } from '../lib/ingestion/validation.ts';
+import type { PatchDataset } from '../lib/ingestion/types.ts';
+
+async function run() {
+  console.log('=== WUTHERING WAVES 3.7 DETERMINISTIC INGESTION ===\n');
+
+  // Parse command-line target flags
+  const args = process.argv.slice(2);
+  let target: 'local' | 'remote' = 'local';
+  let confirmRemote = false;
+
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    if (arg === '--target' && i + 1 < args.length) {
+      const val = args[++i].toLowerCase();
+      if (val === 'local' || val === 'remote') {
+        target = val;
+      } else {
+        console.error(`ERROR: Invalid target "${val}". Supported targets: local, remote`);
+        process.exit(1);
+      }
+    } else if (arg.startsWith('--target=')) {
+      const val = arg.split('=')[1].toLowerCase();
+      if (val === 'local' || val === 'remote') {
+        target = val;
+      } else {
+        console.error(`ERROR: Invalid target "${val}". Supported targets: local, remote`);
+        process.exit(1);
+      }
+    } else if (arg === '--confirm-remote') {
+      confirmRemote = true;
+    }
+  }
+
+  // Enforce remote confirmation guard
+  if (target === 'remote') {
+    if (!confirmRemote) {
+      console.error('ERROR: Remote ingestion aborted for safety.');
+      console.error('Remote execution strictly requires both flags:');
+      console.error('  --target remote --confirm-remote');
+      process.exit(1);
+    }
+  }
+
+  // Print explicit target indicator before credential resolution
+  if (target === 'remote') {
+    console.log('Target: REMOTE\n');
+  } else {
+    console.log('Target: LOCAL\n');
+  }
+
+  // Resolve target-specific credentials
+  let supabaseUrl: string;
+  let adminKey: string;
+
+  if (target === 'remote') {
+    const envUrl = process.env.SUPABASE_URL;
+    const envKey = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!envUrl) {
+      console.error('ERROR: SUPABASE_URL environment variable is required for remote ingestion.');
+      process.exit(1);
+    }
+    if (!envKey) {
+      console.error('ERROR: SUPABASE_SECRET_KEY environment variable is required for remote ingestion.');
+      process.exit(1);
+    }
+
+    supabaseUrl = envUrl;
+    adminKey = envKey;
+  } else {
+    // Local target uses local Supabase URL and credentials
+    supabaseUrl = process.env.SUPABASE_URL || 'http://127.0.0.1:54321';
+    adminKey =
+      process.env.SUPABASE_SECRET_KEY ||
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU';
+  }
+
+  const supabase = createClient(supabaseUrl, adminKey, {
+    auth: { persistSession: false, autoRefreshToken: false }
+  });
+
+  const datasetPath = path.resolve('data/patches/3.7/patch_3_7_dataset.json');
+  if (!fs.existsSync(datasetPath)) {
+    console.error(`ERROR: Dataset file not found at ${datasetPath}`);
+    process.exit(1);
+  }
+
+  const rawJson = fs.readFileSync(datasetPath, 'utf8');
+  const dataset: PatchDataset = JSON.parse(rawJson);
+
+  console.log(`[Validation] Validating patch ${dataset.patch?.version} dataset...`);
+  const validation = validatePatchDataset(dataset);
+  if (!validation.isValid) {
+    console.error('Validation failed with errors:');
+    validation.errors.forEach(e => console.error(`  - [${e.path}] ${e.message}`));
+    process.exit(1);
+  }
+  console.log('  -> Validation PASSED cleanly.\n');
+
+  console.log(`[Ingestion] Ingesting into Supabase canonical game-fact tables...`);
+  const report = await ingestPatchDataset(dataset, supabase);
+
+  console.log('\n=== INGESTION REPORT ===');
+  console.log(`Success:                   ${report.success}`);
+  console.log(`Patch Version:             ${report.patchVersion}`);
+  console.log(`Duration:                  ${report.durationMs}ms`);
+  console.log('\nCanonical Records Processed:');
+  console.log(`  - Patches:               ${report.counts.patches}`);
+  console.log(`  - Provenance Sources:    ${report.counts.provenanceSources}`);
+  console.log(`  - Functional Roles:      ${report.counts.functionalRoles}`);
+  console.log(`  - Combat Tags:           ${report.counts.combatTags}`);
+  console.log(`  - Resonators:            ${report.counts.resonators}`);
+  console.log(`  - Resonator Patch Data:  ${report.counts.resonatorPatchData}`);
+  console.log(`  - Resonator Roles:       ${report.counts.resonatorRoles}`);
+  console.log(`  - Resonator Combat Tags: ${report.counts.resonatorCombatTags}`);
+  console.log(`  - Abilities:             ${report.counts.abilities}`);
+  console.log(`  - Ability Patch Data:    ${report.counts.abilityPatchData}`);
+  console.log(`  - Gameplay Effects:      ${report.counts.gameplayEffects}`);
+  console.log(`  - Ability Effects:       ${report.counts.abilityEffects}`);
+  console.log('\nProvenance Sources:');
+  report.provenanceSourcesUsed.forEach(s => console.log(`  - ${s}`));
+  console.log('\nExternal URLs:');
+  report.externalSources.forEach(u => console.log(`  - ${u}`));
+  console.log('\nIntentional Omissions:');
+  report.omissions.forEach(o => console.log(`  - ${o}`));
+  console.log('==================================================\n');
+}
+
+run().catch(err => {
+  console.error('\nIngestion process aborted with error:', err);
+  process.exit(1);
+});

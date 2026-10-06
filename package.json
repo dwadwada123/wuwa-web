@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "node --test --experimental-strip-types tests/**/*.test.ts",
+    "ingest": "node --experimental-strip-types scripts/ingest.ts"
   },
   "type": "module",
   "devDependencies": {
@@ -27,6 +29,7 @@
     "next": "^16.3.8",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
+    "server-only": "^0.0.1",
     "tailwind-merge": "^3.7.0"
   }
 }
