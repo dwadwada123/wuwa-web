@@ -123,6 +123,12 @@ async function run() {
   console.log(`  - Ability Patch Data:    ${report.counts.abilityPatchData}`);
   console.log(`  - Gameplay Effects:      ${report.counts.gameplayEffects}`);
   console.log(`  - Ability Effects:       ${report.counts.abilityEffects}`);
+  console.log(`  - Weapons:               ${report.counts.weapons}`);
+  console.log(`  - Weapon Patch Data:     ${report.counts.weaponPatchData}`);
+  console.log(`  - Echoes:                ${report.counts.echoes}`);
+  console.log(`  - Echo Patch Data:       ${report.counts.echoPatchData}`);
+  console.log(`  - Sonatas:               ${report.counts.sonatas}`);
+  console.log(`  - Sonata Patch Data:     ${report.counts.sonataPatchData}`);
   console.log('\nProvenance Sources:');
   report.provenanceSourcesUsed.forEach(s => console.log(`  - ${s}`));
   console.log('\nExternal URLs:');

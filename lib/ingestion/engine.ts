@@ -50,7 +50,13 @@ export async function ingestPatchDataset(
     abilities: 0,
     abilityPatchData: 0,
     gameplayEffects: 0,
-    abilityEffects: 0
+    abilityEffects: 0,
+    weapons: 0,
+    weaponPatchData: 0,
+    echoes: 0,
+    echoPatchData: 0,
+    sonatas: 0,
+    sonataPatchData: 0
   };
 
   // 2. Ingest Provenance Sources
@@ -377,6 +383,281 @@ export async function ingestPatchDataset(
           counts.abilityEffects++;
         }
       }
+    }
+  }
+
+  // 7. Ingest Weapons & Weapon Patch Data
+  if (dataset.weapons && dataset.weapons.length > 0) {
+    for (const w of dataset.weapons) {
+      // 7a. Invariant Weapon Identity
+      const { data: weaponRow, error: weaponError } = await supabase
+        .from('weapons')
+        .upsert(
+          {
+            name: w.name,
+            weapon_type: w.weapon_type,
+            rarity: w.rarity
+          },
+          { onConflict: 'name' }
+        )
+        .select('id, name')
+        .single();
+
+      if (weaponError || !weaponRow) {
+        throw new Error(`Failed to upsert weapon ${w.name}: ${weaponError?.message}`);
+      }
+
+      const weaponId = weaponRow.id;
+      counts.weapons++;
+
+      // 7b. Passive Effect (if provided)
+      let passiveEffectId: string | null = null;
+      if (w.patch_data.passive_effect) {
+        const eff = w.patch_data.passive_effect;
+        const effProvId = provenanceMap.get(eff.provenance_source_name);
+        if (!effProvId) {
+          throw new Error(`Provenance source ${eff.provenance_source_name} for weapon ${w.name} not found`);
+        }
+
+        passiveEffectId = deterministicUuid(`gameplay_effect:weapon:${dataset.patch.version}:${w.name}`);
+        const { error: effError } = await supabase
+          .from('gameplay_effects')
+          .upsert(
+            {
+              id: passiveEffectId,
+              patch_id: patchId,
+              category: eff.category,
+              target: eff.target,
+              condition_expression: eff.condition_expression ?? {},
+              detail_expression: eff.detail_expression ?? {},
+              provenance_id: effProvId
+            },
+            { onConflict: 'id' }
+          );
+
+        if (effError) {
+          throw new Error(`Failed to upsert weapon passive effect for ${w.name}: ${effError.message}`);
+        }
+        counts.gameplayEffects++;
+      }
+
+      // 7c. Patch-Specific Weapon Data
+      const wProvId = provenanceMap.get(w.patch_data.provenance_source_name);
+      if (!wProvId) {
+        throw new Error(`Provenance source ${w.patch_data.provenance_source_name} for weapon ${w.name} not found`);
+      }
+
+      const { error: wPatchError } = await supabase
+        .from('weapon_patch_data')
+        .upsert(
+          {
+            weapon_id: weaponId,
+            patch_id: patchId,
+            base_atk_lvl90: w.patch_data.base_atk_lvl90,
+            sub_stat_type: w.patch_data.sub_stat_type,
+            sub_stat_value_lvl90: w.patch_data.sub_stat_value_lvl90,
+            passive_effect_id: passiveEffectId,
+            provenance_id: wProvId
+          },
+          { onConflict: 'weapon_id, patch_id' }
+        );
+
+      if (wPatchError) {
+        throw new Error(`Failed to upsert weapon_patch_data for ${w.name}: ${wPatchError.message}`);
+      }
+
+      counts.weaponPatchData++;
+    }
+  }
+
+  // 8. Ingest Echoes & Echo Patch Data
+  if (dataset.echoes && dataset.echoes.length > 0) {
+    for (const e of dataset.echoes) {
+      // 8a. Invariant Echo Identity
+      const { data: echoRow, error: echoError } = await supabase
+        .from('echoes')
+        .upsert(
+          {
+            name: e.name,
+            class_type: e.class_type,
+            cost: e.cost
+          },
+          { onConflict: 'name' }
+        )
+        .select('id, name')
+        .single();
+
+      if (echoError || !echoRow) {
+        throw new Error(`Failed to upsert echo ${e.name}: ${echoError?.message}`);
+      }
+
+      const echoId = echoRow.id;
+      counts.echoes++;
+
+      // 8b. Skill Effect (if provided)
+      let skillEffectId: string | null = null;
+      if (e.patch_data.skill_effect) {
+        const eff = e.patch_data.skill_effect;
+        const effProvId = provenanceMap.get(eff.provenance_source_name);
+        if (!effProvId) {
+          throw new Error(`Provenance source ${eff.provenance_source_name} for echo ${e.name} not found`);
+        }
+
+        skillEffectId = deterministicUuid(`gameplay_effect:echo:${dataset.patch.version}:${e.name}`);
+        const { error: effError } = await supabase
+          .from('gameplay_effects')
+          .upsert(
+            {
+              id: skillEffectId,
+              patch_id: patchId,
+              category: eff.category,
+              target: eff.target,
+              condition_expression: eff.condition_expression ?? {},
+              detail_expression: eff.detail_expression ?? {},
+              provenance_id: effProvId
+            },
+            { onConflict: 'id' }
+          );
+
+        if (effError) {
+          throw new Error(`Failed to upsert echo skill effect for ${e.name}: ${effError.message}`);
+        }
+        counts.gameplayEffects++;
+      }
+
+      // 8c. Patch-Specific Echo Data
+      const eProvId = provenanceMap.get(e.patch_data.provenance_source_name);
+      if (!eProvId) {
+        throw new Error(`Provenance source ${e.patch_data.provenance_source_name} for echo ${e.name} not found`);
+      }
+
+      const { error: ePatchError } = await supabase
+        .from('echo_patch_data')
+        .upsert(
+          {
+            echo_id: echoId,
+            patch_id: patchId,
+            cost: e.patch_data.cost,
+            cd_seconds: e.patch_data.cd_seconds ?? 0,
+            concertos_generated: e.patch_data.concertos_generated ?? 0,
+            skill_effect_id: skillEffectId,
+            provenance_id: eProvId
+          },
+          { onConflict: 'echo_id, patch_id' }
+        );
+
+      if (ePatchError) {
+        throw new Error(`Failed to upsert echo_patch_data for ${e.name}: ${ePatchError.message}`);
+      }
+
+      counts.echoPatchData++;
+    }
+  }
+
+  // 9. Ingest Sonatas & Sonata Patch Data
+  if (dataset.sonatas && dataset.sonatas.length > 0) {
+    for (const s of dataset.sonatas) {
+      // 9a. Invariant Sonata Identity
+      const { data: sonataRow, error: sonataError } = await supabase
+        .from('sonatas')
+        .upsert(
+          {
+            name: s.name,
+            code: s.code,
+            description: s.description ?? null
+          },
+          { onConflict: 'code' }
+        )
+        .select('id, code')
+        .single();
+
+      if (sonataError || !sonataRow) {
+        throw new Error(`Failed to upsert sonata ${s.code}: ${sonataError?.message}`);
+      }
+
+      const sonataId = sonataRow.id;
+      counts.sonatas++;
+
+      // 9b. 2-Piece Gameplay Effect
+      const eff2 = s.patch_data.two_piece_effect;
+      const eff2ProvId = provenanceMap.get(eff2.provenance_source_name);
+      if (!eff2ProvId) {
+        throw new Error(`Provenance source ${eff2.provenance_source_name} for sonata ${s.code} 2pc not found`);
+      }
+
+      const twoPieceEffectId = deterministicUuid(`gameplay_effect:sonata:${dataset.patch.version}:${s.code}:2pc`);
+      const { error: eff2Error } = await supabase
+        .from('gameplay_effects')
+        .upsert(
+          {
+            id: twoPieceEffectId,
+            patch_id: patchId,
+            category: eff2.category,
+            target: eff2.target,
+            condition_expression: eff2.condition_expression ?? {},
+            detail_expression: eff2.detail_expression ?? {},
+            provenance_id: eff2ProvId
+          },
+          { onConflict: 'id' }
+        );
+
+      if (eff2Error) {
+        throw new Error(`Failed to upsert sonata 2pc effect for ${s.code}: ${eff2Error.message}`);
+      }
+      counts.gameplayEffects++;
+
+      // 9c. 5-Piece Gameplay Effect
+      const eff5 = s.patch_data.five_piece_effect;
+      const eff5ProvId = provenanceMap.get(eff5.provenance_source_name);
+      if (!eff5ProvId) {
+        throw new Error(`Provenance source ${eff5.provenance_source_name} for sonata ${s.code} 5pc not found`);
+      }
+
+      const fivePieceEffectId = deterministicUuid(`gameplay_effect:sonata:${dataset.patch.version}:${s.code}:5pc`);
+      const { error: eff5Error } = await supabase
+        .from('gameplay_effects')
+        .upsert(
+          {
+            id: fivePieceEffectId,
+            patch_id: patchId,
+            category: eff5.category,
+            target: eff5.target,
+            condition_expression: eff5.condition_expression ?? {},
+            detail_expression: eff5.detail_expression ?? {},
+            provenance_id: eff5ProvId
+          },
+          { onConflict: 'id' }
+        );
+
+      if (eff5Error) {
+        throw new Error(`Failed to upsert sonata 5pc effect for ${s.code}: ${eff5Error.message}`);
+      }
+      counts.gameplayEffects++;
+
+      // 9d. Patch-Specific Sonata Data
+      const sProvId = provenanceMap.get(s.patch_data.provenance_source_name);
+      if (!sProvId) {
+        throw new Error(`Provenance source ${s.patch_data.provenance_source_name} for sonata ${s.code} not found`);
+      }
+
+      const { error: sPatchError } = await supabase
+        .from('sonata_patch_data')
+        .upsert(
+          {
+            sonata_id: sonataId,
+            patch_id: patchId,
+            two_piece_effect_id: twoPieceEffectId,
+            five_piece_effect_id: fivePieceEffectId,
+            provenance_id: sProvId
+          },
+          { onConflict: 'sonata_id, patch_id' }
+        );
+
+      if (sPatchError) {
+        throw new Error(`Failed to upsert sonata_patch_data for ${s.code}: ${sPatchError.message}`);
+      }
+
+      counts.sonataPatchData++;
     }
   }
 

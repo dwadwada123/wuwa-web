@@ -128,12 +128,61 @@ export interface ResonatorInput {
   abilities: AbilityInput[];
 }
 
+export interface WeaponPatchDataInput {
+  base_atk_lvl90: number;
+  sub_stat_type: string;
+  sub_stat_value_lvl90: number;
+  passive_effect?: GameplayEffectInput | null;
+  provenance_source_name: string;
+}
+
+export interface WeaponInput {
+  name: string;
+  weapon_type: WeaponType;
+  rarity: 3 | 4 | 5;
+  patch_data: WeaponPatchDataInput;
+}
+
+export type EchoClassType = 'Calamity' | 'Overlord' | 'Elite' | 'Common';
+export type EchoCost = 1 | 3 | 4;
+
+export interface EchoPatchDataInput {
+  cost: EchoCost;
+  cd_seconds?: number;
+  concertos_generated?: number;
+  skill_effect?: GameplayEffectInput | null;
+  provenance_source_name: string;
+}
+
+export interface EchoInput {
+  name: string;
+  class_type: EchoClassType;
+  cost: EchoCost;
+  patch_data: EchoPatchDataInput;
+}
+
+export interface SonataPatchDataInput {
+  two_piece_effect: GameplayEffectInput;
+  five_piece_effect: GameplayEffectInput;
+  provenance_source_name: string;
+}
+
+export interface SonataInput {
+  name: string;
+  code: string;
+  description?: string | null;
+  patch_data: SonataPatchDataInput;
+}
+
 export interface PatchDataset {
   patch: PatchInput;
   provenance_sources: ProvenanceSourceInput[];
   functional_roles: FunctionalRoleInput[];
   combat_tags: CombatTagInput[];
   resonators: ResonatorInput[];
+  weapons?: WeaponInput[];
+  echoes?: EchoInput[];
+  sonatas?: SonataInput[];
 }
 
 export interface IngestionCounts {
@@ -149,6 +198,12 @@ export interface IngestionCounts {
   abilityPatchData: number;
   gameplayEffects: number;
   abilityEffects: number;
+  weapons: number;
+  weaponPatchData: number;
+  echoes: number;
+  echoPatchData: number;
+  sonatas: number;
+  sonataPatchData: number;
 }
 
 export interface IngestionReport {

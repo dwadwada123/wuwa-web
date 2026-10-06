@@ -177,6 +177,134 @@ test('Ingestion CLI - Remote Ingestion Requires --confirm-remote', () => {
   assert.ok(proc.stderr.includes('--confirm-remote'));
 });
 
+test('Ingestion - Valid Weapon Parsing', () => {
+  const dataset = loadTestDataset();
+  assert.ok(dataset.weapons && dataset.weapons.length >= 60, 'Should have at least 60 weapons');
+
+  const jadehaven = dataset.weapons.find(w => w.name === 'Blooming Jadehaven');
+  assert.ok(jadehaven, 'Blooming Jadehaven must exist');
+  assert.equal(jadehaven.weapon_type, 'Rectifier');
+  assert.equal(jadehaven.rarity, 5);
+  assert.equal(jadehaven.patch_data.base_atk_lvl90, 587.50);
+  assert.equal(jadehaven.patch_data.sub_stat_type, 'CritRate');
+  assert.equal(jadehaven.patch_data.sub_stat_value_lvl90, 0.2430);
+
+  const unspokenRue = dataset.weapons.find(w => w.name === 'Unspoken Rue');
+  assert.ok(unspokenRue, 'Unspoken Rue must exist');
+  assert.equal(unspokenRue.weapon_type, 'Sword');
+  assert.equal(unspokenRue.rarity, 5);
+  assert.equal(unspokenRue.patch_data.base_atk_lvl90, 587.50);
+  assert.equal(unspokenRue.patch_data.sub_stat_type, 'CritRate');
+  assert.equal(unspokenRue.patch_data.sub_stat_value_lvl90, 0.2430);
+});
+
+test('Ingestion - Invalid Weapon Taxonomy Rejected', () => {
+  const dataset = loadTestDataset();
+  (dataset.weapons![0] as any).weapon_type = 'Dagger';
+
+  const result = validatePatchDataset(dataset);
+  assert.equal(result.isValid, false);
+  assert.ok(result.errors.some(e => e.message.includes('Invalid weapon type')));
+});
+
+test('Ingestion - Duplicate Weapon Identity Rejected', () => {
+  const dataset = loadTestDataset();
+  const clone = JSON.parse(JSON.stringify(dataset.weapons![0]));
+  dataset.weapons!.push(clone);
+
+  const result = validatePatchDataset(dataset);
+  assert.equal(result.isValid, false);
+  assert.ok(result.errors.some(e => e.message.includes('Duplicate weapon identity')));
+});
+
+test('Ingestion - Valid Echo Parsing', () => {
+  const dataset = loadTestDataset();
+  assert.ok(dataset.echoes && dataset.echoes.length >= 40, 'Should have at least 40 echoes');
+
+  const formrender = dataset.echoes.find(e => e.name === 'Formrender');
+  assert.ok(formrender, 'Formrender must exist');
+  assert.equal(formrender.class_type, 'Elite');
+  assert.equal(formrender.cost, 3);
+
+  const soulfrayer = dataset.echoes.find(e => e.name === 'Soulfrayer');
+  assert.ok(soulfrayer, 'Soulfrayer must exist');
+  assert.equal(soulfrayer.class_type, 'Elite');
+  assert.equal(soulfrayer.cost, 3);
+
+  const skywatch = dataset.echoes.find(e => e.name === 'Skywatch Lancer');
+  assert.ok(skywatch, 'Skywatch Lancer must exist');
+  assert.equal(skywatch.class_type, 'Common');
+  assert.equal(skywatch.cost, 1);
+
+  const puppet = dataset.echoes.find(e => e.name === 'Bloomburst Puppet');
+  assert.ok(puppet, 'Bloomburst Puppet must exist');
+  assert.equal(puppet.class_type, 'Common');
+  assert.equal(puppet.cost, 1);
+
+  const serpent = dataset.echoes.find(e => e.name === 'Jade Nether Serpent');
+  assert.ok(serpent, 'Jade Nether Serpent must exist');
+  assert.equal(serpent.class_type, 'Common');
+  assert.equal(serpent.cost, 1);
+
+  const suhsin = dataset.echoes.find(e => e.name === 'Reminiscence: Suhsin the Inevitable');
+  assert.ok(suhsin, 'Reminiscence: Suhsin the Inevitable must exist');
+  assert.equal(suhsin.class_type, 'Calamity');
+  assert.equal(suhsin.cost, 4);
+});
+
+test('Ingestion - Invalid Echo Cost/Class Rejected', () => {
+  const dataset = loadTestDataset();
+  (dataset.echoes![0] as any).cost = 2;
+
+  const result = validatePatchDataset(dataset);
+  assert.equal(result.isValid, false);
+  assert.ok(result.errors.some(e => e.message.includes('Invalid echo cost')));
+});
+
+test('Ingestion - Valid Sonata Parsing', () => {
+  const dataset = loadTestDataset();
+  assert.ok(dataset.sonatas && dataset.sonatas.length === 12, 'Must have exactly 12 Sonata sets');
+
+  const swornVigil = dataset.sonatas.find(s => s.code === 'HEART_OF_SWORN_VIGIL');
+  assert.ok(swornVigil, 'Heart of Sworn Vigil must exist');
+  assert.equal(swornVigil.name, 'Heart of Sworn Vigil');
+  assert.ok(swornVigil.patch_data.two_piece_effect);
+  assert.ok(swornVigil.patch_data.five_piece_effect);
+
+  const electricRef = dataset.sonatas.find(s => s.code === 'FLASH_OF_ELECTRIC_REFLECTION');
+  assert.ok(electricRef, 'Flash of Electric Reflection must exist');
+  assert.equal(electricRef.name, 'Flash of Electric Reflection');
+
+  const tingedYearning = dataset.sonatas.find(s => s.code === 'FLOWER_OF_TINGED_YEARNING');
+  assert.ok(tingedYearning, 'Flower of Tinged Yearning must exist');
+  assert.equal(tingedYearning.name, 'Flower of Tinged Yearning');
+});
+
+test('Ingestion - Duplicate Sonata Code Rejected', () => {
+  const dataset = loadTestDataset();
+  const clone = JSON.parse(JSON.stringify(dataset.sonatas![0]));
+  clone.name = 'Unique Sonata Name Clone';
+  dataset.sonatas!.push(clone);
+
+  const result = validatePatchDataset(dataset);
+  assert.equal(result.isValid, false);
+  assert.ok(result.errors.some(e => e.message.includes('Duplicate sonata code')));
+});
+
+test('Ingestion - Patch-Consistent Gameplay-Effect References', () => {
+  const dataset = loadTestDataset();
+  for (const sonata of dataset.sonatas || []) {
+    assert.ok(
+      sonata.patch_data.two_piece_effect.category && sonata.patch_data.two_piece_effect.target,
+      `Sonata ${sonata.name} 2pc effect missing valid taxonomy`
+    );
+    assert.ok(
+      sonata.patch_data.five_piece_effect.category && sonata.patch_data.five_piece_effect.target,
+      `Sonata ${sonata.name} 5pc effect missing valid taxonomy`
+    );
+  }
+});
+
 test('Ingestion - Deterministic UUID Generator Consistency', () => {
   const id1 = deterministicUuid('effect:test:1');
   const id2 = deterministicUuid('effect:test:1');
@@ -213,7 +341,13 @@ test('Ingestion - Deterministic Ingestion & Idempotency Guarantee', async () => 
       abilities,
       abilityPatchData,
       gameplayEffects,
-      abilityEffects
+      abilityEffects,
+      weapons,
+      weaponPatchData,
+      echoes,
+      echoPatchData,
+      sonatas,
+      sonataPatchData
     ] = await Promise.all([
       supabase.from('patches').select('count', { count: 'exact' }),
       supabase.from('provenance_sources').select('count', { count: 'exact' }),
@@ -226,7 +360,13 @@ test('Ingestion - Deterministic Ingestion & Idempotency Guarantee', async () => 
       supabase.from('abilities').select('count', { count: 'exact' }),
       supabase.from('ability_patch_data').select('count', { count: 'exact' }),
       supabase.from('gameplay_effects').select('count', { count: 'exact' }),
-      supabase.from('ability_effects').select('count', { count: 'exact' })
+      supabase.from('ability_effects').select('count', { count: 'exact' }),
+      supabase.from('weapons').select('count', { count: 'exact' }),
+      supabase.from('weapon_patch_data').select('count', { count: 'exact' }),
+      supabase.from('echoes').select('count', { count: 'exact' }),
+      supabase.from('echo_patch_data').select('count', { count: 'exact' }),
+      supabase.from('sonatas').select('count', { count: 'exact' }),
+      supabase.from('sonata_patch_data').select('count', { count: 'exact' })
     ]);
 
     return {
@@ -241,7 +381,13 @@ test('Ingestion - Deterministic Ingestion & Idempotency Guarantee', async () => 
       abilities: abilities.count,
       abilityPatchData: abilityPatchData.count,
       gameplayEffects: gameplayEffects.count,
-      abilityEffects: abilityEffects.count
+      abilityEffects: abilityEffects.count,
+      weapons: weapons.count,
+      weaponPatchData: weaponPatchData.count,
+      echoes: echoes.count,
+      echoPatchData: echoPatchData.count,
+      sonatas: sonatas.count,
+      sonataPatchData: sonataPatchData.count
     };
   }
 
@@ -253,6 +399,12 @@ test('Ingestion - Deterministic Ingestion & Idempotency Guarantee', async () => 
   assert.equal(countsAfterFirst.patchData, 60);
   assert.ok(countsAfterFirst.abilities! >= 500);
   assert.ok(countsAfterFirst.gameplayEffects! >= 70);
+  assert.ok(countsAfterFirst.weapons! >= 60);
+  assert.ok(countsAfterFirst.weaponPatchData! >= 60);
+  assert.ok(countsAfterFirst.echoes! >= 40);
+  assert.ok(countsAfterFirst.echoPatchData! >= 40);
+  assert.equal(countsAfterFirst.sonatas, 12);
+  assert.equal(countsAfterFirst.sonataPatchData, 12);
 
   // Second ingestion execution (Idempotency test)
   const secondReport = await ingestPatchDataset(dataset, supabase);

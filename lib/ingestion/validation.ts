@@ -31,6 +31,12 @@ export const VALID_WEAPON_TYPES = new Set<WeaponType>([
 
 export const VALID_RARITIES = new Set<Rarity>([4, 5]);
 
+export const VALID_WEAPON_RARITIES = new Set<number>([3, 4, 5]);
+
+export const VALID_ECHO_CLASSES = new Set<string>(['Calamity', 'Overlord', 'Elite', 'Common']);
+
+export const VALID_ECHO_COSTS = new Set<number>([1, 3, 4]);
+
 export const VALID_SOURCE_TYPES = new Set<SourceType>([
   'OFFICIAL_PUBLISHED',
   'OFFICIAL_DATAMINE',
@@ -355,6 +361,223 @@ export function validatePatchDataset(data: unknown): ValidationResult {
         });
       }
     });
+  }
+
+  // 5. Weapons Validation
+  if (dataset.weapons) {
+    if (!Array.isArray(dataset.weapons)) {
+      errors.push({ path: 'weapons', message: 'weapons must be an array' });
+    } else {
+      const weaponNames = new Set<string>();
+      dataset.weapons.forEach((w, wIdx) => {
+        const wPath = `weapons[${wIdx}]`;
+
+        if (!w.name || typeof w.name !== 'string') {
+          errors.push({ path: `${wPath}.name`, message: 'Weapon name is required' });
+        } else {
+          if (weaponNames.has(w.name)) {
+            errors.push({ path: `${wPath}.name`, message: `Duplicate weapon identity: ${w.name}` });
+          }
+          weaponNames.add(w.name);
+        }
+
+        if (!VALID_WEAPON_TYPES.has(w.weapon_type)) {
+          errors.push({ path: `${wPath}.weapon_type`, message: `Invalid weapon type: ${w.weapon_type}` });
+        }
+
+        if (!VALID_WEAPON_RARITIES.has(w.rarity)) {
+          errors.push({ path: `${wPath}.rarity`, message: `Invalid weapon rarity: ${w.rarity}` });
+        }
+
+        if (!w.patch_data || typeof w.patch_data !== 'object') {
+          errors.push({ path: `${wPath}.patch_data`, message: 'patch_data is required for weapon' });
+        } else {
+          const pd = w.patch_data;
+          if (typeof pd.base_atk_lvl90 !== 'number' || pd.base_atk_lvl90 <= 0) {
+            errors.push({ path: `${wPath}.patch_data.base_atk_lvl90`, message: `base_atk_lvl90 must be > 0, got ${pd.base_atk_lvl90}` });
+          }
+
+          if (!pd.sub_stat_type || typeof pd.sub_stat_type !== 'string') {
+            errors.push({ path: `${wPath}.patch_data.sub_stat_type`, message: 'sub_stat_type is required' });
+          }
+
+          if (typeof pd.sub_stat_value_lvl90 !== 'number' || pd.sub_stat_value_lvl90 <= 0) {
+            errors.push({ path: `${wPath}.patch_data.sub_stat_value_lvl90`, message: `sub_stat_value_lvl90 must be > 0, got ${pd.sub_stat_value_lvl90}` });
+          }
+
+          if (!pd.provenance_source_name || !provenanceNames.has(pd.provenance_source_name)) {
+            errors.push({
+              path: `${wPath}.patch_data.provenance_source_name`,
+              message: `Missing or unregistered provenance source for weapon: ${pd.provenance_source_name}`
+            });
+          }
+
+          if (pd.passive_effect) {
+            const eff = pd.passive_effect;
+            if (!VALID_EFFECT_CATEGORIES.has(eff.category)) {
+              errors.push({ path: `${wPath}.patch_data.passive_effect.category`, message: `Invalid gameplay effect category: ${eff.category}` });
+            }
+            if (!VALID_EFFECT_TARGETS.has(eff.target)) {
+              errors.push({ path: `${wPath}.patch_data.passive_effect.target`, message: `Invalid gameplay effect target: ${eff.target}` });
+            }
+            if (!eff.provenance_source_name || !provenanceNames.has(eff.provenance_source_name)) {
+              errors.push({
+                path: `${wPath}.patch_data.passive_effect.provenance_source_name`,
+                message: `Missing or unregistered provenance source for weapon passive effect: ${eff.provenance_source_name}`
+              });
+            }
+          }
+        }
+      });
+    }
+  }
+
+  // 6. Echoes Validation
+  if (dataset.echoes) {
+    if (!Array.isArray(dataset.echoes)) {
+      errors.push({ path: 'echoes', message: 'echoes must be an array' });
+    } else {
+      const echoNames = new Set<string>();
+      dataset.echoes.forEach((e, eIdx) => {
+        const ePath = `echoes[${eIdx}]`;
+
+        if (!e.name || typeof e.name !== 'string') {
+          errors.push({ path: `${ePath}.name`, message: 'Echo name is required' });
+        } else {
+          if (echoNames.has(e.name)) {
+            errors.push({ path: `${ePath}.name`, message: `Duplicate echo identity: ${e.name}` });
+          }
+          echoNames.add(e.name);
+        }
+
+        if (!VALID_ECHO_CLASSES.has(e.class_type)) {
+          errors.push({ path: `${ePath}.class_type`, message: `Invalid echo class_type: ${e.class_type}` });
+        }
+
+        if (!VALID_ECHO_COSTS.has(e.cost)) {
+          errors.push({ path: `${ePath}.cost`, message: `Invalid echo cost: ${e.cost}` });
+        }
+
+        if (!e.patch_data || typeof e.patch_data !== 'object') {
+          errors.push({ path: `${ePath}.patch_data`, message: 'patch_data is required for echo' });
+        } else {
+          const pd = e.patch_data;
+          if (!VALID_ECHO_COSTS.has(pd.cost)) {
+            errors.push({ path: `${ePath}.patch_data.cost`, message: `Invalid echo patch_data cost: ${pd.cost}` });
+          }
+          if (pd.cost !== e.cost) {
+            errors.push({ path: `${ePath}.patch_data.cost`, message: `Echo cost mismatch between invariant (${e.cost}) and patch (${pd.cost})` });
+          }
+          if (pd.cd_seconds !== undefined && pd.cd_seconds !== null && pd.cd_seconds < 0) {
+            errors.push({ path: `${ePath}.patch_data.cd_seconds`, message: 'cd_seconds cannot be negative' });
+          }
+          if (pd.concertos_generated !== undefined && pd.concertos_generated !== null && pd.concertos_generated < 0) {
+            errors.push({ path: `${ePath}.patch_data.concertos_generated`, message: 'concertos_generated cannot be negative' });
+          }
+          if (!pd.provenance_source_name || !provenanceNames.has(pd.provenance_source_name)) {
+            errors.push({
+              path: `${ePath}.patch_data.provenance_source_name`,
+              message: `Missing or unregistered provenance source for echo: ${pd.provenance_source_name}`
+            });
+          }
+
+          if (pd.skill_effect) {
+            const eff = pd.skill_effect;
+            if (!VALID_EFFECT_CATEGORIES.has(eff.category)) {
+              errors.push({ path: `${ePath}.patch_data.skill_effect.category`, message: `Invalid gameplay effect category: ${eff.category}` });
+            }
+            if (!VALID_EFFECT_TARGETS.has(eff.target)) {
+              errors.push({ path: `${ePath}.patch_data.skill_effect.target`, message: `Invalid gameplay effect target: ${eff.target}` });
+            }
+            if (!eff.provenance_source_name || !provenanceNames.has(eff.provenance_source_name)) {
+              errors.push({
+                path: `${ePath}.patch_data.skill_effect.provenance_source_name`,
+                message: `Missing or unregistered provenance source for echo skill effect: ${eff.provenance_source_name}`
+              });
+            }
+          }
+        }
+      });
+    }
+  }
+
+  // 7. Sonatas Validation
+  if (dataset.sonatas) {
+    if (!Array.isArray(dataset.sonatas)) {
+      errors.push({ path: 'sonatas', message: 'sonatas must be an array' });
+    } else {
+      const sonataNames = new Set<string>();
+      const sonataCodes = new Set<string>();
+      dataset.sonatas.forEach((s, sIdx) => {
+        const sPath = `sonatas[${sIdx}]`;
+
+        if (!s.name || typeof s.name !== 'string') {
+          errors.push({ path: `${sPath}.name`, message: 'Sonata name is required' });
+        } else {
+          if (sonataNames.has(s.name)) {
+            errors.push({ path: `${sPath}.name`, message: `Duplicate sonata identity: ${s.name}` });
+          }
+          sonataNames.add(s.name);
+        }
+
+        if (!s.code || typeof s.code !== 'string') {
+          errors.push({ path: `${sPath}.code`, message: 'Sonata code is required' });
+        } else {
+          if (sonataCodes.has(s.code)) {
+            errors.push({ path: `${sPath}.code`, message: `Duplicate sonata code: ${s.code}` });
+          }
+          sonataCodes.add(s.code);
+        }
+
+        if (!s.patch_data || typeof s.patch_data !== 'object') {
+          errors.push({ path: `${sPath}.patch_data`, message: 'patch_data is required for sonata' });
+        } else {
+          const pd = s.patch_data;
+          if (!pd.two_piece_effect || typeof pd.two_piece_effect !== 'object') {
+            errors.push({ path: `${sPath}.patch_data.two_piece_effect`, message: 'two_piece_effect is required for sonata' });
+          } else {
+            const eff2 = pd.two_piece_effect;
+            if (!VALID_EFFECT_CATEGORIES.has(eff2.category)) {
+              errors.push({ path: `${sPath}.patch_data.two_piece_effect.category`, message: `Invalid gameplay effect category: ${eff2.category}` });
+            }
+            if (!VALID_EFFECT_TARGETS.has(eff2.target)) {
+              errors.push({ path: `${sPath}.patch_data.two_piece_effect.target`, message: `Invalid gameplay effect target: ${eff2.target}` });
+            }
+            if (!eff2.provenance_source_name || !provenanceNames.has(eff2.provenance_source_name)) {
+              errors.push({
+                path: `${sPath}.patch_data.two_piece_effect.provenance_source_name`,
+                message: `Missing or unregistered provenance source for 2-piece effect: ${eff2.provenance_source_name}`
+              });
+            }
+          }
+
+          if (!pd.five_piece_effect || typeof pd.five_piece_effect !== 'object') {
+            errors.push({ path: `${sPath}.patch_data.five_piece_effect`, message: 'five_piece_effect is required for sonata' });
+          } else {
+            const eff5 = pd.five_piece_effect;
+            if (!VALID_EFFECT_CATEGORIES.has(eff5.category)) {
+              errors.push({ path: `${sPath}.patch_data.five_piece_effect.category`, message: `Invalid gameplay effect category: ${eff5.category}` });
+            }
+            if (!VALID_EFFECT_TARGETS.has(eff5.target)) {
+              errors.push({ path: `${sPath}.patch_data.five_piece_effect.target`, message: `Invalid gameplay effect target: ${eff5.target}` });
+            }
+            if (!eff5.provenance_source_name || !provenanceNames.has(eff5.provenance_source_name)) {
+              errors.push({
+                path: `${sPath}.patch_data.five_piece_effect.provenance_source_name`,
+                message: `Missing or unregistered provenance source for 5-piece effect: ${eff5.provenance_source_name}`
+              });
+            }
+          }
+
+          if (!pd.provenance_source_name || !provenanceNames.has(pd.provenance_source_name)) {
+            errors.push({
+              path: `${sPath}.patch_data.provenance_source_name`,
+              message: `Missing or unregistered provenance source for sonata: ${pd.provenance_source_name}`
+            });
+          }
+        }
+      });
+    }
   }
 
   return {

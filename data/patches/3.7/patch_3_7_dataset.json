@@ -8333,5 +8333,2223 @@
         }
       ]
     }
+  ],
+  "weapons": [
+    {
+      "name": "Blooming Jadehaven",
+      "weapon_type": "Rectifier",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 587.5,
+        "sub_stat_type": "CritRate",
+        "sub_stat_value_lvl90": 0.243,
+        "provenance_source_name": "Kuro Games Official 3.7 Release Announcement",
+        "passive_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "resonance_skill"
+          },
+          "detail_expression": {
+            "all_attribute_dmg": 0.12,
+            "resonance_skill_dmg": 0.24,
+            "duration_seconds": 12
+          },
+          "provenance_source_name": "Kuro Games Official 3.7 Release Announcement"
+        }
+      }
+    },
+    {
+      "name": "Unspoken Rue",
+      "weapon_type": "Sword",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 587.5,
+        "sub_stat_type": "CritRate",
+        "sub_stat_value_lvl90": 0.243,
+        "provenance_source_name": "Kuro Games Official 3.7 Release Announcement",
+        "passive_effect": {
+          "category": "STAT_BUFF",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "on_field"
+          },
+          "detail_expression": {
+            "atk_percent": 0.12,
+            "crit_dmg": 0.24,
+            "duration_seconds": 14
+          },
+          "provenance_source_name": "Kuro Games Official 3.7 Release Announcement"
+        }
+      }
+    },
+    {
+      "name": "Emerald of Genesis",
+      "weapon_type": "Sword",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 587.5,
+        "sub_stat_type": "CritRate",
+        "sub_stat_value_lvl90": 0.243,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "passive_effect": {
+          "category": "STAT_BUFF",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "resonance_skill"
+          },
+          "detail_expression": {
+            "energy_regen": 0.128,
+            "atk_percent": 0.12,
+            "duration_seconds": 10
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Blazing Brilliance",
+      "weapon_type": "Sword",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 587.5,
+        "sub_stat_type": "CritDMG",
+        "sub_stat_value_lvl90": 0.486,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "passive_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "resonance_skill"
+          },
+          "detail_expression": {
+            "skill_dmg_bonus": 0.28,
+            "duration_seconds": 12
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Red Spring",
+      "weapon_type": "Sword",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 587.5,
+        "sub_stat_type": "CritRate",
+        "sub_stat_value_lvl90": 0.243,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "passive_effect": {
+          "category": "STAT_BUFF",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "basic_attack"
+          },
+          "detail_expression": {
+            "atk_percent": 0.14,
+            "duration_seconds": 10
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Somnoire Anchor",
+      "weapon_type": "Sword",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 587.5,
+        "sub_stat_type": "CritDMG",
+        "sub_stat_value_lvl90": 0.486,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "passive_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "heavy_attack"
+          },
+          "detail_expression": {
+            "havoc_dmg_bonus": 0.2,
+            "duration_seconds": 12
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Verdant Summit",
+      "weapon_type": "Broadblade",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 587.5,
+        "sub_stat_type": "CritDMG",
+        "sub_stat_value_lvl90": 0.486,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "passive_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "resonance_liberation"
+          },
+          "detail_expression": {
+            "heavy_attack_dmg": 0.48,
+            "duration_seconds": 14
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Ages of Harvest",
+      "weapon_type": "Broadblade",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 587.5,
+        "sub_stat_type": "CritRate",
+        "sub_stat_value_lvl90": 0.243,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "passive_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "resonance_skill"
+          },
+          "detail_expression": {
+            "resonance_skill_dmg": 0.48,
+            "duration_seconds": 12
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Lustrous Razor",
+      "weapon_type": "Broadblade",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 587.5,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.3645,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "passive_effect": {
+          "category": "STAT_BUFF",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "resonance_skill"
+          },
+          "detail_expression": {
+            "liberation_dmg_bonus": 0.28,
+            "duration_seconds": 12
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "The Mountains Roar",
+      "weapon_type": "Broadblade",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 587.5,
+        "sub_stat_type": "CritRate",
+        "sub_stat_value_lvl90": 0.243,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "passive_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "heavy_attack"
+          },
+          "detail_expression": {
+            "broadblade_dmg_bonus": 0.2,
+            "duration_seconds": 10
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Static Mist",
+      "weapon_type": "Pistols",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 587.5,
+        "sub_stat_type": "CritRate",
+        "sub_stat_value_lvl90": 0.243,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "passive_effect": {
+          "category": "STAT_BUFF",
+          "target": "NEXT_RESONATOR",
+          "condition_expression": {
+            "trigger": "outro_skill"
+          },
+          "detail_expression": {
+            "atk_percent": 0.1,
+            "duration_seconds": 14
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "The Reckoning",
+      "weapon_type": "Pistols",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 587.5,
+        "sub_stat_type": "CritDMG",
+        "sub_stat_value_lvl90": 0.486,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "passive_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "basic_attack"
+          },
+          "detail_expression": {
+            "pistols_dmg_bonus": 0.25,
+            "duration_seconds": 10
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Abyssal Decrescendo",
+      "weapon_type": "Pistols",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 587.5,
+        "sub_stat_type": "CritRate",
+        "sub_stat_value_lvl90": 0.243,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "passive_effect": {
+          "category": "STAT_BUFF",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "resonance_skill"
+          },
+          "detail_expression": {
+            "energy_regen": 0.15,
+            "duration_seconds": 10
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Abyss Surges",
+      "weapon_type": "Gauntlets",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 587.5,
+        "sub_stat_type": "EnergyRegen",
+        "sub_stat_value_lvl90": 0.3645,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "passive_effect": {
+          "category": "STAT_BUFF",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "resonance_skill"
+          },
+          "detail_expression": {
+            "basic_attack_dmg": 0.2,
+            "duration_seconds": 10
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Veritys Handle",
+      "weapon_type": "Gauntlets",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 587.5,
+        "sub_stat_type": "CritRate",
+        "sub_stat_value_lvl90": 0.243,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "passive_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "resonance_liberation"
+          },
+          "detail_expression": {
+            "liberation_dmg_bonus": 0.48,
+            "duration_seconds": 12
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Iron Grip of Justice",
+      "weapon_type": "Gauntlets",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 587.5,
+        "sub_stat_type": "CritDMG",
+        "sub_stat_value_lvl90": 0.486,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "passive_effect": {
+          "category": "STAT_BUFF",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "heavy_attack"
+          },
+          "detail_expression": {
+            "atk_percent": 0.16,
+            "duration_seconds": 10
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Cosmic Ripples",
+      "weapon_type": "Rectifier",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 587.5,
+        "sub_stat_type": "EnergyRegen",
+        "sub_stat_value_lvl90": 0.3645,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "passive_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "basic_attack"
+          },
+          "detail_expression": {
+            "basic_attack_dmg": 0.24,
+            "duration_seconds": 8
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Stringmaster",
+      "weapon_type": "Rectifier",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 500,
+        "sub_stat_type": "CritRate",
+        "sub_stat_value_lvl90": 0.36,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "passive_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "resonance_skill"
+          },
+          "detail_expression": {
+            "resonance_skill_dmg": 0.36,
+            "duration_seconds": 12
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Rime-Draped Sprouts",
+      "weapon_type": "Rectifier",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 500,
+        "sub_stat_type": "CritRate",
+        "sub_stat_value_lvl90": 0.36,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "passive_effect": {
+          "category": "STAT_BUFF",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "intro_skill"
+          },
+          "detail_expression": {
+            "atk_percent": 0.12,
+            "basic_attack_dmg": 0.24,
+            "duration_seconds": 14
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Stellar Symphony",
+      "weapon_type": "Rectifier",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 412.5,
+        "sub_stat_type": "EnergyRegen",
+        "sub_stat_value_lvl90": 0.77,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "passive_effect": {
+          "category": "STAT_BUFF",
+          "target": "TEAM",
+          "condition_expression": {
+            "trigger": "intro_outro"
+          },
+          "detail_expression": {
+            "team_hp_percent": 0.12,
+            "team_atk_percent": 0.14,
+            "duration_seconds": 30
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Whispers of the Deep",
+      "weapon_type": "Rectifier",
+      "rarity": 5,
+      "patch_data": {
+        "base_atk_lvl90": 500,
+        "sub_stat_type": "CritDMG",
+        "sub_stat_value_lvl90": 0.72,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "passive_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "resonance_liberation"
+          },
+          "detail_expression": {
+            "havoc_dmg_bonus": 0.3,
+            "duration_seconds": 10
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Autumntrace",
+      "weapon_type": "Broadblade",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 412.5,
+        "sub_stat_type": "CritRate",
+        "sub_stat_value_lvl90": 0.2025,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Broadblade#41",
+      "weapon_type": "Broadblade",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 412.5,
+        "sub_stat_type": "EnergyRegen",
+        "sub_stat_value_lvl90": 0.3235,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Dauntless Evernight",
+      "weapon_type": "Broadblade",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 387.5,
+        "sub_stat_type": "DEF%",
+        "sub_stat_value_lvl90": 0.615,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Helios Cleaver",
+      "weapon_type": "Broadblade",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 412.5,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.3038,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Discord",
+      "weapon_type": "Broadblade",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 337.5,
+        "sub_stat_type": "EnergyRegen",
+        "sub_stat_value_lvl90": 0.518,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Waning Redshift",
+      "weapon_type": "Broadblade",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 412.5,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.3038,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Commando of Conviction",
+      "weapon_type": "Sword",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 412.5,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.3038,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Lumingloss",
+      "weapon_type": "Sword",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 387.5,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.3888,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Lunar Cutter",
+      "weapon_type": "Sword",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 412.5,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.3038,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Sword#18",
+      "weapon_type": "Sword",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 412.5,
+        "sub_stat_type": "DEF%",
+        "sub_stat_value_lvl90": 0.486,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Overture",
+      "weapon_type": "Sword",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 337.5,
+        "sub_stat_type": "EnergyRegen",
+        "sub_stat_value_lvl90": 0.518,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "End of the Tunnel",
+      "weapon_type": "Sword",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 412.5,
+        "sub_stat_type": "CritRate",
+        "sub_stat_value_lvl90": 0.2025,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Novaburst",
+      "weapon_type": "Pistols",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 412.5,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.3038,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Thunderbolt",
+      "weapon_type": "Pistols",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 387.5,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.3888,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Undying Flame",
+      "weapon_type": "Pistols",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 412.5,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.3038,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Pistols#26",
+      "weapon_type": "Pistols",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 412.5,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.3038,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Cadenza",
+      "weapon_type": "Pistols",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 337.5,
+        "sub_stat_type": "EnergyRegen",
+        "sub_stat_value_lvl90": 0.518,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Relentless Surge",
+      "weapon_type": "Pistols",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 412.5,
+        "sub_stat_type": "CritRate",
+        "sub_stat_value_lvl90": 0.2025,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Hollow Mirage",
+      "weapon_type": "Gauntlets",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 412.5,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.3038,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Marcato",
+      "weapon_type": "Gauntlets",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 337.5,
+        "sub_stat_type": "EnergyRegen",
+        "sub_stat_value_lvl90": 0.518,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Stonard",
+      "weapon_type": "Gauntlets",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 412.5,
+        "sub_stat_type": "CritRate",
+        "sub_stat_value_lvl90": 0.2025,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Gauntlets#21D",
+      "weapon_type": "Gauntlets",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 387.5,
+        "sub_stat_type": "DEF%",
+        "sub_stat_value_lvl90": 0.615,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Amity Accord",
+      "weapon_type": "Gauntlets",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 387.5,
+        "sub_stat_type": "DEF%",
+        "sub_stat_value_lvl90": 0.615,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Abyssal Grip",
+      "weapon_type": "Gauntlets",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 412.5,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.3038,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Augment",
+      "weapon_type": "Rectifier",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 412.5,
+        "sub_stat_type": "CritRate",
+        "sub_stat_value_lvl90": 0.2025,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Comet Flare",
+      "weapon_type": "Rectifier",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 337.5,
+        "sub_stat_type": "HP%",
+        "sub_stat_value_lvl90": 0.518,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Jinzhou Keeper",
+      "weapon_type": "Rectifier",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 387.5,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.3888,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Rectifier#25",
+      "weapon_type": "Rectifier",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 337.5,
+        "sub_stat_type": "EnergyRegen",
+        "sub_stat_value_lvl90": 0.518,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Variation",
+      "weapon_type": "Rectifier",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 337.5,
+        "sub_stat_type": "EnergyRegen",
+        "sub_stat_value_lvl90": 0.518,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Fusion Accretion",
+      "weapon_type": "Rectifier",
+      "rarity": 4,
+      "patch_data": {
+        "base_atk_lvl90": 412.5,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.3038,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Brawlers Broadblade",
+      "weapon_type": "Broadblade",
+      "rarity": 3,
+      "patch_data": {
+        "base_atk_lvl90": 300,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.2025,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Guardian Broadblade",
+      "weapon_type": "Broadblade",
+      "rarity": 3,
+      "patch_data": {
+        "base_atk_lvl90": 325,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.243,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Originite: Type I",
+      "weapon_type": "Broadblade",
+      "rarity": 3,
+      "patch_data": {
+        "base_atk_lvl90": 300,
+        "sub_stat_type": "DEF%",
+        "sub_stat_value_lvl90": 0.3235,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Guardian Sword",
+      "weapon_type": "Sword",
+      "rarity": 3,
+      "patch_data": {
+        "base_atk_lvl90": 325,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.243,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Originite: Type II",
+      "weapon_type": "Sword",
+      "rarity": 3,
+      "patch_data": {
+        "base_atk_lvl90": 300,
+        "sub_stat_type": "DEF%",
+        "sub_stat_value_lvl90": 0.3235,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Sword of Night",
+      "weapon_type": "Sword",
+      "rarity": 3,
+      "patch_data": {
+        "base_atk_lvl90": 300,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.2025,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Guardian Pistols",
+      "weapon_type": "Pistols",
+      "rarity": 3,
+      "patch_data": {
+        "base_atk_lvl90": 325,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.243,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Originite: Type III",
+      "weapon_type": "Pistols",
+      "rarity": 3,
+      "patch_data": {
+        "base_atk_lvl90": 300,
+        "sub_stat_type": "DEF%",
+        "sub_stat_value_lvl90": 0.3235,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Undaunted",
+      "weapon_type": "Pistols",
+      "rarity": 3,
+      "patch_data": {
+        "base_atk_lvl90": 300,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.2025,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Guardian Gauntlets",
+      "weapon_type": "Gauntlets",
+      "rarity": 3,
+      "patch_data": {
+        "base_atk_lvl90": 325,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.243,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Originite: Type IV",
+      "weapon_type": "Gauntlets",
+      "rarity": 3,
+      "patch_data": {
+        "base_atk_lvl90": 300,
+        "sub_stat_type": "DEF%",
+        "sub_stat_value_lvl90": 0.3235,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Iron Gauntlets",
+      "weapon_type": "Gauntlets",
+      "rarity": 3,
+      "patch_data": {
+        "base_atk_lvl90": 300,
+        "sub_stat_type": "HP%",
+        "sub_stat_value_lvl90": 0.3235,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Guardian Rectifier",
+      "weapon_type": "Rectifier",
+      "rarity": 3,
+      "patch_data": {
+        "base_atk_lvl90": 325,
+        "sub_stat_type": "ATK%",
+        "sub_stat_value_lvl90": 0.243,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Originite: Type V",
+      "weapon_type": "Rectifier",
+      "rarity": 3,
+      "patch_data": {
+        "base_atk_lvl90": 300,
+        "sub_stat_type": "DEF%",
+        "sub_stat_value_lvl90": 0.3235,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Resonating Melody",
+      "weapon_type": "Rectifier",
+      "rarity": 3,
+      "patch_data": {
+        "base_atk_lvl90": 300,
+        "sub_stat_type": "EnergyRegen",
+        "sub_stat_value_lvl90": 0.3235,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    }
+  ],
+  "echoes": [
+    {
+      "name": "Reminiscence: Suhsin the Inevitable",
+      "class_type": "Calamity",
+      "cost": 4,
+      "patch_data": {
+        "cost": 4,
+        "cd_seconds": 20,
+        "concertos_generated": 10,
+        "provenance_source_name": "Kuro Games Official 3.7 Release Announcement",
+        "skill_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "electro_flare_unison"
+          },
+          "detail_expression": {
+            "electro_dmg": 0.2,
+            "duration_seconds": 30
+          },
+          "provenance_source_name": "Kuro Games Official 3.7 Release Announcement"
+        }
+      }
+    },
+    {
+      "name": "Crownless",
+      "class_type": "Calamity",
+      "cost": 4,
+      "patch_data": {
+        "cost": 4,
+        "cd_seconds": 20,
+        "concertos_generated": 10,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "skill_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "on_transform"
+          },
+          "detail_expression": {
+            "havoc_dmg_bonus": 0.12,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Thundering Mephis",
+      "class_type": "Calamity",
+      "cost": 4,
+      "patch_data": {
+        "cost": 4,
+        "cd_seconds": 20,
+        "concertos_generated": 10,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "skill_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "on_hit"
+          },
+          "detail_expression": {
+            "electro_dmg": 0.12,
+            "resonance_liberation_dmg": 0.12,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Tempest Mephis",
+      "class_type": "Overlord",
+      "cost": 4,
+      "patch_data": {
+        "cost": 4,
+        "cd_seconds": 20,
+        "concertos_generated": 10,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "skill_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "on_hit"
+          },
+          "detail_expression": {
+            "electro_dmg": 0.12,
+            "heavy_attack_dmg": 0.12,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Mourning Aix",
+      "class_type": "Calamity",
+      "cost": 4,
+      "patch_data": {
+        "cost": 4,
+        "cd_seconds": 20,
+        "concertos_generated": 10,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "skill_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "on_transform"
+          },
+          "detail_expression": {
+            "spectro_dmg_bonus": 0.12,
+            "resonance_liberation_dmg": 0.12,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Feilian Beringal",
+      "class_type": "Calamity",
+      "cost": 4,
+      "patch_data": {
+        "cost": 4,
+        "cd_seconds": 20,
+        "concertos_generated": 10,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "skill_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "on_transform"
+          },
+          "detail_expression": {
+            "aero_dmg_bonus": 0.12,
+            "heavy_attack_dmg": 0.12,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Inferno Rider",
+      "class_type": "Calamity",
+      "cost": 4,
+      "patch_data": {
+        "cost": 4,
+        "cd_seconds": 20,
+        "concertos_generated": 10,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "skill_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "on_transform"
+          },
+          "detail_expression": {
+            "fusion_dmg_bonus": 0.12,
+            "basic_attack_dmg": 0.12,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Bell-Borne Geochelone",
+      "class_type": "Calamity",
+      "cost": 4,
+      "patch_data": {
+        "cost": 4,
+        "cd_seconds": 20,
+        "concertos_generated": 10,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "skill_effect": {
+          "category": "SHIELD",
+          "target": "TEAM",
+          "condition_expression": {
+            "trigger": "on_cast"
+          },
+          "detail_expression": {
+            "damage_reduction": 0.5,
+            "team_dmg_bonus": 0.1,
+            "duration_seconds": 30
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Lampylumen Myriad",
+      "class_type": "Calamity",
+      "cost": 4,
+      "patch_data": {
+        "cost": 4,
+        "cd_seconds": 20,
+        "concertos_generated": 10,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "skill_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "on_transform"
+          },
+          "detail_expression": {
+            "glacio_dmg_bonus": 0.12,
+            "resonance_skill_dmg": 0.12,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Dreamless",
+      "class_type": "Calamity",
+      "cost": 4,
+      "patch_data": {
+        "cost": 4,
+        "cd_seconds": 20,
+        "concertos_generated": 10,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "skill_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "after_rover_liberation"
+          },
+          "detail_expression": {
+            "dreamless_dmg_bonus": 0.5,
+            "duration_seconds": 5
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Jue",
+      "class_type": "Calamity",
+      "cost": 4,
+      "patch_data": {
+        "cost": 4,
+        "cd_seconds": 20,
+        "concertos_generated": 10,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "skill_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "on_cast"
+          },
+          "detail_expression": {
+            "resonance_skill_dmg": 0.16,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Fallacy of No Return",
+      "class_type": "Calamity",
+      "cost": 4,
+      "patch_data": {
+        "cost": 4,
+        "cd_seconds": 20,
+        "concertos_generated": 10,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "skill_effect": {
+          "category": "STAT_BUFF",
+          "target": "TEAM",
+          "condition_expression": {
+            "trigger": "on_cast"
+          },
+          "detail_expression": {
+            "team_energy_regen": 0.1,
+            "team_atk_percent": 0.1,
+            "duration_seconds": 20
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Impermanence Heron",
+      "class_type": "Overlord",
+      "cost": 4,
+      "patch_data": {
+        "cost": 4,
+        "cd_seconds": 20,
+        "concertos_generated": 10,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "skill_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "NEXT_RESONATOR",
+          "condition_expression": {
+            "trigger": "on_outro"
+          },
+          "detail_expression": {
+            "all_damage_bonus": 0.12,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Mech Abomination",
+      "class_type": "Overlord",
+      "cost": 4,
+      "patch_data": {
+        "cost": 4,
+        "cd_seconds": 20,
+        "concertos_generated": 10,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "skill_effect": {
+          "category": "STAT_BUFF",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "on_hit"
+          },
+          "detail_expression": {
+            "atk_percent": 0.12,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Formrender",
+      "class_type": "Elite",
+      "cost": 3,
+      "patch_data": {
+        "cost": 3,
+        "cd_seconds": 15,
+        "concertos_generated": 5,
+        "provenance_source_name": "Kuro Games Official 3.7 Release Announcement",
+        "skill_effect": {
+          "category": "STAT_BUFF",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "on_cast"
+          },
+          "detail_expression": {
+            "energy_regen": 0.1,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "Kuro Games Official 3.7 Release Announcement"
+        }
+      }
+    },
+    {
+      "name": "Soulfrayer",
+      "class_type": "Elite",
+      "cost": 3,
+      "patch_data": {
+        "cost": 3,
+        "cd_seconds": 15,
+        "concertos_generated": 5,
+        "provenance_source_name": "Kuro Games Official 3.7 Release Announcement",
+        "skill_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "trigger": "on_cast"
+          },
+          "detail_expression": {
+            "electro_dmg": 0.1,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "Kuro Games Official 3.7 Release Announcement"
+        }
+      }
+    },
+    {
+      "name": "Chasm Guardian",
+      "class_type": "Elite",
+      "cost": 3,
+      "patch_data": {
+        "cost": 3,
+        "cd_seconds": 15,
+        "concertos_generated": 5,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Flautist",
+      "class_type": "Elite",
+      "cost": 3,
+      "patch_data": {
+        "cost": 3,
+        "cd_seconds": 15,
+        "concertos_generated": 5,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Havoc Dreadmane",
+      "class_type": "Elite",
+      "cost": 3,
+      "patch_data": {
+        "cost": 3,
+        "cd_seconds": 15,
+        "concertos_generated": 5,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Tambourinist",
+      "class_type": "Elite",
+      "cost": 3,
+      "patch_data": {
+        "cost": 3,
+        "cd_seconds": 15,
+        "concertos_generated": 5,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Violet-Feathered Heron",
+      "class_type": "Elite",
+      "cost": 3,
+      "patch_data": {
+        "cost": 3,
+        "cd_seconds": 15,
+        "concertos_generated": 5,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Cyan-Feathered Heron",
+      "class_type": "Elite",
+      "cost": 3,
+      "patch_data": {
+        "cost": 3,
+        "cd_seconds": 15,
+        "concertos_generated": 5,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Autopuppet Scout",
+      "class_type": "Elite",
+      "cost": 3,
+      "patch_data": {
+        "cost": 3,
+        "cd_seconds": 15,
+        "concertos_generated": 5,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Glacio Dreadmane",
+      "class_type": "Elite",
+      "cost": 3,
+      "patch_data": {
+        "cost": 3,
+        "cd_seconds": 15,
+        "concertos_generated": 5,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Hoochief Cyclone",
+      "class_type": "Elite",
+      "cost": 3,
+      "patch_data": {
+        "cost": 3,
+        "cd_seconds": 15,
+        "concertos_generated": 5,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Rocksteady Guardian",
+      "class_type": "Elite",
+      "cost": 3,
+      "patch_data": {
+        "cost": 3,
+        "cd_seconds": 15,
+        "concertos_generated": 5,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Roseshroom",
+      "class_type": "Elite",
+      "cost": 3,
+      "patch_data": {
+        "cost": 3,
+        "cd_seconds": 15,
+        "concertos_generated": 5,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Spearback",
+      "class_type": "Elite",
+      "cost": 3,
+      "patch_data": {
+        "cost": 3,
+        "cd_seconds": 15,
+        "concertos_generated": 5,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Lightcrusher",
+      "class_type": "Elite",
+      "cost": 3,
+      "patch_data": {
+        "cost": 3,
+        "cd_seconds": 15,
+        "concertos_generated": 5,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Lumahoof",
+      "class_type": "Elite",
+      "cost": 3,
+      "patch_data": {
+        "cost": 3,
+        "cd_seconds": 15,
+        "concertos_generated": 5,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Glacio Predator",
+      "class_type": "Elite",
+      "cost": 3,
+      "patch_data": {
+        "cost": 3,
+        "cd_seconds": 15,
+        "concertos_generated": 5,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Havoc Warrior",
+      "class_type": "Elite",
+      "cost": 3,
+      "patch_data": {
+        "cost": 3,
+        "cd_seconds": 15,
+        "concertos_generated": 5,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Skywatch Lancer",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "Kuro Games Official 3.7 Release Announcement"
+      }
+    },
+    {
+      "name": "Bloomburst Puppet",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "Kuro Games Official 3.7 Release Announcement"
+      }
+    },
+    {
+      "name": "Jade Nether Serpent",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "Kuro Games Official 3.7 Release Announcement"
+      }
+    },
+    {
+      "name": "Baby Viridblaze Saurian",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Chirpuff",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Cruisewing",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Diamondclaw",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Dwarf Cassowary",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Excarat",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Fission Junrock",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Fusion Dreadmane",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Fusion Prism",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Glacio Prism",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Gulpuff",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Havoc Prism",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Hoartoise",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Sabyr Boar",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Snip Snap",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Spectro Prism",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Tick Tack",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Traffic Illuminator",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Whiff Whaff",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Zig Zag",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Clang Bang",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    },
+    {
+      "name": "Lava Ganglion",
+      "class_type": "Common",
+      "cost": 1,
+      "patch_data": {
+        "cost": 1,
+        "cd_seconds": 8,
+        "concertos_generated": 2,
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+      }
+    }
+  ],
+  "sonatas": [
+    {
+      "name": "Freezing Frost",
+      "code": "FREEZING_FROST",
+      "description": "2-Pc: Glacio DMG +10%. 5-Pc: Upon releasing Basic Attack or Heavy Attack, Glacio DMG +10%, stacking up to 3 times for 15s. Upon releasing Resonance Liberation, grants an extra Glacio DMG +20% for 15s.",
+      "patch_data": {
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "two_piece_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 2
+          },
+          "detail_expression": {
+            "element": "Glacio",
+            "dmg_bonus": 0.1
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        "five_piece_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 5,
+            "trigger": "basic_heavy_liberation"
+          },
+          "detail_expression": {
+            "element": "Glacio",
+            "dmg_bonus_stacking": 0.3,
+            "liberation_bonus": 0.2,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Molten Rift",
+      "code": "MOLTEN_RIFT",
+      "description": "2-Pc: Fusion DMG +10%. 5-Pc: Upon releasing Resonance Skill, Fusion DMG +30% for 15s.",
+      "patch_data": {
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "two_piece_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 2
+          },
+          "detail_expression": {
+            "element": "Fusion",
+            "dmg_bonus": 0.1
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        "five_piece_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 5,
+            "trigger": "resonance_skill"
+          },
+          "detail_expression": {
+            "element": "Fusion",
+            "dmg_bonus": 0.3,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Void Thunder",
+      "code": "VOID_THUNDER",
+      "description": "2-Pc: Electro DMG +10%. 5-Pc: Upon releasing Heavy Attack or Resonance Skill, Electro DMG +15%, stacking up to 2 times for 15s.",
+      "patch_data": {
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "two_piece_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 2
+          },
+          "detail_expression": {
+            "element": "Electro",
+            "dmg_bonus": 0.1
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        "five_piece_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 5,
+            "trigger": "heavy_or_skill"
+          },
+          "detail_expression": {
+            "element": "Electro",
+            "dmg_bonus_total": 0.3,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Sierra Gale",
+      "code": "SIERRA_GALE",
+      "description": "2-Pc: Aero DMG +10%. 5-Pc: Upon releasing Intro Skill, Aero DMG +30% for 15s.",
+      "patch_data": {
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "two_piece_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 2
+          },
+          "detail_expression": {
+            "element": "Aero",
+            "dmg_bonus": 0.1
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        "five_piece_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 5,
+            "trigger": "intro_skill"
+          },
+          "detail_expression": {
+            "element": "Aero",
+            "dmg_bonus": 0.3,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Celestial Light",
+      "code": "CELESTIAL_LIGHT",
+      "description": "2-Pc: Spectro DMG +10%. 5-Pc: Upon releasing Intro Skill, Spectro DMG +30% for 15s.",
+      "patch_data": {
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "two_piece_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 2
+          },
+          "detail_expression": {
+            "element": "Spectro",
+            "dmg_bonus": 0.1
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        "five_piece_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 5,
+            "trigger": "intro_skill"
+          },
+          "detail_expression": {
+            "element": "Spectro",
+            "dmg_bonus": 0.3,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Sun-sinking Eclipse",
+      "code": "SUN_SINKING_ECLIPSE",
+      "description": "2-Pc: Havoc DMG +10%. 5-Pc: Upon releasing Basic Attack or Heavy Attack, Havoc DMG +7.5%, stacking up to 4 times for 15s.",
+      "patch_data": {
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "two_piece_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 2
+          },
+          "detail_expression": {
+            "element": "Havoc",
+            "dmg_bonus": 0.1
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        "five_piece_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 5,
+            "trigger": "basic_or_heavy"
+          },
+          "detail_expression": {
+            "element": "Havoc",
+            "dmg_bonus_total": 0.3,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Rejuvenating Glow",
+      "code": "REJUVENATING_GLOW",
+      "description": "2-Pc: Healing +10%. 5-Pc: Upon healing allies, increases ATK of all team members by 15% for 30s.",
+      "patch_data": {
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "two_piece_effect": {
+          "category": "HEALING",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 2
+          },
+          "detail_expression": {
+            "healing_bonus": 0.1
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        "five_piece_effect": {
+          "category": "STAT_BUFF",
+          "target": "TEAM",
+          "condition_expression": {
+            "set_pieces": 5,
+            "trigger": "healing_allies"
+          },
+          "detail_expression": {
+            "team_atk_percent": 0.15,
+            "duration_seconds": 30
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Moonlit Clouds",
+      "code": "MOONLIT_CLOUDS",
+      "description": "2-Pc: Energy Regen +10%. 5-Pc: Upon using Outro Skill, increases the ATK of the next Resonator by 22.5% for 15s.",
+      "patch_data": {
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "two_piece_effect": {
+          "category": "STAT_BUFF",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 2
+          },
+          "detail_expression": {
+            "energy_regen": 0.1
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        "five_piece_effect": {
+          "category": "STAT_BUFF",
+          "target": "NEXT_RESONATOR",
+          "condition_expression": {
+            "set_pieces": 5,
+            "trigger": "outro_skill"
+          },
+          "detail_expression": {
+            "atk_percent": 0.225,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Lingering Tunes",
+      "code": "LINGERING_TUNES",
+      "description": "2-Pc: ATK +10%. 5-Pc: While on the field, ATK increases by 5% every 1.5s, stacking up to 4 times. Outro Skill DMG +60%.",
+      "patch_data": {
+        "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)",
+        "two_piece_effect": {
+          "category": "STAT_BUFF",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 2
+          },
+          "detail_expression": {
+            "atk_percent": 0.1
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        },
+        "five_piece_effect": {
+          "category": "STAT_BUFF",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 5,
+            "trigger": "on_field"
+          },
+          "detail_expression": {
+            "atk_percent_stacking": 0.2,
+            "outro_dmg_bonus": 0.6
+          },
+          "provenance_source_name": "api-v2.encore.moe Client Datamine (Patch 3.7)"
+        }
+      }
+    },
+    {
+      "name": "Heart of Sworn Vigil",
+      "code": "HEART_OF_SWORN_VIGIL",
+      "description": "2-Pc: Electro DMG +10%. 5-Pc: Inflicting Electro Flare, obtaining Unison, or triggering Unison Response increases Crit Rate by 15% and grants 22.5% Electro DMG for 30s.",
+      "patch_data": {
+        "provenance_source_name": "Kuro Games Official 3.7 Release Announcement",
+        "two_piece_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 2
+          },
+          "detail_expression": {
+            "element": "Electro",
+            "dmg_bonus": 0.1
+          },
+          "provenance_source_name": "Kuro Games Official 3.7 Release Announcement"
+        },
+        "five_piece_effect": {
+          "category": "STAT_BUFF",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 5,
+            "trigger": "electro_flare_unison"
+          },
+          "detail_expression": {
+            "crit_rate": 0.15,
+            "electro_dmg": 0.225,
+            "duration_seconds": 30
+          },
+          "provenance_source_name": "Kuro Games Official 3.7 Release Announcement"
+        }
+      }
+    },
+    {
+      "name": "Flash of Electric Reflection",
+      "code": "FLASH_OF_ELECTRIC_REFLECTION",
+      "description": "2-Pc: Electro DMG +10%. 5-Pc: When the Resonator inflicts Electro Flare on enemies, they gain a 10% Electro DMG Bonus for 15s. While active, casting an Outro Skill grants the incoming Resonator an additional 25% Electro DMG Bonus for 15s.",
+      "patch_data": {
+        "provenance_source_name": "Kuro Games Official 3.7 Release Announcement",
+        "two_piece_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 2
+          },
+          "detail_expression": {
+            "element": "Electro",
+            "dmg_bonus": 0.1
+          },
+          "provenance_source_name": "Kuro Games Official 3.7 Release Announcement"
+        },
+        "five_piece_effect": {
+          "category": "DMG_AMPLIFY",
+          "target": "NEXT_RESONATOR",
+          "condition_expression": {
+            "set_pieces": 5,
+            "trigger": "electro_flare_and_outro"
+          },
+          "detail_expression": {
+            "self_electro_dmg": 0.1,
+            "next_electro_dmg": 0.25,
+            "duration_seconds": 15
+          },
+          "provenance_source_name": "Kuro Games Official 3.7 Release Announcement"
+        }
+      }
+    },
+    {
+      "name": "Flower of Tinged Yearning",
+      "code": "FLOWER_OF_TINGED_YEARNING",
+      "description": "2-Pc: Healing +10%. 5-Pc: Healing a team member increases the ATK of all Resonators in the team by 10% for 30s. If the healing Resonator gains Unison or triggers Unison Response while active, team ATK is further increased by an additional 15%.",
+      "patch_data": {
+        "provenance_source_name": "Kuro Games Official 3.7 Release Announcement",
+        "two_piece_effect": {
+          "category": "HEALING",
+          "target": "SELF",
+          "condition_expression": {
+            "set_pieces": 2
+          },
+          "detail_expression": {
+            "healing_bonus": 0.1
+          },
+          "provenance_source_name": "Kuro Games Official 3.7 Release Announcement"
+        },
+        "five_piece_effect": {
+          "category": "STAT_BUFF",
+          "target": "TEAM",
+          "condition_expression": {
+            "set_pieces": 5,
+            "trigger": "healing_team_unison"
+          },
+          "detail_expression": {
+            "team_atk_base": 0.1,
+            "team_atk_unison_bonus": 0.15,
+            "duration_seconds": 30
+          },
+          "provenance_source_name": "Kuro Games Official 3.7 Release Announcement"
+        }
+      }
+    }
   ]
 }
