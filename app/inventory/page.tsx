@@ -9,14 +9,14 @@ export default async function InventoryPage() {
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
   if (!supabaseUrl || !supabaseKey) {
-    redirect('/auth/login');
+    redirect('/auth/login?redirect=/inventory');
   }
 
   const supabase = await createClient();
   const { data: claimsData, error: authError } = await supabase.auth.getClaims();
 
   if (authError || !claimsData?.claims?.sub) {
-    redirect('/auth/login');
+    redirect('/auth/login?redirect=/inventory');
   }
 
   const userId = claimsData.claims.sub as string;

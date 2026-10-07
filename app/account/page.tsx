@@ -10,14 +10,14 @@ export default async function AccountPage() {
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
   if (!supabaseUrl || !supabaseKey) {
-    redirect("/auth/login");
+    redirect("/auth/login?redirect=/account");
   }
 
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getClaims();
 
   if (error || !data?.claims) {
-    redirect("/auth/login");
+    redirect("/auth/login?redirect=/account");
   }
 
   const claims = data.claims;
@@ -60,10 +60,10 @@ export default async function AccountPage() {
         </div>
 
         <div className="mt-8 flex items-center justify-between border-t border-border pt-6">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
             <Link
               href="/"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className="text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
               &larr; Home
             </Link>
@@ -71,7 +71,13 @@ export default async function AccountPage() {
               href="/inventory"
               className="rounded-lg bg-primary/20 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/30 transition-colors"
             >
-              Manage Inventory
+              Inventory
+            </Link>
+            <Link
+              href="/tower"
+              className="rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
+            >
+              Tower Optimizer
             </Link>
           </div>
 

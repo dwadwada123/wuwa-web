@@ -262,6 +262,13 @@ test('UI Integration - Full End-to-End Flow from OwnedRoster to TowerOptimizatio
   assert.equal(viewModel.vigorSummary.totalVigorConsumed, result.totalVigorConsumed);
   assert.equal(viewModel.totalScore, result.totalScore);
   assert.equal(viewModel.optimality, result.optimality);
+
+  // Verify lean client payload size (Requirement 18 & 22: no candidate pools or matrix sent to browser)
+  const payloadSizeBytes = Buffer.byteLength(JSON.stringify(viewModel), 'utf8');
+  assert.ok(
+    payloadSizeBytes < 150000,
+    `Client ViewModel payload must be compact (< 150 KB), was ${payloadSizeBytes} bytes`
+  );
 });
 
 test('UI Integration - Empty Inventory State (< 3 Resonators) Blocks Optimization', () => {

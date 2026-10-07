@@ -52,7 +52,11 @@ export function ScopeSelector({
         </div>
 
         {/* Scope Pill Toggle */}
-        <div className="inline-flex rounded-lg border border-border bg-secondary/40 p-1">
+        <div
+          role="radiogroup"
+          aria-label="Optimization stage scope"
+          className="inline-flex rounded-lg border border-border bg-secondary/40 p-1"
+        >
           {(
             [
               { id: 'FULL_CYCLE', label: 'Full Cycle' },
@@ -62,9 +66,12 @@ export function ScopeSelector({
           ).map((item) => (
             <button
               key={item.id}
+              type="button"
+              role="radio"
+              aria-checked={scope === item.id}
               onClick={() => onChangeScope(item.id)}
               disabled={disabled}
-              className={`rounded-md px-3 py-1 text-xs font-semibold transition-colors disabled:opacity-50 ${
+              className={`rounded-md px-3 py-1 text-xs font-semibold transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                 scope === item.id
                   ? 'bg-primary text-primary-foreground shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
@@ -99,9 +106,11 @@ export function ScopeSelector({
               return (
                 <button
                   key={t.id}
+                  type="button"
+                  aria-pressed={isSelected}
                   onClick={() => onSelectTower(t.id)}
                   disabled={disabled}
-                  className={`rounded-lg border p-3 text-left transition-all ${
+                  className={`rounded-lg border p-3 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                     isSelected
                       ? 'border-primary bg-primary/10 shadow-sm'
                       : 'border-border/70 bg-secondary/30 hover:bg-secondary/50'

@@ -5,7 +5,11 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
-export function LoginForm() {
+interface LoginFormProps {
+  redirectTarget?: string;
+}
+
+export function LoginForm({ redirectTarget = "/account" }: LoginFormProps) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -40,7 +44,7 @@ export function LoginForm() {
         return;
       }
 
-      router.push("/account");
+      router.push(redirectTarget);
       router.refresh();
     } catch {
       setError("An unexpected error occurred during sign in. Please try again.");
@@ -117,7 +121,11 @@ export function LoginForm() {
         <div className="mt-6 border-t border-border pt-4 text-center text-xs text-muted-foreground">
           Don&apos;t have an account?{" "}
           <Link
-            href="/auth/sign-up"
+            href={
+              redirectTarget !== "/account"
+                ? `/auth/sign-up?redirect=${encodeURIComponent(redirectTarget)}`
+                : "/auth/sign-up"
+            }
             className="font-medium text-primary hover:underline"
           >
             Sign up

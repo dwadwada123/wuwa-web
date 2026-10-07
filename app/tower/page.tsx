@@ -12,7 +12,7 @@ export default async function TowerPage() {
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
   if (!supabaseUrl || !supabaseKey) {
-    redirect('/auth/login');
+    redirect('/auth/login?redirect=/tower');
   }
 
   // 1. Authenticate user from session claims
@@ -20,7 +20,7 @@ export default async function TowerPage() {
   const { data: claimsData, error: authError } = await supabase.auth.getClaims();
 
   if (authError || !claimsData?.claims?.sub) {
-    redirect('/auth/login');
+    redirect('/auth/login?redirect=/tower');
   }
 
   const userId = claimsData.claims.sub as string;

@@ -157,8 +157,9 @@ export function TowerOptimizerClient({
             <span>{errorMessage}</span>
           </div>
           <button
+            type="button"
             onClick={() => setErrorMessage(null)}
-            className="text-xs underline hover:text-destructive/80 shrink-0 ml-4"
+            className="text-xs underline hover:text-destructive/80 shrink-0 ml-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive rounded"
           >
             Dismiss
           </button>
@@ -209,9 +210,10 @@ export function TowerOptimizerClient({
             )}
 
             <button
+              type="button"
               onClick={handleRunOptimization}
               disabled={isPending || isInventoryInsufficient}
-              className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-xs font-bold text-primary-foreground hover:bg-primary/90 transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-xs font-bold text-primary-foreground hover:bg-primary/90 transition-all shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isPending ? (
                 <span className="flex items-center gap-2">

@@ -77,8 +77,12 @@ export function WhyThisTeam({ stage }: WhyThisTeamProps) {
   return (
     <div className="rounded-lg border border-border/60 bg-secondary/15 overflow-hidden">
       <button
+        type="button"
+        id={`why-team-btn-${stage.stageId}`}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-3 text-left hover:bg-secondary/30 transition-colors"
+        aria-expanded={isOpen}
+        aria-controls={`why-team-panel-${stage.stageId}`}
+        className="w-full flex items-center justify-between p-3 text-left hover:bg-secondary/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
       >
         <div className="flex items-center gap-2">
           <span className="text-xs font-semibold text-foreground">
@@ -101,7 +105,12 @@ export function WhyThisTeam({ stage }: WhyThisTeamProps) {
       </button>
 
       {isOpen && (
-        <div className="p-4 pt-1 space-y-4 border-t border-border/40">
+        <div
+          id={`why-team-panel-${stage.stageId}`}
+          role="region"
+          aria-labelledby={`why-team-btn-${stage.stageId}`}
+          className="p-4 pt-1 space-y-4 border-t border-border/40"
+        >
           {/* 1. Global Trade-off Display (Requirement 11) */}
           {hasTradeoff && tradeoffReason && (
             <div className="rounded-lg border border-orange-500/30 bg-orange-500/10 p-3.5 space-y-2">

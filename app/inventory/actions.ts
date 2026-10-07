@@ -32,6 +32,10 @@ export async function toggleResonatorOwnership(
     revalidatePath('/inventory');
     return { success: true };
   } catch (err: any) {
-    return { success: false, error: err.message || 'Operation failed' };
+    console.error('[toggleResonatorOwnership] Error:', err);
+    return {
+      success: false,
+      error: 'Failed to update resonator ownership. Please try again.',
+    };
   }
 }

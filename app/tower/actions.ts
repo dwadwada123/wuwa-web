@@ -327,10 +327,11 @@ export async function runTowerOptimizationAction(
       data: viewModel,
     };
   } catch (err: any) {
+    console.error('[runTowerOptimizationAction] Unexpected error:', err);
     return {
       success: false,
       code: 'ERROR',
-      error: err.message || 'An unexpected error occurred during optimization.',
+      error: 'An unexpected error occurred during optimization. Please try again.',
     };
   }
 }

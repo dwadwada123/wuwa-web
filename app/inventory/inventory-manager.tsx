@@ -174,29 +174,42 @@ export function InventoryManager({ resonators, initialOwnedIds }: InventoryManag
         {/* Top row: Search and Ownership toggle tabs */}
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
+            <label htmlFor="inventory-search" className="sr-only">
+              Search resonators by name
+            </label>
             <input
+              id="inventory-search"
               type="text"
               placeholder="Search resonator by name..."
+              aria-label="Search resonators by name"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full rounded-lg border border-border bg-secondary/50 px-3.5 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             />
             {search && (
               <button
+                type="button"
                 onClick={() => setSearch('')}
-                className="absolute right-3 top-2.5 text-xs text-muted-foreground hover:text-foreground"
+                aria-label="Clear search input"
+                className="absolute right-3 top-2.5 text-xs text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
               >
                 Clear
               </button>
             )}
           </div>
 
-          <div className="inline-flex rounded-lg border border-border bg-secondary/30 p-1">
+          <div
+            role="group"
+            aria-label="Filter by ownership"
+            className="inline-flex rounded-lg border border-border bg-secondary/30 p-1"
+          >
             {(['ALL', 'OWNED', 'UNOWNED'] as const).map((tab) => (
               <button
                 key={tab}
+                type="button"
                 onClick={() => setOwnershipFilter(tab)}
-                className={`rounded-md px-3 py-1 text-xs font-medium transition-colors ${
+                aria-pressed={ownershipFilter === tab}
+                className={`rounded-md px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                   ownershipFilter === tab
                     ? 'bg-primary text-primary-foreground shadow-sm'
                     : 'text-muted-foreground hover:text-foreground'
@@ -209,15 +222,17 @@ export function InventoryManager({ resonators, initialOwnedIds }: InventoryManag
         </div>
 
         {/* Filter Pills: Elements */}
-        <div className="flex flex-wrap items-center gap-1.5 pt-1">
+        <div className="flex flex-wrap items-center gap-1.5 pt-1" role="group" aria-label="Filter by element">
           <span className="text-xs font-medium text-muted-foreground mr-1">Element:</span>
           {ELEMENTS.map((el) => {
             const isSelected = elementFilter === el;
             return (
               <button
                 key={el}
+                type="button"
                 onClick={() => setElementFilter(el)}
-                className={`rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors border ${
+                aria-pressed={isSelected}
+                className={`rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                   isSelected
                     ? 'bg-primary text-primary-foreground border-primary'
                     : 'bg-secondary/40 text-muted-foreground border-border/60 hover:text-foreground'
@@ -230,15 +245,17 @@ export function InventoryManager({ resonators, initialOwnedIds }: InventoryManag
         </div>
 
         {/* Filter Pills: Weapon Types */}
-        <div className="flex flex-wrap items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter by weapon type">
           <span className="text-xs font-medium text-muted-foreground mr-1">Weapon:</span>
           {WEAPON_TYPES.map((wep) => {
             const isSelected = weaponFilter === wep;
             return (
               <button
                 key={wep}
+                type="button"
                 onClick={() => setWeaponFilter(wep)}
-                className={`rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors border ${
+                aria-pressed={isSelected}
+                className={`rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                   isSelected
                     ? 'bg-primary text-primary-foreground border-primary'
                     : 'bg-secondary/40 text-muted-foreground border-border/60 hover:text-foreground'
@@ -326,9 +343,11 @@ export function InventoryManager({ resonators, initialOwnedIds }: InventoryManag
                   </span>
 
                   <button
+                    type="button"
                     onClick={() => handleToggle(r.id)}
                     disabled={isUpdating}
-                    className={`inline-flex items-center justify-center rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
+                    aria-label={`${isOwned ? 'Remove' : 'Add'} ${r.name} ${isOwned ? 'from' : 'to'} owned roster`}
+                    className={`inline-flex items-center justify-center rounded-lg px-3 py-1.5 text-xs font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                       isOwned
                         ? 'bg-destructive/15 text-destructive hover:bg-destructive/25 border border-destructive/30'
                         : 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm'

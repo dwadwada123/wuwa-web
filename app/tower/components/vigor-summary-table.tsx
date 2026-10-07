@@ -60,7 +60,8 @@ export function VigorSummaryTable({ vigor }: VigorSummaryTableProps) {
 
       {/* Vigor Table */}
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs border-collapse">
+        <table className="w-full text-left text-xs border-collapse" aria-label="Vigor allocation summary">
+          <caption className="sr-only">Authoritative stamina accounting across all owned Resonators</caption>
           <thead>
             <tr className="border-b border-border text-muted-foreground uppercase font-bold text-[10px] tracking-wider">
               <th className="py-2.5 px-3">Resonator</th>

@@ -5,7 +5,11 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
-export function SignUpForm() {
+interface SignUpFormProps {
+  redirectTarget?: string;
+}
+
+export function SignUpForm({ redirectTarget = "/account" }: SignUpFormProps) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -64,7 +68,7 @@ export function SignUpForm() {
         setLoading(false);
       } else if (data?.session) {
         // Automatically signed in (e.g. if email confirmations are disabled)
-        router.push("/account");
+        router.push(redirectTarget);
         router.refresh();
       } else {
         setConfirmationRequired(true);
@@ -212,7 +216,11 @@ export function SignUpForm() {
         <div className="mt-6 border-t border-border pt-4 text-center text-xs text-muted-foreground">
           Already have an account?{" "}
           <Link
-            href="/auth/login"
+            href={
+              redirectTarget !== "/account"
+                ? `/auth/login?redirect=${encodeURIComponent(redirectTarget)}`
+                : "/auth/login"
+            }
             className="font-medium text-primary hover:underline"
           >
             Sign in
