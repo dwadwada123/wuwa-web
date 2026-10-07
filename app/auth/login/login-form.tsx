@@ -90,12 +90,20 @@ export function LoginForm({ redirectTarget = "/account" }: LoginFormProps) {
           </div>
 
           <div>
-            <label
-              htmlFor="password"
-              className="block text-xs font-medium uppercase tracking-wider text-muted-foreground mb-1.5"
-            >
-              Password
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label
+                htmlFor="password"
+                className="block text-xs font-medium uppercase tracking-wider text-muted-foreground"
+              >
+                Password
+              </label>
+              <Link
+                href="/auth/forgot-password"
+                className="text-xs font-medium text-primary hover:underline"
+              >
+                Forgot password?
+              </Link>
+            </div>
             <input
               id="password"
               name="password"
