@@ -53,6 +53,26 @@ export interface IGameDataRepository {
   getActiveOrLatestCycle(cycleId?: string): Promise<{ cycle: ToACycle; patch: PatchContext } | null>;
 }
 
+const GLOBAL_GAME_DATA_CACHE = {
+  patchContext: new Map<string, PatchContext>(),
+  resonators: new Map<string, Resonator[]>(),
+  weapons: new Map<string, Weapon[]>(),
+  echoes: new Map<string, Echo[]>(),
+  sonatas: new Map<string, Sonata[]>(),
+  cycles: new Map<string, ToACycle>(),
+  stages: new Map<string, ToAStage>(),
+};
+
+export function clearGameDataCache(): void {
+  GLOBAL_GAME_DATA_CACHE.patchContext.clear();
+  GLOBAL_GAME_DATA_CACHE.resonators.clear();
+  GLOBAL_GAME_DATA_CACHE.weapons.clear();
+  GLOBAL_GAME_DATA_CACHE.echoes.clear();
+  GLOBAL_GAME_DATA_CACHE.sonatas.clear();
+  GLOBAL_GAME_DATA_CACHE.cycles.clear();
+  GLOBAL_GAME_DATA_CACHE.stages.clear();
+}
+
 export class SupabaseGameDataRepository implements IGameDataRepository {
   private client: SupabaseClient;
 
@@ -61,6 +81,10 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
   }
 
   async getPatchContext(version: string, cycleId?: string): Promise<PatchContext | null> {
+    const cacheKey = `${version}::${cycleId || ''}`;
+    const cached = GLOBAL_GAME_DATA_CACHE.patchContext.get(cacheKey);
+    if (cached) return cached;
+
     const { data: patch, error } = await this.client
       .from('patches')
       .select('id, version, release_date')
@@ -69,15 +93,20 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
 
     if (error || !patch) return null;
 
-    return {
+    const result: PatchContext = {
       patchId: patch.id,
       version: patch.version,
       cycleId,
       snapshotDate: patch.release_date,
     };
+    GLOBAL_GAME_DATA_CACHE.patchContext.set(cacheKey, result);
+    return result;
   }
 
   async getResonators(patchId: string): Promise<Resonator[]> {
+    const cached = GLOBAL_GAME_DATA_CACHE.resonators.get(patchId);
+    if (cached) return cached;
+
     // 1. Fetch base resonators and patch data
     const { data: resonatorsData, error } = await this.client
       .from('resonators')
@@ -136,7 +165,7 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
       throw new Error(`Failed to load resonators for patch ${patchId}: ${error?.message}`);
     }
 
-    return resonatorsData.map((row: any) => {
+    const result = resonatorsData.map((row: any) => {
       const patchData = Array.isArray(row.resonator_patch_data)
         ? row.resonator_patch_data[0]
         : row.resonator_patch_data;
@@ -195,6 +224,8 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
         abilities,
       };
     });
+    GLOBAL_GAME_DATA_CACHE.resonators.set(patchId, result);
+    return result;
   }
 
   async getResonatorById(resonatorId: string, patchId: string): Promise<Resonator | null> {
@@ -203,6 +234,9 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
   }
 
   async getWeapons(patchId: string): Promise<Weapon[]> {
+    const cached = GLOBAL_GAME_DATA_CACHE.weapons.get(patchId);
+    if (cached) return cached;
+
     const { data, error } = await this.client
       .from('weapons')
       .select(`
@@ -230,7 +264,7 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
       throw new Error(`Failed to load weapons for patch ${patchId}: ${error?.message}`);
     }
 
-    return data.map((row: any) => {
+    const result = data.map((row: any) => {
       const pd = Array.isArray(row.weapon_patch_data)
         ? row.weapon_patch_data[0]
         : row.weapon_patch_data;
@@ -258,9 +292,14 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
         passiveEffect,
       };
     });
+    GLOBAL_GAME_DATA_CACHE.weapons.set(patchId, result);
+    return result;
   }
 
   async getEchoes(patchId: string): Promise<Echo[]> {
+    const cached = GLOBAL_GAME_DATA_CACHE.echoes.get(patchId);
+    if (cached) return cached;
+
     const { data, error } = await this.client
       .from('echoes')
       .select(`
@@ -287,7 +326,7 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
       throw new Error(`Failed to load echoes for patch ${patchId}: ${error?.message}`);
     }
 
-    return data.map((row: any) => {
+    const result = data.map((row: any) => {
       const pd = Array.isArray(row.echo_patch_data)
         ? row.echo_patch_data[0]
         : row.echo_patch_data;
@@ -314,9 +353,14 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
         skillEffect,
       };
     });
+    GLOBAL_GAME_DATA_CACHE.echoes.set(patchId, result);
+    return result;
   }
 
   async getSonatas(patchId: string): Promise<Sonata[]> {
+    const cached = GLOBAL_GAME_DATA_CACHE.sonatas.get(patchId);
+    if (cached) return cached;
+
     const { data, error } = await this.client
       .from('sonatas')
       .select(`
@@ -339,7 +383,7 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
       throw new Error(`Failed to load sonatas for patch ${patchId}: ${error?.message}`);
     }
 
-    return data.map((row: any) => {
+    const result = data.map((row: any) => {
       const pd = Array.isArray(row.sonata_patch_data)
         ? row.sonata_patch_data[0]
         : row.sonata_patch_data;
@@ -365,6 +409,8 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
         fivePieceEffect: mapGe(pd?.five_piece),
       };
     });
+    GLOBAL_GAME_DATA_CACHE.sonatas.set(patchId, result);
+    return result;
   }
 
   async getEnemies(patchId: string): Promise<Enemy[]> {
@@ -415,6 +461,10 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
   }
 
   async getToACycle(cycleId: string, patchId: string): Promise<ToACycle | null> {
+    const cacheKey = `${cycleId}::${patchId}`;
+    const cached = GLOBAL_GAME_DATA_CACHE.cycles.get(cacheKey);
+    if (cached) return cached;
+
     const { data: cycle, error } = await this.client
       .from('toa_cycles')
       .select(`
@@ -444,24 +494,29 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
 
     if (error || !cycle) return null;
 
-    const towers: ToATower[] = [];
+    const towerPromises: Promise<ToATower>[] = [];
     for (const zone of (cycle as any).toa_zones || []) {
       for (const t of zone.toa_towers || []) {
-        const stages: ToAStage[] = [];
-        for (const s of t.toa_stages || []) {
-          const loadedStage = await this.getToAStage(s.id, patchId);
-          if (loadedStage) stages.push(loadedStage);
-        }
-        towers.push({
-          id: t.id,
-          towerOrder: t.tower_order,
-          towerName: t.tower_name,
-          stages: stages.sort((a, b) => a.stageIndex - b.stageIndex),
-        });
+        towerPromises.push(
+          (async () => {
+            const stagePromises = (t.toa_stages || []).map((s: any) => this.getToAStage(s.id, patchId));
+            const loadedStages = (await Promise.all(stagePromises)).filter(
+              (s): s is ToAStage => s !== null
+            );
+            return {
+              id: t.id,
+              towerOrder: t.tower_order,
+              towerName: t.tower_name,
+              stages: loadedStages.sort((a, b) => a.stageIndex - b.stageIndex),
+            };
+          })()
+        );
       }
     }
 
-    return {
+    const towers = await Promise.all(towerPromises);
+
+    const result: ToACycle = {
       id: cycle.id,
       patchId: cycle.patch_id,
       cycleName: cycle.cycle_name,
@@ -469,9 +524,15 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
       endTime: cycle.end_time,
       towers: towers.sort((a, b) => a.towerOrder - b.towerOrder),
     };
+    GLOBAL_GAME_DATA_CACHE.cycles.set(cacheKey, result);
+    return result;
   }
 
   async getToAStage(stageId: string, patchId: string): Promise<ToAStage | null> {
+    const cacheKey = `${stageId}::${patchId}`;
+    const cached = GLOBAL_GAME_DATA_CACHE.stages.get(cacheKey);
+    if (cached) return cached;
+
     const { data: stage, error } = await this.client
       .from('toa_stages')
       .select(`
@@ -595,7 +656,7 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
       };
     });
 
-    return {
+    const result: ToAStage = {
       id: stage.id,
       patchId,
       stageIndex: stage.stage_index,
@@ -604,6 +665,8 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
       challengeGoals: challengeGoals.sort((a, b) => a.goalOrder - b.goalOrder),
       waves: waves.sort((a, b) => a.waveIndex - b.waveIndex),
     };
+    GLOBAL_GAME_DATA_CACHE.stages.set(cacheKey, result);
+    return result;
   }
 
   async getAvailableCycles(): Promise<AvailableCycleSummary[]> {

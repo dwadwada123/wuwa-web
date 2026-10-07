@@ -12,6 +12,8 @@ import {
   optimizeToA,
   buildOptimizationExplanation,
   parseStageIdentity,
+  computeOptimizationCacheKey,
+  globalOptimizationCache,
 } from '@/lib/engine';
 import type { ToAStage, Resonator, Weapon } from '@/lib/domain/types';
 import type { TeamStageScore } from '@/lib/engine/scoring/types';
@@ -32,8 +34,13 @@ import type {
 export async function runTowerOptimizationAction(
   input: RunOptimizationInput
 ): Promise<RunOptimizationResponse> {
+  const isTimingLogsEnabled = process.env.OPTIMIZER_TIMING_LOGS === 'true';
+  const overallStart = performance.now();
+  const timings: Record<string, number> = {};
+
   try {
     // 1. Authenticate user from session claims
+    let stageStart = performance.now();
     const supabase = await createClient();
     const { data: claimsData, error: authError } = await supabase.auth.getClaims();
 
@@ -46,8 +53,10 @@ export async function runTowerOptimizationAction(
     }
 
     const userId = claimsData.claims.sub as string;
+    timings.auth = Math.round((performance.now() - stageStart) * 100) / 100;
 
     // 2. Load User Inventory
+    stageStart = performance.now();
     const userInventoryRepo = new SupabaseUserInventoryRepository(supabase);
     const userRoster = await userInventoryRepo.getOwnedRoster(userId);
 
@@ -59,8 +68,10 @@ export async function runTowerOptimizationAction(
           'Add more Resonators to your inventory before optimizing Tower of Adversity. (At least 3 owned Resonators required to field a team)',
       };
     }
+    timings.inventoryQuery = Math.round((performance.now() - stageStart) * 100) / 100;
 
     // 3. Resolve active/selected ToA Cycle from game data repository
+    stageStart = performance.now();
     const gameDataRepo = new SupabaseGameDataRepository(supabase);
     const cycleData = await gameDataRepo.getActiveOrLatestCycle(input.cycleId);
 
@@ -73,8 +84,10 @@ export async function runTowerOptimizationAction(
     }
 
     const { cycle, patch } = cycleData;
+    timings.cycleQuery = Math.round((performance.now() - stageStart) * 100) / 100;
 
-    // 4. Load Canonical Entities for Patch Snapshot
+    // 4. Load Canonical Entities for Patch Snapshot (cached in repository)
+    stageStart = performance.now();
     const [availableResonators, availableWeapons, availableEchoes, availableSonatas] =
       await Promise.all([
         gameDataRepo.getResonators(cycle.patchId),
@@ -82,8 +95,10 @@ export async function runTowerOptimizationAction(
         gameDataRepo.getEchoes(cycle.patchId),
         gameDataRepo.getSonatas(cycle.patchId),
       ]);
+    timings.gameDataQuery = Math.round((performance.now() - stageStart) * 100) / 100;
 
     // 5. Resolve Stages Scope
+    stageStart = performance.now();
     let stagesToOptimize: ToAStage[] = [];
     if (input.scope === 'TOWER' && input.selectedTowerId) {
       const tower = cycle.towers.find((t) => t.id === input.selectedTowerId);
@@ -109,8 +124,76 @@ export async function runTowerOptimizationAction(
         error: 'No stages selected for optimization scope.',
       };
     }
+    timings.scopeResolution = Math.round((performance.now() - stageStart) * 100) / 100;
+
+    // 5b. Cache Verification: Check deterministic optimization cache
+    stageStart = performance.now();
+    const cacheKey = computeOptimizationCacheKey({
+      userId,
+      inventory: {
+        resonators: userRoster.resonators.map((r) => ({
+          resonatorId: r.resonatorId,
+          level: r.level,
+          waveband: r.waveband,
+          normalAttackLevel: r.normalAttackLevel,
+          resonanceSkillLevel: r.resonanceSkillLevel,
+          forteCircuitLevel: r.forteCircuitLevel,
+          resonanceLiberationLevel: r.resonanceLiberationLevel,
+          introSkillLevel: r.introSkillLevel,
+        })),
+        weapons: userRoster.weapons?.map((w) => ({
+          id: w.id,
+          weaponId: w.weaponId,
+          level: w.level,
+          refinement: w.refinement,
+        })),
+        loadouts: userRoster.loadouts?.map((l) => ({
+          resonatorId: l.userResonatorId,
+          weaponInstanceId: l.weaponInstanceId || '',
+        })),
+      },
+      patchId: patch.patchId,
+      cycleId: cycle.id,
+      stages: stagesToOptimize.map((s) => ({
+        id: s.id,
+        vigorCost: s.vigorCost,
+        areaEffects: s.areaEffects.map((ae) => ({ id: ae.id })),
+        waves: s.waves.map((w) => ({
+          enemyInstances: w.enemyInstances.map((ei) => ({
+            enemy: {
+              id: ei.enemy.id,
+              resistances: ei.enemy.resistances.map((r) => ({
+                element: r.element,
+                ratio: r.resistanceRatio,
+              })),
+            },
+          })),
+        })),
+      })),
+      mode: 'BEST_EFFORT',
+      maxSearchStates: 200000,
+      scoringVersion: 'v1-standard',
+    });
+
+    const cachedViewModel = globalOptimizationCache.get(cacheKey);
+    timings.cacheLookup = Math.round((performance.now() - stageStart) * 100) / 100;
+
+    if (cachedViewModel) {
+      timings.total = Math.round((performance.now() - overallStart) * 100) / 100;
+      if (isTimingLogsEnabled) {
+        console.log(
+          `[runTowerOptimizationAction] Cache HIT (${cacheKey.slice(0, 10)}):`,
+          JSON.stringify(timings)
+        );
+      }
+      return {
+        success: true,
+        data: cachedViewModel,
+      };
+    }
 
     // 6. Domain Adaptation
+    stageStart = performance.now();
     const adapted = adaptInventoryToEngine(userRoster, {
       patchContext: patch,
       availableResonators,
@@ -118,8 +201,10 @@ export async function runTowerOptimizationAction(
       availableEchoes,
       availableSonatas,
     });
+    timings.domainAdaptation = Math.round((performance.now() - stageStart) * 100) / 100;
 
     // 7. Deterministic Candidate Generation
+    stageStart = performance.now();
     const candidates = generateTeamCandidates(adapted.roster, {
       patchContext: patch,
       availableResonators,
@@ -134,8 +219,10 @@ export async function runTowerOptimizationAction(
           'No valid 3-person team candidates can be formed from your current inventory.',
       };
     }
+    timings.candidateGen = Math.round((performance.now() - stageStart) * 100) / 100;
 
     // 8. Deterministic Team Scoring for all scoped stages
+    stageStart = performance.now();
     const scoringContext = { patchContext: patch, roster: adapted.roster };
     const scores = new Map<string, TeamStageScore>();
 
@@ -145,8 +232,10 @@ export async function runTowerOptimizationAction(
         scores.set(`${score.candidateKey}::${score.stageKey}`, score);
       }
     }
+    timings.teamScoring = Math.round((performance.now() - stageStart) * 100) / 100;
 
     // 9. Optimization Context Setup
+    stageStart = performance.now();
     const optContext: ToAOptimizationContext = {
       cycleId: cycle.id,
       patchId: patch.patchId,
@@ -162,11 +251,15 @@ export async function runTowerOptimizationAction(
       mode: 'BEST_EFFORT',
       maxSearchStates: 200000,
     });
+    timings.optimizer = Math.round((performance.now() - stageStart) * 100) / 100;
 
     // 11. Deterministic Explanation Building
+    stageStart = performance.now();
     const explanation = buildOptimizationExplanation(optContext, result);
+    timings.explanation = Math.round((performance.now() - stageStart) * 100) / 100;
 
     // 12. Build Lean Client View Model (zero candidate matrix leakage)
+    stageStart = performance.now();
     const assignmentMap = new Map(result.assignments.map((a) => [a.stageId, a]));
     const stageExplMap = new Map(explanation.stages.map((s) => [s.stageKey, s]));
 
@@ -321,6 +414,19 @@ export async function runTowerOptimizationAction(
         durationMs: result.metrics.durationMs,
       },
     };
+
+    timings.viewModelSerialization = Math.round((performance.now() - stageStart) * 100) / 100;
+    timings.total = Math.round((performance.now() - overallStart) * 100) / 100;
+
+    // Cache computed view model for identical requests
+    globalOptimizationCache.set(cacheKey, viewModel);
+
+    if (isTimingLogsEnabled) {
+      console.log(
+        `[runTowerOptimizationAction] Timing (ms):`,
+        JSON.stringify(timings)
+      );
+    }
 
     return {
       success: true,

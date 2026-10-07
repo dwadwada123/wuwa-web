@@ -13,6 +13,7 @@ async function run() {
   const args = process.argv.slice(2);
   let target: 'local' | 'remote' = 'local';
   let confirmRemote = false;
+  let patchVersion = '3.7';
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -34,6 +35,10 @@ async function run() {
       }
     } else if (arg === '--confirm-remote') {
       confirmRemote = true;
+    } else if ((arg === '--patch' || arg === '-p') && i + 1 < args.length) {
+      patchVersion = args[++i];
+    } else if (arg.startsWith('--patch=')) {
+      patchVersion = arg.split('=')[1];
     }
   }
 
@@ -109,7 +114,7 @@ async function run() {
     auth: { persistSession: false, autoRefreshToken: false }
   });
 
-  const datasetPath = path.resolve('data/patches/3.7/patch_3_7_dataset.json');
+  const datasetPath = path.resolve(`data/patches/${patchVersion}/patch_${patchVersion.replace(/\./g, '_')}_dataset.json`);
   if (!fs.existsSync(datasetPath)) {
     console.error(`ERROR: Dataset file not found at ${datasetPath}`);
     process.exit(1);
