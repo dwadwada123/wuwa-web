@@ -91,10 +91,14 @@ test.describe('Tower of Adversity End-to-End Optimization Flow', () => {
     // 4. Mark / unmark ownership toggle
     const targetCardButton = page.getByRole('button', { name: new RegExp(targetChar, 'i') }).first();
     const initialText = await targetCardButton.innerText();
-    await targetCardButton.click();
+    const expectedToggledText = initialText === 'Remove' ? 'Mark Owned' : 'Remove';
 
-    // Wait for optimistic update + server transition
-    await expect(targetCardButton).not.toHaveText(initialText, { timeout: 10000 });
+    await Promise.all([
+      page.waitForResponse((res) => res.request().method() === 'POST' && res.status() === 200, { timeout: 15000 }),
+      targetCardButton.click(),
+    ]);
+
+    await expect(targetCardButton).toHaveText(expectedToggledText, { timeout: 10000 });
 
     // 5. Refresh inventory
     await page.reload();
@@ -102,12 +106,15 @@ test.describe('Tower of Adversity End-to-End Optimization Flow', () => {
     // 6. Verify ownership remained persisted after refresh
     await searchInput.fill(targetChar);
     const postRefreshButton = page.getByRole('button', { name: new RegExp(targetChar, 'i') }).first();
-    await expect(postRefreshButton).not.toHaveText(initialText);
+    await expect(postRefreshButton).toHaveText(expectedToggledText);
 
     // Restore ownership to owned for full 12-stage feasibility
     if (initialText === 'Remove') {
       // It was removed, click again to re-add
-      await postRefreshButton.click();
+      await Promise.all([
+        page.waitForResponse((res) => res.request().method() === 'POST' && res.status() === 200, { timeout: 15000 }),
+        postRefreshButton.click(),
+      ]);
       await expect(postRefreshButton).toHaveText('Remove', { timeout: 10000 });
     }
 
