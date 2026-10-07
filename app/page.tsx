@@ -80,7 +80,7 @@ export default function HomePage() {
           </div>
           <div className="rounded-xl border border-border/60 bg-secondary/40 p-4">
             <div className="text-xs font-medium text-muted-foreground">Optimization Engine</div>
-            <div className="mt-1 text-sm font-semibold text-foreground">Deterministic ILP</div>
+            <div className="mt-1 text-sm font-semibold text-foreground">Deterministic Branch-and-Bound</div>
           </div>
         </div>
 

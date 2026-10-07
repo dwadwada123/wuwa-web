@@ -165,7 +165,7 @@ async function runSmokeTest(): Promise<SmokeReport> {
       toggleButton.click(),
     ]);
     await page.waitForFunction(
-      ([btn, expected]) => btn && btn.innerText === expected,
+      ([btn, expected]) => (btn as any)?.innerText === expected,
       [await toggleButton.elementHandle(), expectedToggledText],
       { timeout: 10000 }
     );
@@ -191,7 +191,7 @@ async function runSmokeTest(): Promise<SmokeReport> {
         refreshedButton.click(),
       ]);
       await page.waitForFunction(
-        (btn) => btn && btn.innerText === 'Remove',
+        (btn) => (btn as any)?.innerText === 'Remove',
         await refreshedButton.elementHandle(),
         { timeout: 10000 }
       );
