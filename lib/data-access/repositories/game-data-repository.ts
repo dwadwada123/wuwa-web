@@ -29,6 +29,16 @@ import type {
   GameplayEffect,
 } from '../../domain/types/index.ts';
 
+export interface AvailableCycleSummary {
+  id: string;
+  patchId: string;
+  patchVersion: string;
+  cycleName: string;
+  startTime: string;
+  endTime: string;
+  isActive: boolean;
+}
+
 export interface IGameDataRepository {
   getPatchContext(version: string, cycleId?: string): Promise<PatchContext | null>;
   getResonators(patchId: string): Promise<Resonator[]>;
@@ -39,10 +49,16 @@ export interface IGameDataRepository {
   getEnemies(patchId: string): Promise<Enemy[]>;
   getToACycle(cycleId: string, patchId: string): Promise<ToACycle | null>;
   getToAStage(stageId: string, patchId: string): Promise<ToAStage | null>;
+  getAvailableCycles(): Promise<AvailableCycleSummary[]>;
+  getActiveOrLatestCycle(cycleId?: string): Promise<{ cycle: ToACycle; patch: PatchContext } | null>;
 }
 
 export class SupabaseGameDataRepository implements IGameDataRepository {
-  constructor(private client: SupabaseClient) {}
+  private client: SupabaseClient;
+
+  constructor(client: SupabaseClient) {
+    this.client = client;
+  }
 
   async getPatchContext(version: string, cycleId?: string): Promise<PatchContext | null> {
     const { data: patch, error } = await this.client
@@ -73,44 +89,48 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
         rarity,
         release_date,
         resonator_patch_data!inner (
+          id,
           base_hp_lvl90,
           base_atk_lvl90,
-          base_def_lvl90
-        ),
-        resonator_roles (
-          is_primary,
-          functional_roles (
-            code,
-            label
-          )
-        ),
-        resonator_combat_tags (
-          combat_tags (
-            code,
-            label
+          base_def_lvl90,
+          resonator_roles (
+            is_primary,
+            functional_roles (
+              code,
+              label
+            )
+          ),
+          resonator_combat_tags (
+            combat_tags (
+              code,
+              label
+            )
           )
         ),
         abilities (
           id,
           ability_code,
           ability_category,
-          name,
-          cooldown_seconds,
-          energy_cost,
-          concertos_generated,
-          ability_effects (
-            gameplay_effects (
-              id,
-              patch_id,
-              category,
-              target,
-              condition_expression,
-              detail_expression
+          ability_patch_data!inner (
+            name,
+            cooldown_seconds,
+            energy_cost,
+            concertos_generated,
+            ability_effects (
+              gameplay_effects (
+                id,
+                patch_id,
+                category,
+                target,
+                condition_expression,
+                detail_expression
+              )
             )
           )
         )
       `)
-      .eq('resonator_patch_data.patch_id', patchId);
+      .eq('resonator_patch_data.patch_id', patchId)
+      .eq('abilities.ability_patch_data.patch_id', patchId);
 
     if (error || !resonatorsData) {
       throw new Error(`Failed to load resonators for patch ${patchId}: ${error?.message}`);
@@ -121,19 +141,23 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
         ? row.resonator_patch_data[0]
         : row.resonator_patch_data;
 
-      const roles: FunctionalRole[] = (row.resonator_roles || []).map((rr: any) => ({
+      const roles: FunctionalRole[] = (patchData?.resonator_roles || []).map((rr: any) => ({
         code: rr.functional_roles?.code || '',
         label: rr.functional_roles?.label || '',
         isPrimary: rr.is_primary,
       }));
 
-      const combatTags: CombatTag[] = (row.resonator_combat_tags || []).map((rc: any) => ({
+      const combatTags: CombatTag[] = (patchData?.resonator_combat_tags || []).map((rc: any) => ({
         code: rc.combat_tags?.code || '',
         label: rc.combat_tags?.label || '',
       }));
 
       const abilities: ResonatorAbility[] = (row.abilities || []).map((ab: any) => {
-        const effects: GameplayEffect[] = (ab.ability_effects || [])
+        const apd = Array.isArray(ab.ability_patch_data)
+          ? ab.ability_patch_data[0]
+          : ab.ability_patch_data;
+
+        const effects: GameplayEffect[] = (apd?.ability_effects || [])
           .map((ae: any) => ae.gameplay_effects)
           .filter(Boolean)
           .map((ge: any) => ({
@@ -148,10 +172,10 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
         return {
           code: ab.ability_code,
           category: ab.ability_category,
-          name: ab.name,
-          cooldownSeconds: ab.cooldown_seconds,
-          energyCost: ab.energy_cost,
-          concertosGenerated: ab.concertos_generated,
+          name: apd?.name || ab.ability_code,
+          cooldownSeconds: apd?.cooldown_seconds ?? null,
+          energyCost: apd?.energy_cost ?? null,
+          concertosGenerated: apd?.concertos_generated ?? 0,
           effects,
         };
       });
@@ -301,10 +325,10 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
         code,
         description,
         sonata_patch_data!inner (
-          two_piece:gameplay_effects!sonata_patch_data_two_piece_effect_id_fkey (
+          two_piece:gameplay_effects!sonata_patch_two_piece_fkey (
             id, patch_id, category, target, condition_expression, detail_expression
           ),
-          five_piece:gameplay_effects!sonata_patch_data_five_piece_effect_id_fkey (
+          five_piece:gameplay_effects!sonata_patch_five_piece_fkey (
             id, patch_id, category, target, condition_expression, detail_expression
           )
         )
@@ -462,7 +486,6 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
         stage_area_effects (
           area_effects (
             id,
-            source_id,
             name,
             description,
             gameplay_effects (
@@ -517,7 +540,7 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
       .filter(Boolean)
       .map((ae: any) => ({
         id: ae.id,
-        sourceId: ae.source_id,
+        sourceId: ae.id,
         name: ae.name,
         description: ae.description,
         gameplayEffect: {
@@ -581,5 +604,76 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
       challengeGoals: challengeGoals.sort((a, b) => a.goalOrder - b.goalOrder),
       waves: waves.sort((a, b) => a.waveIndex - b.waveIndex),
     };
+  }
+
+  async getAvailableCycles(): Promise<AvailableCycleSummary[]> {
+    const { data: cycles, error } = await this.client
+      .from('toa_cycles')
+      .select('id, patch_id, cycle_name, start_time, end_time, patches(version)')
+      .order('end_time', { ascending: false });
+
+    if (error || !cycles) return [];
+
+    const now = new Date();
+    return cycles.map((c: any) => {
+      const start = new Date(c.start_time);
+      const end = new Date(c.end_time);
+      const isActive = now >= start && now <= end;
+      return {
+        id: c.id,
+        patchId: c.patch_id,
+        patchVersion: c.patches?.version || 'Unknown',
+        cycleName: c.cycle_name,
+        startTime: c.start_time,
+        endTime: c.end_time,
+        isActive,
+      };
+    });
+  }
+
+  async getActiveOrLatestCycle(cycleId?: string): Promise<{ cycle: ToACycle; patch: PatchContext } | null> {
+    let targetCycleId = cycleId;
+    let patchId: string | null = null;
+    let patchVersion = '';
+
+    if (targetCycleId) {
+      const { data, error } = await this.client
+        .from('toa_cycles')
+        .select('id, patch_id, patches(version)')
+        .eq('id', targetCycleId)
+        .single();
+      if (!error && data) {
+        patchId = data.patch_id;
+        patchVersion = (data as any).patches?.version || '';
+      }
+    } else {
+      const { data: cycles, error } = await this.client
+        .from('toa_cycles')
+        .select('id, patch_id, start_time, end_time, patches(version)')
+        .order('end_time', { ascending: false });
+
+      if (!error && cycles && cycles.length > 0) {
+        const now = new Date();
+        const active = cycles.find((c: any) => {
+          const s = new Date(c.start_time);
+          const e = new Date(c.end_time);
+          return now >= s && now <= e;
+        });
+        const chosen = active || cycles[0];
+        targetCycleId = chosen.id;
+        patchId = chosen.patch_id;
+        patchVersion = (chosen as any).patches?.version || '';
+      }
+    }
+
+    if (!targetCycleId || !patchId) return null;
+
+    const cycle = await this.getToACycle(targetCycleId, patchId);
+    if (!cycle) return null;
+
+    const patch = await this.getPatchContext(patchVersion, targetCycleId);
+    if (!patch) return null;
+
+    return { cycle, patch };
   }
 }

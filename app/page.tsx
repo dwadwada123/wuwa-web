@@ -36,6 +36,12 @@ export default function HomePage() {
               Inventory
             </Link>
             <Link
+              href="/tower"
+              className="rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
+            >
+              Tower
+            </Link>
+            <Link
               href="/account"
               className="rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
             >

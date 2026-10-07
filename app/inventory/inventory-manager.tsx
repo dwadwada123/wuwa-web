@@ -136,6 +136,12 @@ export function InventoryManager({ resonators, initialOwnedIds }: InventoryManag
 
         <div className="flex items-center gap-2">
           <Link
+            href="/tower"
+            className="rounded-lg bg-primary px-3.5 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
+          >
+            Tower Optimizer →
+          </Link>
+          <Link
             href="/account"
             className="rounded-lg border border-border px-3.5 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
