@@ -1,0 +1,19 @@
+# Scratch and temporary files
+scratch*
+scratch/
+supabase/.temp/
+.temp/
+
+# Docs and markdown reports
+docs/
+
+# Tests
+tests/
+test-results/
+playwright-report/
+.playwright-mcp/
+
+# Git and IDE
+.git/
+.github/
+.agents/

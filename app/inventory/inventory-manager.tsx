@@ -3,19 +3,23 @@
 import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import { toggleResonatorOwnership } from './actions';
+import { ResonatorEditDrawer } from './components/resonator-edit-drawer';
+import type {
+  CanonicalResonatorItem,
+  CanonicalWeaponItem,
+  CanonicalSonataItem,
+  ResonatorInvestmentState,
+} from './types';
 
-export interface ResonatorListItem {
-  id: string;
-  name: string;
-  element: string;
-  weaponType: string;
-  rarity: number;
-  releaseDate: string;
-}
+// Backward compatible export alias
+export type ResonatorListItem = CanonicalResonatorItem;
 
 interface InventoryManagerProps {
-  resonators: ResonatorListItem[];
+  resonators: CanonicalResonatorItem[];
   initialOwnedIds: string[];
+  canonicalWeapons?: CanonicalWeaponItem[];
+  canonicalSonatas?: CanonicalSonataItem[];
+  initialInvestments?: Record<string, ResonatorInvestmentState>;
 }
 
 const ELEMENTS = ['ALL', 'Glacio', 'Fusion', 'Electro', 'Aero', 'Spectro', 'Havoc'] as const;
@@ -30,8 +34,19 @@ const ELEMENT_COLORS: Record<string, { bg: string; text: string; border: string 
   Havoc: { bg: 'bg-fuchsia-500/10', text: 'text-fuchsia-400', border: 'border-fuchsia-500/30' },
 };
 
-export function InventoryManager({ resonators, initialOwnedIds }: InventoryManagerProps) {
+export function InventoryManager({
+  resonators,
+  initialOwnedIds,
+  canonicalWeapons = [],
+  canonicalSonatas = [],
+  initialInvestments = {},
+}: InventoryManagerProps) {
   const [ownedIds, setOwnedIds] = useState<Set<string>>(new Set(initialOwnedIds));
+  const [investments, setInvestments] = useState<Record<string, ResonatorInvestmentState>>(
+    initialInvestments
+  );
+  const [editingResonator, setEditingResonator] = useState<CanonicalResonatorItem | null>(null);
+
   const [search, setSearch] = useState('');
   const [elementFilter, setElementFilter] = useState<string>('ALL');
   const [weaponFilter, setWeaponFilter] = useState<string>('ALL');
@@ -72,6 +87,19 @@ export function InventoryManager({ resonators, initialOwnedIds }: InventoryManag
             return next;
           });
           setErrorMessage(res.error || 'Failed to update resonator ownership.');
+        } else if (!isCurrentlyOwned && !investments[resonatorId]) {
+          // Initialize baseline investment state for newly owned character without defaulting to 90
+          setInvestments((prev) => ({
+            ...prev,
+            [resonatorId]: {
+              userResonatorId: '',
+              resonatorId,
+              level: 1,
+              waveband: 0,
+              weapon: null,
+              sonata: null,
+            },
+          }));
         }
       } catch (err: any) {
         // Rollback on network/runtime error
@@ -130,29 +158,14 @@ export function InventoryManager({ resonators, initialOwnedIds }: InventoryManag
             </span>
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
-            Manage your owned characters to power deterministic team generation and ToA optimization.
+            Manage your owned characters, equipment, and investment levels to power deterministic ToA optimization.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <Link
-            href="/tower"
-            className="rounded-lg bg-primary px-3.5 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
-          >
-            Tower Optimizer →
-          </Link>
-          <Link
-            href="/account"
-            className="rounded-lg border border-border px-3.5 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Account
-          </Link>
-          <Link
-            href="/"
-            className="rounded-lg bg-secondary px-3.5 py-1.5 text-xs font-medium text-secondary-foreground hover:bg-secondary/80 transition-colors"
-          >
-            Home
-          </Link>
+          <span className="text-xs text-muted-foreground hidden sm:inline font-mono">
+            Patch 3.7 Canonical Roster
+          </span>
         </div>
       </div>
 
@@ -292,6 +305,8 @@ export function InventoryManager({ resonators, initialOwnedIds }: InventoryManag
           {filteredResonators.map((r) => {
             const isOwned = ownedIds.has(r.id);
             const isUpdating = pendingIds.has(r.id);
+            const inv = investments[r.id];
+
             const elStyle = ELEMENT_COLORS[r.element] || {
               bg: 'bg-secondary/40',
               text: 'text-foreground',
@@ -310,11 +325,18 @@ export function InventoryManager({ resonators, initialOwnedIds }: InventoryManag
                 <div>
                   {/* Top line: Element badge & Rarity */}
                   <div className="flex items-center justify-between">
-                    <span
-                      className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium border ${elStyle.bg} ${elStyle.text} ${elStyle.border}`}
-                    >
-                      {r.element}
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <span
+                        className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium border ${elStyle.bg} ${elStyle.text} ${elStyle.border}`}
+                      >
+                        {r.element}
+                      </span>
+                      {isOwned && (
+                        <span className="inline-flex items-center rounded-md bg-primary/10 border border-primary/20 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
+                          In Roster
+                        </span>
+                      )}
+                    </div>
                     <span className="text-xs font-bold text-amber-400 tracking-wider">
                       {'★'.repeat(r.rarity)}
                     </span>
@@ -327,39 +349,109 @@ export function InventoryManager({ resonators, initialOwnedIds }: InventoryManag
                     </h3>
                     <p className="mt-0.5 text-xs text-muted-foreground">{r.weaponType}</p>
                   </div>
+
+                  {/* Investment & Equipment Summary for Owned Characters */}
+                  {isOwned && (
+                    <div className="mt-3 rounded-lg border border-border/60 bg-secondary/20 p-2.5 space-y-1.5 text-xs font-mono">
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground font-sans">Investment:</span>
+                        <span className="font-bold text-foreground">
+                          Lv.{inv?.level ?? 1} • S{inv?.waveband ?? 0}
+                        </span>
+                      </div>
+
+                      <div className="flex items-start justify-between gap-1">
+                        <span className="text-muted-foreground font-sans shrink-0">Weapon:</span>
+                        <span className="text-right text-foreground truncate max-w-[150px]" title={inv?.weapon ? `${inv.weapon.name} (Lv.${inv.weapon.level}, R${inv.weapon.refinement})` : 'Unequipped'}>
+                          {inv?.weapon ? (
+                            <span>
+                              {inv.weapon.name}{' '}
+                              <span className="text-[10px] text-muted-foreground">
+                                (Lv.{inv.weapon.level}, R{inv.weapon.refinement})
+                              </span>
+                            </span>
+                          ) : (
+                            <span className="text-muted-foreground/60 italic font-sans text-[11px]">
+                              Unequipped
+                            </span>
+                          )}
+                        </span>
+                      </div>
+
+                      <div className="flex items-start justify-between gap-1">
+                        <span className="text-muted-foreground font-sans shrink-0">Sonata:</span>
+                        <span className="text-right text-foreground truncate max-w-[150px]" title={inv?.sonata?.name ?? 'Unset'}>
+                          {inv?.sonata ? (
+                            <span>{inv.sonata.name}</span>
+                          ) : (
+                            <span className="text-muted-foreground/60 italic font-sans text-[11px]">
+                              Unset
+                            </span>
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {/* Bottom line: Ownership Toggle Button */}
-                <div className="mt-5 pt-3 border-t border-border/40 flex items-center justify-between">
-                  <span className="text-xs font-medium text-muted-foreground">
-                    {isOwned ? (
-                      <span className="text-emerald-400 font-semibold flex items-center gap-1">
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                        In Roster
-                      </span>
-                    ) : (
-                      'Not Owned'
-                    )}
-                  </span>
+                {/* Bottom line: Action Buttons */}
+                <div className="mt-4 pt-3 border-t border-border/40 flex items-center justify-between gap-2">
+                  {isOwned ? (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => handleToggle(r.id)}
+                        disabled={isUpdating}
+                        aria-label={`Remove ${r.name} from owned roster`}
+                        className="inline-flex items-center justify-center rounded-lg bg-destructive/10 hover:bg-destructive/20 border border-destructive/25 px-2.5 py-1.5 text-xs font-medium text-destructive transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive disabled:opacity-50"
+                      >
+                        {isUpdating ? '...' : 'Remove'}
+                      </button>
 
-                  <button
-                    type="button"
-                    onClick={() => handleToggle(r.id)}
-                    disabled={isUpdating}
-                    aria-label={`${isOwned ? 'Remove' : 'Add'} ${r.name} ${isOwned ? 'from' : 'to'} owned roster`}
-                    className={`inline-flex items-center justify-center rounded-lg px-3 py-1.5 text-xs font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                      isOwned
-                        ? 'bg-destructive/15 text-destructive hover:bg-destructive/25 border border-destructive/30'
-                        : 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm'
-                    } disabled:opacity-50 disabled:cursor-not-allowed`}
-                  >
-                    {isUpdating ? 'Saving...' : isOwned ? 'Remove' : 'Mark Owned'}
-                  </button>
+                      <button
+                        type="button"
+                        onClick={() => setEditingResonator(r)}
+                        disabled={isUpdating}
+                        aria-label={`Edit build for ${r.name}`}
+                        className="inline-flex items-center justify-center rounded-lg bg-primary/15 hover:bg-primary/25 border border-primary/30 px-3 py-1.5 text-xs font-bold text-primary transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+                      >
+                        Edit Build
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => handleToggle(r.id)}
+                      disabled={isUpdating}
+                      aria-label={`Mark ${r.name} as owned`}
+                      className="w-full inline-flex items-center justify-center rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground hover:bg-primary/90 shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+                    >
+                      {isUpdating ? 'Saving...' : 'Mark Owned'}
+                    </button>
+                  )}
                 </div>
               </div>
             );
           })}
         </div>
+      )}
+
+      {/* Reusable Resonator Build Editor Drawer */}
+      {editingResonator && (
+        <ResonatorEditDrawer
+          resonator={editingResonator}
+          availableWeapons={canonicalWeapons}
+          availableSonatas={canonicalSonatas}
+          currentInvestment={investments[editingResonator.id]}
+          isOpen={Boolean(editingResonator)}
+          onClose={() => setEditingResonator(null)}
+          onSaved={(updated) => {
+            setInvestments((prev) => ({
+              ...prev,
+              [updated.resonatorId]: updated,
+            }));
+          }}
+        />
       )}
     </div>
   );

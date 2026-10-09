@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import type { StageCardViewModel } from '../types';
+import type { LegacyStageCardViewModel } from '../types';
 import type { ExplanationReason } from '@/lib/engine/explanation/types';
 
 interface WhyThisTeamProps {
-  stage: StageCardViewModel;
+  stage: LegacyStageCardViewModel;
 }
 
 const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {

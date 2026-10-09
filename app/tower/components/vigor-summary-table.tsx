@@ -1,19 +1,24 @@
 'use client';
 
-import type { VigorExplanation } from '@/lib/engine/explanation/types';
+import type { RecommendationVigorLedgerEntryViewModel } from '@/lib/services/recommendation/types';
 
 interface VigorSummaryTableProps {
-  vigor: VigorExplanation;
+  ledger: readonly RecommendationVigorLedgerEntryViewModel[];
+  totalVigorConsumed: number;
 }
 
-export function VigorSummaryTable({ vigor }: VigorSummaryTableProps) {
-  if (!vigor || !vigor.resonators || vigor.resonators.length === 0) {
+export function VigorSummaryTable({ ledger, totalVigorConsumed }: VigorSummaryTableProps) {
+  if (!ledger || ledger.length === 0) {
     return (
       <div className="rounded-xl border border-border/70 bg-card p-6 text-center text-sm text-muted-foreground">
         No Vigor usage data available.
       </div>
     );
   }
+
+  const totalCapacity = ledger.reduce((acc, r) => acc + r.startingVigor, 0);
+  const utilizationPercentage = totalCapacity > 0 ? Math.round((totalVigorConsumed / totalCapacity) * 100) : 0;
+  const bottlenecks = ledger.filter((r) => r.vigorConsumed > 0 && r.vigorRemaining === 0);
 
   return (
     <div className="rounded-xl border border-border/80 bg-card p-5 space-y-4 shadow-sm">
@@ -24,7 +29,7 @@ export function VigorSummaryTable({ vigor }: VigorSummaryTableProps) {
             Vigor Allocation Summary
           </h3>
           <p className="mt-0.5 text-xs text-muted-foreground">
-            Authoritative stamina accounting across all owned Resonators.
+            Authoritative stamina accounting across all participating Resonators.
           </p>
         </div>
 
@@ -34,24 +39,22 @@ export function VigorSummaryTable({ vigor }: VigorSummaryTableProps) {
               Consumed / Capacity
             </div>
             <div className="text-xs font-bold text-foreground">
-              {vigor.totalVigorConsumed} / {vigor.totalRosterVigorCapacity} (
-              {vigor.utilizationPercentage}%)
+              {totalVigorConsumed} / {totalCapacity} ({utilizationPercentage}%)
             </div>
           </div>
         </div>
       </div>
 
       {/* Bottlenecks banner if any */}
-      {vigor.bottleneckResonators.length > 0 && (
+      {bottlenecks.length > 0 && (
         <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-300 flex items-start gap-2">
           <span className="h-2 w-2 rounded-full bg-amber-400 mt-1 shrink-0" />
           <div>
-            <span className="font-bold">Bottleneck Resonators: </span>
+            <span className="font-bold">Fully Exhausted Resonators: </span>
             <span>
-              {vigor.bottleneckResonators.length} character(s) reached full stamina exhaustion
-              (0 remaining):{' '}
+              {bottlenecks.length} character(s) reached 0 stamina reserve:{' '}
               <strong className="text-amber-200">
-                {vigor.bottleneckResonators.join(', ')}
+                {bottlenecks.map((b) => b.resonatorId).join(', ')}
               </strong>
             </span>
           </div>
@@ -61,20 +64,20 @@ export function VigorSummaryTable({ vigor }: VigorSummaryTableProps) {
       {/* Vigor Table */}
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs border-collapse" aria-label="Vigor allocation summary">
-          <caption className="sr-only">Authoritative stamina accounting across all owned Resonators</caption>
+          <caption className="sr-only">Authoritative stamina accounting across all participating Resonators</caption>
           <thead>
             <tr className="border-b border-border text-muted-foreground uppercase font-bold text-[10px] tracking-wider">
               <th className="py-2.5 px-3">Resonator</th>
               <th className="py-2.5 px-3 text-center">Used</th>
-              <th className="py-2.5 px-3 text-center">Capacity</th>
+              <th className="py-2.5 px-3 text-center">Starting</th>
               <th className="py-2.5 px-3 text-center">Remaining</th>
-              <th className="py-2.5 px-3">Stage Assignments</th>
+              <th className="py-2.5 px-3">Assigned Stages</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border/40 font-mono">
-            {vigor.resonators.map((r) => {
-              const isBottleneck = r.used > 0 && r.remaining === 0;
-              const isUnused = r.used === 0;
+            {ledger.map((r) => {
+              const isBottleneck = r.vigorConsumed > 0 && r.vigorRemaining === 0;
+              const isUnused = r.vigorConsumed === 0;
 
               return (
                 <tr
@@ -85,7 +88,7 @@ export function VigorSummaryTable({ vigor }: VigorSummaryTableProps) {
                 >
                   <td className="py-2.5 px-3 font-sans font-semibold text-foreground">
                     <div className="flex items-center gap-1.5">
-                      <span>{r.name}</span>
+                      <span>{r.resonatorId}</span>
                       {isBottleneck && (
                         <span className="rounded bg-amber-500/20 px-1.5 py-0.2 text-[9px] font-bold text-amber-400 uppercase font-sans">
                           Exhausted
@@ -94,33 +97,33 @@ export function VigorSummaryTable({ vigor }: VigorSummaryTableProps) {
                     </div>
                   </td>
                   <td className="py-2.5 px-3 text-center font-bold text-foreground">
-                    {r.used}
+                    {r.vigorConsumed}
                   </td>
                   <td className="py-2.5 px-3 text-center text-muted-foreground">
-                    {r.capacity}
+                    {r.startingVigor}
                   </td>
                   <td className="py-2.5 px-3 text-center font-bold">
                     <span
                       className={
-                        r.remaining === 0
+                        r.vigorRemaining === 0
                           ? 'text-amber-400'
                           : isUnused
                           ? 'text-muted-foreground'
                           : 'text-emerald-400'
                       }
                     >
-                      {r.remaining}
+                      {r.vigorRemaining}
                     </span>
                   </td>
                   <td className="py-2.5 px-3 font-sans">
-                    {r.stagesAssigned.length > 0 ? (
+                    {r.assignedStageIds.length > 0 ? (
                       <div className="flex flex-wrap items-center gap-1">
-                        {r.stagesAssigned.map((st, i) => (
+                        {r.assignedStageIds.map((stId, i) => (
                           <span
                             key={i}
                             className="rounded bg-secondary/80 px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground border border-border/50"
                           >
-                            Floor {st.stageIndex} ({st.vigorCost}v)
+                            {stId}
                           </span>
                         ))}
                       </div>

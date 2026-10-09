@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { GlobalNav } from "@/components/global-nav";
 
 export const metadata: Metadata = {
   title: "Wuthering Waves Optimizer | Tower of Adversity 3.7",
@@ -14,6 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="min-h-screen bg-background text-foreground antialiased font-sans">
+        <GlobalNav />
         {children}
       </body>
     </html>

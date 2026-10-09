@@ -1,9 +1,21 @@
 /**
- * Tower of Adversity Optimization UI & View Models
+ * Tower of Adversity UI & View Models
+ * Phase 7 Step 25: Application Service & Inventory Adapter Integration
  *
- * Grounded in pure domain models and deterministic engine outputs.
- * Strict client isolation: only lean view models reach the browser.
+ * Grounded strictly in pure domain models and deterministic Step 24 engine outputs.
+ * Strict client isolation: only lean, factual view models reach the browser.
  */
+
+import type {
+  RecommendationViewModel,
+  RecommendationStageViewModel,
+  RecommendationTowerGroupViewModel,
+  RecommendationTeamViewModel,
+  RecommendationTeamMemberViewModel,
+  RecommendationVigorLedgerEntryViewModel,
+  StageScopeType,
+  RecommendationErrorCode,
+} from '@/lib/services/recommendation/types';
 
 import type {
   OptimizationStatus,
@@ -17,7 +29,21 @@ import type {
   OptimalityExplanation,
 } from '@/lib/engine/explanation/types';
 
-export type StageScopeType = 'FULL_CYCLE' | 'TOWER' | 'CUSTOM';
+export type {
+  StageScopeType,
+  RecommendationViewModel,
+  RecommendationStageViewModel,
+  RecommendationTowerGroupViewModel,
+  RecommendationTeamViewModel,
+  RecommendationTeamMemberViewModel,
+  RecommendationVigorLedgerEntryViewModel,
+  RecommendationErrorCode,
+};
+
+// Authoritative Step 25 types for Tower UI
+export type TowerOptimizationViewModel = RecommendationViewModel;
+export type StageCardViewModel = RecommendationStageViewModel;
+export type TowerGroupViewModel = RecommendationTowerGroupViewModel;
 
 export interface AvailableCycleMeta {
   id: string;
@@ -28,6 +54,26 @@ export interface AvailableCycleMeta {
   endTime: string;
   isActive: boolean;
 }
+
+export interface RunOptimizationInput {
+  cycleId?: string;
+  scope: StageScopeType;
+  selectedTowerId?: string;
+  selectedStageIds?: string[];
+  targetK?: number;
+  allowPartial?: boolean;
+}
+
+export interface RunOptimizationResponse {
+  success: boolean;
+  code?: RecommendationErrorCode | 'EMPTY_INVENTORY' | 'CYCLE_NOT_FOUND' | 'ERROR';
+  error?: string;
+  data?: TowerOptimizationViewModel;
+}
+
+/* =========================================================================
+ * Legacy Heuristic Types (Preserved for legacy test harness compatibility)
+ * ========================================================================= */
 
 export interface StageResonatorViewModel {
   id: string;
@@ -63,7 +109,7 @@ export interface AreaEffectSummary {
   category: string;
 }
 
-export interface StageCardViewModel {
+export interface LegacyStageCardViewModel {
   stageId: string;
   stageKey: string;
   towerName: string;
@@ -95,14 +141,14 @@ export interface StageCardViewModel {
   };
 }
 
-export interface TowerGroupViewModel {
+export interface LegacyTowerGroupViewModel {
   towerId: string;
   towerName: string;
   towerOrder: number;
-  stages: StageCardViewModel[];
+  stages: LegacyStageCardViewModel[];
 }
 
-export interface TowerOptimizationViewModel {
+export interface LegacyTowerOptimizationViewModel {
   cycle: {
     id: string;
     name: string;
@@ -126,25 +172,11 @@ export interface TowerOptimizationViewModel {
   vigorSummary: VigorExplanation;
   globalTradeoffs: ExplanationReason[];
   summaryReasons: ExplanationReason[];
-  towers: TowerGroupViewModel[];
+  towers: LegacyTowerGroupViewModel[];
   infeasibilityReasons?: string[];
   metrics: {
     searchStatesExplored: number;
     prunedStatesCount: number;
     durationMs: number;
   };
-}
-
-export interface RunOptimizationInput {
-  cycleId?: string;
-  scope: StageScopeType;
-  selectedTowerId?: string;
-  selectedStageIds?: string[];
-}
-
-export interface RunOptimizationResponse {
-  success: boolean;
-  code?: 'UNAUTHENTICATED' | 'EMPTY_INVENTORY' | 'NO_VALID_CANDIDATES' | 'CYCLE_NOT_FOUND' | 'ERROR';
-  error?: string;
-  data?: TowerOptimizationViewModel;
 }

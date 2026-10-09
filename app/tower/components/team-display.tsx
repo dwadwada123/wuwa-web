@@ -1,19 +1,36 @@
 'use client';
 
-import type { StageResonatorViewModel } from '../types';
+import type { RecommendationTeamMemberViewModel } from '@/lib/services/recommendation/types';
 
 interface TeamDisplayProps {
-  members: StageResonatorViewModel[];
+  members: readonly RecommendationTeamMemberViewModel[];
 }
 
-const ELEMENT_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  Glacio: { bg: 'bg-sky-500/10', text: 'text-sky-400', border: 'border-sky-500/30' },
-  Fusion: { bg: 'bg-rose-500/10', text: 'text-rose-400', border: 'border-rose-500/30' },
-  Electro: { bg: 'bg-purple-500/10', text: 'text-purple-400', border: 'border-purple-500/30' },
-  Aero: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/30' },
-  Spectro: { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/30' },
-  Havoc: { bg: 'bg-fuchsia-500/10', text: 'text-fuchsia-400', border: 'border-fuchsia-500/30' },
-};
+function getBuildStatusBadge(status: string) {
+  switch (status) {
+    case 'READY':
+      return {
+        className: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400',
+        label: 'Build Ready',
+      };
+    case 'ACCEPTABLE':
+      return {
+        className: 'bg-teal-500/15 border-teal-500/30 text-teal-400',
+        label: 'Acceptable',
+      };
+    case 'NOT_READY':
+      return {
+        className: 'bg-amber-500/15 border-amber-500/30 text-amber-400',
+        label: 'Not Ready',
+      };
+    case 'UNINVESTED':
+    default:
+      return {
+        className: 'bg-secondary/80 border-border text-muted-foreground',
+        label: status,
+      };
+  }
+}
 
 export function TeamDisplay({ members }: TeamDisplayProps) {
   if (!members || members.length === 0) {
@@ -27,68 +44,58 @@ export function TeamDisplay({ members }: TeamDisplayProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
       {members.map((m, idx) => {
-        const elStyle = ELEMENT_COLORS[m.element] || {
-          bg: 'bg-secondary/40',
-          text: 'text-foreground',
-          border: 'border-border',
-        };
+        const buildBadge = getBuildStatusBadge(m.buildStatus);
 
         return (
           <div
-            key={`${m.id}-${idx}`}
+            key={`${m.resonatorId}-${idx}`}
             className="flex flex-col justify-between rounded-lg border border-border/70 bg-card/80 p-3 shadow-sm hover:border-border transition-colors"
           >
             <div>
-              {/* Header: Element badge + Rarity */}
-              <div className="flex items-center justify-between">
-                <span
-                  className={`inline-flex items-center rounded px-2 py-0.5 text-[11px] font-semibold border ${elStyle.bg} ${elStyle.text} ${elStyle.border}`}
-                >
-                  {m.element}
+              {/* Header: Resonator ID + Build status badge */}
+              <div className="flex items-center justify-between gap-1 flex-wrap">
+                <span className="font-bold text-sm text-foreground tracking-tight">
+                  {m.resonatorId}
                 </span>
-                <span className="text-[11px] font-bold text-amber-400 tracking-wider">
-                  {'★'.repeat(m.rarity)}
+                <span
+                  className={`inline-flex items-center rounded border px-1.5 py-0.5 text-[10px] font-semibold ${buildBadge.className}`}
+                >
+                  {buildBadge.label}
                 </span>
               </div>
 
-              {/* Character Name & Role */}
-              <div className="mt-2">
-                <h4 className="text-sm font-bold text-foreground tracking-tight">
-                  {m.name}
-                </h4>
-                <div className="mt-0.5 flex items-center gap-1.5 flex-wrap">
-                  <span className="rounded bg-secondary/80 px-1.5 py-0.5 text-[10px] font-medium text-secondary-foreground">
-                    {m.role}
+              {/* Badges */}
+              <div className="mt-1 flex items-center gap-1.5 flex-wrap">
+                {m.activeSonataCode && (
+                  <span className="rounded bg-secondary/80 px-1.5 py-0.2 text-[10px] text-muted-foreground border border-border/40 font-mono">
+                    Sonata: {m.activeSonataCode}
                   </span>
-                  <span className="text-[10px] text-muted-foreground">
-                    {m.weaponType}
-                  </span>
-                </div>
+                )}
               </div>
             </div>
 
             {/* Bottom: Investment & Weapon */}
-            <div className="mt-3 pt-2 border-t border-border/40 text-[11px] space-y-0.5">
-              <div className="flex items-center justify-between text-muted-foreground">
+            <div className="mt-3 pt-2 border-t border-border/40 text-[11px] space-y-1">
+              <div className="flex items-center justify-between text-muted-foreground font-mono">
                 <span>Investment</span>
-                <span className="font-mono text-foreground font-medium">
-                  {m.level ? `Lv. ${m.level}` : 'Lv. 90'}
-                  {m.waveband !== undefined ? ` • S${m.waveband}` : ''}
+                <span className="text-foreground font-medium">
+                  Lv. {m.characterLevel ?? 'UNKNOWN'} • S{m.sequenceLevel ?? 'UNKNOWN'}
                 </span>
               </div>
 
-              {m.equippedWeapon ? (
-                <div className="flex items-center justify-between text-muted-foreground truncate">
-                  <span className="shrink-0 mr-1">Weapon</span>
+              <div className="flex items-center justify-between text-muted-foreground truncate font-mono">
+                <span className="shrink-0 mr-1">Weapon</span>
+                {m.equippedWeaponId ? (
                   <span
                     className="font-medium text-foreground truncate"
-                    title={m.equippedWeapon.name}
+                    title={m.equippedWeaponId}
                   >
-                    {m.equippedWeapon.name}
-                    {m.equippedWeapon.level ? ` (${m.equippedWeapon.level})` : ''}
+                    {m.equippedWeaponId} (Lv. {m.weaponLevel ?? '?'}, R{m.weaponRefinement ?? '?'})
                   </span>
-                </div>
-              ) : null}
+                ) : (
+                  <span className="italic text-muted-foreground">None</span>
+                )}
+              </div>
             </div>
           </div>
         );

@@ -52,8 +52,6 @@ export function TowerOptimizerClient({
   };
 
   const handleRunOptimization = () => {
-    if (isInventoryInsufficient) return;
-
     setErrorMessage(null);
     setLoadingStep('Initializing server-side engine execution…');
 
@@ -65,17 +63,18 @@ export function TowerOptimizerClient({
           scope,
           selectedTowerId: scope === 'TOWER' ? selectedTowerId : undefined,
           selectedStageIds: scope === 'CUSTOM' ? selectedStageIds : undefined,
+          allowPartial: true,
         });
 
         if (!res.success) {
-          setErrorMessage(res.error || 'Optimization failed to complete.');
+          setErrorMessage(res.error || 'Recommendation failed to complete.');
           setResults(null);
         } else if (res.data) {
           setResults(res.data);
         }
       } catch (err: any) {
         setErrorMessage(
-          err.message || 'An unexpected error occurred while running optimization.'
+          err.message || 'An unexpected error occurred while running recommendation.'
         );
         setResults(null);
       } finally {
@@ -98,33 +97,18 @@ export function TowerOptimizerClient({
             </span>
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
-            Solve multi-stage Vigor assignments and inspect deterministic team synergy explanations.
+            Solve multi-stage Vigor allocations and inspect factual deterministic recommendations.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <Link
-            href="/inventory"
-            className="rounded-lg bg-primary/15 border border-primary/30 px-3.5 py-1.5 text-xs font-semibold text-primary hover:bg-primary/25 transition-colors"
-          >
-            Inventory ({ownedResonatorsCount} Owned)
-          </Link>
-          <Link
-            href="/account"
-            className="rounded-lg border border-border px-3.5 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Account
-          </Link>
-          <Link
-            href="/"
-            className="rounded-lg bg-secondary px-3.5 py-1.5 text-xs font-medium text-secondary-foreground hover:bg-secondary/80 transition-colors"
-          >
-            Home
-          </Link>
+          <span className="rounded-lg bg-secondary/80 border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground">
+            {ownedResonatorsCount} Resonators Available
+          </span>
         </div>
       </div>
 
-      {/* Insufficient Inventory Warning Banner (Requirement 16) */}
+      {/* Insufficient Inventory Warning Banner */}
       {isInventoryInsufficient && (
         <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-5 space-y-3">
           <div className="flex items-center gap-2.5">
@@ -135,7 +119,7 @@ export function TowerOptimizerClient({
           </div>
           <p className="text-xs text-amber-200/90 leading-relaxed">
             You currently have only <strong>{ownedResonatorsCount}</strong> Resonator(s) marked
-            as owned. A valid Tower of Adversity team requires at least 3 Resonators. Please add
+            as owned in your inventory. A valid Tower of Adversity team requires at least 3 Resonators. Please add
             more Resonators to your inventory before optimizing.
           </p>
           <div>
@@ -149,7 +133,7 @@ export function TowerOptimizerClient({
         </div>
       )}
 
-      {/* Error Message Banner (Requirement 15) */}
+      {/* Error Message Banner */}
       {errorMessage && (
         <div className="rounded-xl border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -188,16 +172,16 @@ export function TowerOptimizerClient({
           disabled={isPending}
         />
 
-        {/* Action Execution Bar (Requirement 14) */}
+        {/* Action Execution Bar */}
         <div className="rounded-xl border border-border/80 bg-card p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-sm">
           <div>
             <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              Optimizer Execution Mode
+              Recommendation Engine Execution
             </div>
             <div className="text-sm font-semibold text-foreground flex items-center gap-2 mt-0.5">
-              <span>BEST_EFFORT</span>
+              <span>Deterministic Rule Pipeline</span>
               <span className="text-xs text-muted-foreground font-normal">
-                (200,000 Branch &amp; Bound search-state budget)
+                (Steps 13, 19–24 Integrated)
               </span>
             </div>
           </div>
@@ -205,7 +189,7 @@ export function TowerOptimizerClient({
           <div className="flex items-center gap-3">
             {isPending && (
               <span className="text-xs text-primary animate-pulse font-medium">
-                {loadingStep || 'Optimizing…'}
+                {loadingStep || 'Evaluating…'}
               </span>
             )}
 
@@ -213,6 +197,7 @@ export function TowerOptimizerClient({
               type="button"
               onClick={handleRunOptimization}
               disabled={isPending || isInventoryInsufficient}
+              aria-label="Run Optimization"
               className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-xs font-bold text-primary-foreground hover:bg-primary/90 transition-all shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isPending ? (
@@ -228,16 +213,19 @@ export function TowerOptimizerClient({
         </div>
       </div>
 
-      {/* Optimization Results Section (Requirements 6 - 13) */}
+      {/* Recommendation Results Section */}
       {results && (
         <div className="space-y-8 pt-4 border-t border-border">
-          {/* 1. Global Optimization Summary */}
+          {/* 1. Orchestration Summary */}
           <OptimizationSummary data={results} />
 
           {/* 2. Vigor Allocation Summary Table */}
-          <VigorSummaryTable vigor={results.vigorSummary} />
+          <VigorSummaryTable
+            ledger={results.vigorLedger}
+            totalVigorConsumed={results.metrics.totalVigorConsumed}
+          />
 
-          {/* 3. Tower & Floor Hierarchy (Requirement 6) */}
+          {/* 3. Tower & Floor Stage Assignments */}
           <div className="space-y-8">
             <div className="flex items-center justify-between border-b border-border/60 pb-3">
               <div>
@@ -245,13 +233,16 @@ export function TowerOptimizerClient({
                   Tower Stage Assignments
                 </h2>
                 <p className="text-xs text-muted-foreground">
-                  Selected 3-resonator team assignments with stage scores and deterministic selection evidence.
+                  Authoritative stage assignments with team compositions and member build statuses.
                 </p>
               </div>
             </div>
 
             {results.towers.map((tower) => (
-              <TowerSection key={tower.towerId} tower={tower} />
+              <TowerSection
+                key={tower.towerId}
+                tower={tower}
+              />
             ))}
           </div>
         </div>

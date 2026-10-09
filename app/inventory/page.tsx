@@ -1,6 +1,14 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
-import { InventoryManager, type ResonatorListItem } from './inventory-manager';
+import { InventoryManager } from './inventory-manager';
+import type {
+  CanonicalResonatorItem,
+  CanonicalWeaponItem,
+  CanonicalSonataItem,
+  ResonatorInvestmentState,
+  EquippedWeaponInfo,
+  EquippedSonataInfo,
+} from './types';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,16 +29,40 @@ export default async function InventoryPage() {
 
   const userId = claimsData.claims.sub as string;
 
-  // Fetch canonical resonators and user's owned resonator references in parallel
-  const [resonatorsRes, userResonatorsRes] = await Promise.all([
+  // Fetch canonical entities and user inventory in parallel
+  const [
+    resonatorsRes,
+    weaponsRes,
+    sonatasRes,
+    userResonatorsRes,
+    userWeaponsRes,
+    userLoadoutsRes,
+  ] = await Promise.all([
     supabase
       .from('resonators')
       .select('id, name, element, weapon_type, rarity, release_date')
       .order('rarity', { ascending: false })
       .order('name', { ascending: true }),
     supabase
+      .from('weapons')
+      .select('id, name, weapon_type, rarity')
+      .order('rarity', { ascending: false })
+      .order('name', { ascending: true }),
+    supabase
+      .from('sonatas')
+      .select('id, name, code')
+      .order('name', { ascending: true }),
+    supabase
       .from('user_resonators')
-      .select('resonator_id')
+      .select('*')
+      .eq('user_id', userId),
+    supabase
+      .from('user_weapons')
+      .select('*')
+      .eq('user_id', userId),
+    supabase
+      .from('user_resonator_loadouts')
+      .select('*')
       .eq('user_id', userId),
   ]);
 
@@ -45,7 +77,7 @@ export default async function InventoryPage() {
     );
   }
 
-  const canonicalResonators: ResonatorListItem[] = (resonatorsRes.data || []).map((r) => ({
+  const canonicalResonators: CanonicalResonatorItem[] = (resonatorsRes.data || []).map((r) => ({
     id: r.id,
     name: r.name,
     element: r.element,
@@ -54,13 +86,78 @@ export default async function InventoryPage() {
     releaseDate: r.release_date,
   }));
 
+  const canonicalWeapons: CanonicalWeaponItem[] = (weaponsRes.data || []).map((w) => ({
+    id: w.id,
+    name: w.name,
+    weaponType: w.weapon_type,
+    rarity: w.rarity,
+  }));
+
+  const canonicalSonatas: CanonicalSonataItem[] = (sonatasRes.data || []).map((s) => ({
+    id: s.id,
+    name: s.name,
+    code: s.code,
+  }));
+
+  // Build mapping tables for efficient lookups
+  const weaponDefMap = new Map(canonicalWeapons.map((w) => [w.id, w]));
+  const sonataDefMap = new Map(canonicalSonatas.map((s) => [s.id, s]));
+  const userWeaponMap = new Map((userWeaponsRes.data || []).map((uw) => [uw.id, uw]));
+  const userLoadoutMap = new Map((userLoadoutsRes.data || []).map((ul) => [ul.user_resonator_id, ul]));
+
   const initialOwnedIds: string[] = (userResonatorsRes.data || []).map((ur) => ur.resonator_id);
+  const initialInvestments: Record<string, ResonatorInvestmentState> = {};
+
+  for (const ur of userResonatorsRes.data || []) {
+    const loadout = userLoadoutMap.get(ur.id);
+    let weaponInfo: EquippedWeaponInfo | null = null;
+
+    if (loadout?.weapon_instance_id) {
+      const userWep = userWeaponMap.get(loadout.weapon_instance_id);
+      if (userWep) {
+        const wepDef = weaponDefMap.get(userWep.weapon_id);
+        weaponInfo = {
+          weaponInstanceId: userWep.id,
+          weaponId: userWep.weapon_id,
+          name: wepDef?.name ?? 'Unknown Weapon',
+          weaponType: wepDef?.weaponType ?? '',
+          rarity: wepDef?.rarity ?? 4,
+          level: userWep.level,
+          refinement: userWep.refinement,
+        };
+      }
+    }
+
+    let sonataInfo: EquippedSonataInfo | null = null;
+    if (loadout?.sonata_id) {
+      const sonDef = sonataDefMap.get(loadout.sonata_id);
+      if (sonDef) {
+        sonataInfo = {
+          sonataId: sonDef.id,
+          name: sonDef.name,
+          code: sonDef.code,
+        };
+      }
+    }
+
+    initialInvestments[ur.resonator_id] = {
+      userResonatorId: ur.id,
+      resonatorId: ur.resonator_id,
+      level: ur.level,
+      waveband: ur.waveband,
+      weapon: weaponInfo,
+      sonata: sonataInfo,
+    };
+  }
 
   return (
     <main className="min-h-screen bg-background">
       <InventoryManager
         resonators={canonicalResonators}
         initialOwnedIds={initialOwnedIds}
+        canonicalWeapons={canonicalWeapons}
+        canonicalSonatas={canonicalSonatas}
+        initialInvestments={initialInvestments}
       />
     </main>
   );

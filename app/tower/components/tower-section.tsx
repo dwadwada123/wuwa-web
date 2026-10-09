@@ -1,10 +1,10 @@
 'use client';
 
-import type { TowerGroupViewModel } from '../types';
+import type { RecommendationTowerGroupViewModel } from '@/lib/services/recommendation/types';
 import { StageCard } from './stage-card';
 
 interface TowerSectionProps {
-  tower: TowerGroupViewModel;
+  tower: RecommendationTowerGroupViewModel;
 }
 
 export function TowerSection({ tower }: TowerSectionProps) {
