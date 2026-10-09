@@ -49,6 +49,9 @@ export async function ingestPatchDataset(
     resonatorCombatTags: 0,
     abilities: 0,
     abilityPatchData: 0,
+    resonatorSequences: 0,
+    resonatorSequencePatchData: 0,
+    resonatorSequenceEffects: 0,
     gameplayEffects: 0,
     abilityEffects: 0,
     weapons: 0,
@@ -396,7 +399,143 @@ export async function ingestPatchDataset(
         }
       }
     }
-  }
+
+    // 6g. Sequence Nodes & Sequence Patch Data & Sequence Effects
+    const sequenceNodes = res.sequence_nodes ?? res.sequences;
+      if (sequenceNodes && sequenceNodes.length > 0) {
+        for (const seqNode of sequenceNodes) {
+          const nodeOrder = seqNode.node_order ?? seqNode.nodeOrder;
+          const nodeCode = seqNode.node_code ?? seqNode.nodeCode;
+          const provName =
+            seqNode.provenance_source_name ??
+            seqNode.provenanceSourceName ??
+            seqNode.provenanceId ??
+            seqNode.provenance_id;
+          const seqProvId = provenanceMap.get(provName as string);
+          if (!seqProvId) {
+            throw new Error(`Provenance source ${provName} for sequence ${nodeCode} of ${res.name} not found`);
+          }
+
+          // Stable Sequence Identity
+          const sequenceId = deterministicUuid(`resonator_sequence:${res.name}:${nodeOrder}`);
+          const { data: seqRow, error: seqError } = await supabase
+            .from('resonator_sequences')
+            .upsert(
+              {
+                id: sequenceId,
+                resonator_id: resonatorId,
+                node_order: nodeOrder,
+                node_code: nodeCode
+              },
+              { onConflict: 'resonator_id, node_order' }
+            )
+            .select('id')
+            .single();
+
+          if (seqError || !seqRow) {
+            throw new Error(`Failed to upsert resonator_sequences for ${res.name} ${nodeCode}: ${seqError?.message}`);
+          }
+
+          counts.resonatorSequences++;
+
+          // Patch-Specific Sequence Data
+          const seqPatchId = deterministicUuid(
+            `resonator_sequence_patch:${dataset.patch.version}:${res.name}:${nodeOrder}`
+          );
+          const { data: seqPatchRow, error: seqPatchError } = await supabase
+            .from('resonator_sequence_patch_data')
+            .upsert(
+              {
+                id: seqPatchId,
+                sequence_id: seqRow.id,
+                patch_id: patchId,
+                name: seqNode.name,
+                description: seqNode.description,
+                provenance_id: seqProvId
+              },
+              { onConflict: 'sequence_id, patch_id' }
+            )
+            .select('id')
+            .single();
+
+          if (seqPatchError || !seqPatchRow) {
+            throw new Error(
+              `Failed to upsert resonator_sequence_patch_data for ${res.name} ${nodeCode}: ${seqPatchError?.message}`
+            );
+          }
+
+          counts.resonatorSequencePatchData++;
+
+          // Sequence Effects (if any)
+          if (seqNode.effects && seqNode.effects.length > 0) {
+            for (let effIdx = 0; effIdx < seqNode.effects.length; effIdx++) {
+              const eff = seqNode.effects[effIdx];
+              const effectOrder = eff.effect_order ?? effIdx + 1;
+              const effProvName = eff.provenance_source_name ?? provName;
+              const effProvId = provenanceMap.get(effProvName as string);
+              if (!effProvId) {
+                throw new Error(
+                  `Provenance source ${effProvName} for sequence effect in ${res.name} ${nodeCode} not found`
+                );
+              }
+
+              const effectId = deterministicUuid(
+                `gameplay_effect:${dataset.patch.version}:${res.name}:SEQ_${nodeCode}:${effectOrder}`
+              );
+
+              const { error: effError } = await supabase
+                .from('gameplay_effects')
+                .upsert(
+                  {
+                    id: effectId,
+                    patch_id: patchId,
+                    category: eff.category,
+                    target: eff.target,
+                    condition_expression: eff.condition_expression ?? {},
+                    detail_expression: eff.detail_expression ?? {},
+                    provenance_id: effProvId
+                  },
+                  { onConflict: 'id' }
+                );
+
+              if (effError) {
+                throw new Error(
+                  `Failed to upsert gameplay effect for sequence ${res.name} ${nodeCode}: ${effError.message}`
+                );
+              }
+
+              counts.gameplayEffects++;
+
+              // Sequence Effect Mapping
+              const seqEffectId = deterministicUuid(
+                `resonator_sequence_effect:${dataset.patch.version}:${res.name}:${nodeOrder}:${effectOrder}`
+              );
+
+              const { error: seqEffError } = await supabase
+                .from('resonator_sequence_effects')
+                .upsert(
+                  {
+                    id: seqEffectId,
+                    sequence_patch_id: seqPatchRow.id,
+                    patch_id: patchId,
+                    effect_id: effectId,
+                    effect_order: effectOrder
+                  },
+                  { onConflict: 'sequence_patch_id, effect_order' }
+                );
+
+              if (seqEffError) {
+                throw new Error(
+                  `Failed to map sequence effect for ${res.name} ${nodeCode}: ${seqEffError.message}`
+                );
+              }
+
+              counts.resonatorSequenceEffects++;
+            }
+          }
+        }
+      }
+    }
 
   // 7. Ingest Weapons & Weapon Patch Data
   if (dataset.weapons && dataset.weapons.length > 0) {
@@ -432,6 +571,12 @@ export async function ingestPatchDataset(
         }
 
         passiveEffectId = deterministicUuid(`gameplay_effect:weapon:${dataset.patch.version}:${w.name}`);
+
+        const detailExpr = { ...(eff.detail_expression ?? {}) };
+        if (w.patch_data.refinement_scaling && !detailExpr.refinement_scaling) {
+          detailExpr.refinement_scaling = w.patch_data.refinement_scaling;
+        }
+
         const { error: effError } = await supabase
           .from('gameplay_effects')
           .upsert(
@@ -441,7 +586,7 @@ export async function ingestPatchDataset(
               category: eff.category,
               target: eff.target,
               condition_expression: eff.condition_expression ?? {},
-              detail_expression: eff.detail_expression ?? {},
+              detail_expression: detailExpr,
               provenance_id: effProvId
             },
             { onConflict: 'id' }

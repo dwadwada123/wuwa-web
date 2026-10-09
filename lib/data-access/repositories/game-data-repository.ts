@@ -27,7 +27,12 @@ import type {
   AreaEffect,
   ChallengeGoal,
   GameplayEffect,
+  GameplayEffectCategory,
+  GameplayEffectTarget,
+  ResonanceSequence,
+  SequenceOrder,
 } from '../../domain/types/index.ts';
+import type { Database } from '../../db/database.types.ts';
 
 export interface AvailableCycleSummary {
   id: string;
@@ -43,6 +48,7 @@ export interface IGameDataRepository {
   getPatchContext(version: string, cycleId?: string): Promise<PatchContext | null>;
   getResonators(patchId: string): Promise<Resonator[]>;
   getResonatorById(resonatorId: string, patchId: string): Promise<Resonator | null>;
+  getResonanceSequences(resonatorId: string, patchId: string): Promise<ResonanceSequence[]>;
   getWeapons(patchId: string): Promise<Weapon[]>;
   getEchoes(patchId: string): Promise<Echo[]>;
   getSonatas(patchId: string): Promise<Sonata[]>;
@@ -56,6 +62,7 @@ export interface IGameDataRepository {
 const GLOBAL_GAME_DATA_CACHE = {
   patchContext: new Map<string, PatchContext>(),
   resonators: new Map<string, Resonator[]>(),
+  sequences: new Map<string, ResonanceSequence[]>(),
   weapons: new Map<string, Weapon[]>(),
   echoes: new Map<string, Echo[]>(),
   sonatas: new Map<string, Sonata[]>(),
@@ -66,11 +73,82 @@ const GLOBAL_GAME_DATA_CACHE = {
 export function clearGameDataCache(): void {
   GLOBAL_GAME_DATA_CACHE.patchContext.clear();
   GLOBAL_GAME_DATA_CACHE.resonators.clear();
+  GLOBAL_GAME_DATA_CACHE.sequences.clear();
   GLOBAL_GAME_DATA_CACHE.weapons.clear();
   GLOBAL_GAME_DATA_CACHE.echoes.clear();
   GLOBAL_GAME_DATA_CACHE.sonatas.clear();
   GLOBAL_GAME_DATA_CACHE.cycles.clear();
   GLOBAL_GAME_DATA_CACHE.stages.clear();
+}
+
+type GameplayEffectRow = Database['public']['Tables']['gameplay_effects']['Row'];
+type SequenceEffectRow = Database['public']['Tables']['resonator_sequence_effects']['Row'];
+type SequencePatchDataRow = Database['public']['Tables']['resonator_sequence_patch_data']['Row'];
+type SequenceRow = Database['public']['Tables']['resonator_sequences']['Row'];
+
+interface ResonanceSequenceQueryEffect {
+  effect_order: SequenceEffectRow['effect_order'];
+  gameplay_effects: Pick<
+    GameplayEffectRow,
+    | 'id'
+    | 'patch_id'
+    | 'category'
+    | 'target'
+    | 'condition_expression'
+    | 'detail_expression'
+  > | null;
+}
+
+interface ResonanceSequenceQueryPatchData {
+  id: SequencePatchDataRow['id'];
+  patch_id: SequencePatchDataRow['patch_id'];
+  name: SequencePatchDataRow['name'];
+  description: SequencePatchDataRow['description'];
+  provenance_id: SequencePatchDataRow['provenance_id'];
+  resonator_sequence_effects?: ResonanceSequenceQueryEffect[] | null;
+}
+
+interface ResonanceSequenceQueryResultRow {
+  id: SequenceRow['id'];
+  resonator_id: SequenceRow['resonator_id'];
+  node_order: SequenceRow['node_order'];
+  node_code: SequenceRow['node_code'];
+  resonator_sequence_patch_data:
+    | ResonanceSequenceQueryPatchData
+    | ResonanceSequenceQueryPatchData[];
+}
+
+function isGameplayEffectCategory(val: string): val is GameplayEffectCategory {
+  return (
+    val === 'STAT_BUFF' ||
+    val === 'DMG_AMPLIFY' ||
+    val === 'COORDINATED_ATTACK' ||
+    val === 'DEF_SHRED' ||
+    val === 'RES_SHRED' ||
+    val === 'HEALING' ||
+    val === 'SHIELD' ||
+    val === 'SPECIAL_MECHANIC' ||
+    val === 'RESOURCE_GRANT' ||
+    val === 'STATE_CHANGE'
+  );
+}
+
+function isGameplayEffectTarget(val: string): val is GameplayEffectTarget {
+  return (
+    val === 'SELF' ||
+    val === 'ACTIVE_CHARACTER' ||
+    val === 'NEXT_RESONATOR' ||
+    val === 'TEAM' ||
+    val === 'ENEMY'
+  );
+}
+
+function isSequenceOrder(val: number): val is SequenceOrder {
+  return Number.isInteger(val) && val >= 1 && val <= 6;
+}
+
+function isJsonObject(val: unknown): val is Record<string, unknown> {
+  return typeof val === 'object' && val !== null && !Array.isArray(val);
 }
 
 export class SupabaseGameDataRepository implements IGameDataRepository {
@@ -231,6 +309,114 @@ export class SupabaseGameDataRepository implements IGameDataRepository {
   async getResonatorById(resonatorId: string, patchId: string): Promise<Resonator | null> {
     const list = await this.getResonators(patchId);
     return list.find((r) => r.id === resonatorId) || null;
+  }
+
+  async getResonanceSequences(resonatorId: string, patchId: string): Promise<ResonanceSequence[]> {
+    const cacheKey = `${patchId}::${resonatorId}`;
+    const cached = GLOBAL_GAME_DATA_CACHE.sequences.get(cacheKey);
+    if (cached) return cached;
+
+    const { data, error } = await this.client
+      .from('resonator_sequences')
+      .select(`
+        id,
+        resonator_id,
+        node_order,
+        node_code,
+        resonator_sequence_patch_data!inner (
+          id,
+          patch_id,
+          name,
+          description,
+          provenance_id,
+          resonator_sequence_effects (
+            effect_order,
+            gameplay_effects (
+              id,
+              patch_id,
+              category,
+              target,
+              condition_expression,
+              detail_expression
+            )
+          )
+        )
+      `)
+      .eq('resonator_id', resonatorId)
+      .eq('resonator_sequence_patch_data.patch_id', patchId)
+      .returns<ResonanceSequenceQueryResultRow[]>();
+
+    if (error) {
+      throw new Error(`Failed to load resonance sequences for resonator ${resonatorId} in patch ${patchId}: ${error.message}`);
+    }
+
+    if (!data || data.length === 0) {
+      GLOBAL_GAME_DATA_CACHE.sequences.set(cacheKey, []);
+      return [];
+    }
+
+    const result: ResonanceSequence[] = [];
+
+    for (const row of data) {
+      const patchData = Array.isArray(row.resonator_sequence_patch_data)
+        ? row.resonator_sequence_patch_data[0]
+        : row.resonator_sequence_patch_data;
+
+      if (!patchData) continue;
+
+      const rawEffects: ResonanceSequenceQueryEffect[] = Array.isArray(patchData.resonator_sequence_effects)
+        ? patchData.resonator_sequence_effects
+        : [];
+
+      // Deterministic sorting of effects by effect_order ascending
+      const sortedRawEffects = [...rawEffects].sort(
+        (a: ResonanceSequenceQueryEffect, b: ResonanceSequenceQueryEffect) => a.effect_order - b.effect_order
+      );
+
+      // Map and enforce strict patch isolation for gameplay_effects
+      const effects: GameplayEffect[] = [];
+      for (const rse of sortedRawEffects) {
+        const ge = rse.gameplay_effects;
+        if (!ge) continue;
+
+        // Defensive patch isolation check (in addition to DB composite FK)
+        if (ge.patch_id !== patchId) continue;
+
+        if (!isGameplayEffectCategory(ge.category) || !isGameplayEffectTarget(ge.target)) {
+          continue;
+        }
+
+        effects.push({
+          id: ge.id,
+          patchId: ge.patch_id,
+          category: ge.category,
+          target: ge.target,
+          conditionExpression: isJsonObject(ge.condition_expression) ? ge.condition_expression : undefined,
+          detailExpression: isJsonObject(ge.detail_expression) ? ge.detail_expression : undefined,
+        });
+      }
+
+      if (!isSequenceOrder(row.node_order)) {
+        continue;
+      }
+
+      result.push({
+        id: row.id,
+        resonatorId: row.resonator_id,
+        nodeOrder: row.node_order,
+        nodeCode: row.node_code,
+        name: patchData.name,
+        description: patchData.description,
+        provenanceId: patchData.provenance_id ?? null,
+        effects,
+      });
+    }
+
+    // Deterministic sorting of sequence nodes by nodeOrder (1 to 6)
+    result.sort((a: ResonanceSequence, b: ResonanceSequence) => a.nodeOrder - b.nodeOrder);
+
+    GLOBAL_GAME_DATA_CACHE.sequences.set(cacheKey, result);
+    return result;
   }
 
   async getWeapons(patchId: string): Promise<Weapon[]> {

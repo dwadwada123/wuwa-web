@@ -104,6 +104,30 @@ export interface AbilityInput {
   effects?: GameplayEffectInput[];
 }
 
+export type SequenceOrder = 1 | 2 | 3 | 4 | 5 | 6;
+export type SequenceNodeCode = 'S1' | 'S2' | 'S3' | 'S4' | 'S5' | 'S6';
+
+export interface SequenceNodeInput {
+  node_order: SequenceOrder;
+  node_code: SequenceNodeCode;
+  name: string;
+  description: string;
+  provenance_source_name: string;
+  effects?: GameplayEffectInput[];
+  nodeOrder?: SequenceOrder;
+  nodeCode?: SequenceNodeCode;
+  provenanceSourceName?: string;
+  provenanceId?: string;
+  provenance_id?: string;
+  patchId?: string;
+  patch_id?: string;
+  patch_version?: string;
+}
+
+export type RefinementRank = 'R1' | 'R2' | 'R3' | 'R4' | 'R5';
+
+export type RefinementScaling = Partial<Record<RefinementRank, Record<string, unknown>>>;
+
 export interface ResonatorRoleAssignment {
   code: string;
   is_primary: boolean;
@@ -126,6 +150,8 @@ export interface ResonatorInput {
   release_date: string; // ISO date 'YYYY-MM-DD'
   patch_data: ResonatorPatchDataInput;
   abilities: AbilityInput[];
+  sequence_nodes?: SequenceNodeInput[];
+  sequences?: SequenceNodeInput[];
 }
 
 export interface WeaponPatchDataInput {
@@ -133,6 +159,7 @@ export interface WeaponPatchDataInput {
   sub_stat_type: string;
   sub_stat_value_lvl90: number;
   passive_effect?: GameplayEffectInput | null;
+  refinement_scaling?: RefinementScaling | null;
   provenance_source_name: string;
 }
 
@@ -294,6 +321,9 @@ export interface IngestionCounts {
   resonatorCombatTags: number;
   abilities: number;
   abilityPatchData: number;
+  resonatorSequences: number;
+  resonatorSequencePatchData: number;
+  resonatorSequenceEffects: number;
   gameplayEffects: number;
   abilityEffects: number;
   weapons: number;

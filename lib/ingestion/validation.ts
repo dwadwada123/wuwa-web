@@ -12,7 +12,12 @@ import type {
   GameplayEffectTarget,
   EnemyClass,
   ResistanceElement,
-  ModifierType
+  ModifierType,
+  SequenceOrder,
+  SequenceNodeCode,
+  SequenceNodeInput,
+  RefinementRank,
+  RefinementScaling
 } from './types';
 
 export const VALID_ELEMENTS = new Set<Element>([
@@ -124,6 +129,354 @@ export const VALID_EFFECT_TARGETS = new Set<GameplayEffectTarget>([
   'TEAM',
   'ENEMY'
 ]);
+
+export const VALID_SEQUENCE_ORDERS = new Set<SequenceOrder>([1, 2, 3, 4, 5, 6]);
+
+export const VALID_SEQUENCE_CODES = new Map<SequenceOrder, SequenceNodeCode>([
+  [1, 'S1'],
+  [2, 'S2'],
+  [3, 'S3'],
+  [4, 'S4'],
+  [5, 'S5'],
+  [6, 'S6']
+]);
+
+export const VALID_REFINEMENT_RANKS = new Set<RefinementRank>(['R1', 'R2', 'R3', 'R4', 'R5']);
+
+export const FORBIDDEN_PROVENANCE_NAMES = new Set<string>([
+  'unknown',
+  'n/a',
+  'na',
+  'generated',
+  'system',
+  'placeholder',
+  'none',
+  'null',
+  'undefined'
+]);
+
+export function validateSequenceNode(
+  node: unknown,
+  context?: {
+    patchVersion?: string;
+    provenanceNames?: Set<string>;
+    resonatorName?: string;
+    pathPrefix?: string;
+  }
+): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const prefix = context?.pathPrefix ?? 'sequence_node';
+
+  if (!node || typeof node !== 'object') {
+    errors.push({ path: prefix, message: 'Sequence node must be an object' });
+    return errors;
+  }
+
+  const n = node as Record<string, unknown>;
+  const rawOrder = n.node_order ?? n.nodeOrder;
+  const rawCode = n.node_code ?? n.nodeCode;
+  const rawName = n.name;
+  const rawDesc = n.description;
+  const rawProv = n.provenance_source_name ?? n.provenanceSourceName ?? n.provenanceId ?? n.provenance_id;
+  const rawPatch = n.patch_version ?? n.patch_id ?? n.patchId;
+
+  // 1. node_order
+  if (
+    rawOrder === undefined ||
+    rawOrder === null ||
+    typeof rawOrder !== 'number' ||
+    !Number.isInteger(rawOrder) ||
+    !VALID_SEQUENCE_ORDERS.has(rawOrder as SequenceOrder)
+  ) {
+    errors.push({
+      path: `${prefix}.node_order`,
+      message: `Invalid node_order: ${rawOrder}. Must be an integer between 1 and 6.`
+    });
+  }
+
+  // 2. node_code & consistency
+  const expectedCode =
+    typeof rawOrder === 'number' && Number.isInteger(rawOrder)
+      ? VALID_SEQUENCE_CODES.get(rawOrder as SequenceOrder)
+      : undefined;
+
+  if (typeof rawCode !== 'string' || !['S1', 'S2', 'S3', 'S4', 'S5', 'S6'].includes(rawCode)) {
+    errors.push({
+      path: `${prefix}.node_code`,
+      message: `Invalid node_code: ${rawCode}. Must be one of S1, S2, S3, S4, S5, S6.`
+    });
+  } else if (expectedCode && rawCode !== expectedCode) {
+    errors.push({
+      path: `${prefix}.node_code`,
+      message: `Mismatched node_order ${rawOrder} and node_code '${rawCode}'. Expected '${expectedCode}'.`
+    });
+  }
+
+  // 3. Name
+  if (typeof rawName !== 'string' || rawName.trim().length === 0) {
+    errors.push({ path: `${prefix}.name`, message: 'Sequence node name is required and cannot be empty' });
+  }
+
+  // 4. Description
+  if (typeof rawDesc !== 'string' || rawDesc.trim().length === 0) {
+    errors.push({ path: `${prefix}.description`, message: 'Sequence node description is required and cannot be empty' });
+  }
+
+  // 5. Provenance
+  if (!rawProv || typeof rawProv !== 'string' || (rawProv as string).trim().length === 0) {
+    errors.push({
+      path: `${prefix}.provenance_source_name`,
+      message: `Missing provenance source for sequence node ${rawCode ?? rawOrder ?? ''}`
+    });
+  } else {
+    const provTrimmed = (rawProv as string).trim();
+    if (FORBIDDEN_PROVENANCE_NAMES.has(provTrimmed.toLowerCase())) {
+      errors.push({
+        path: `${prefix}.provenance_source_name`,
+        message: `Forbidden fake/placeholder provenance source: '${provTrimmed}'`
+      });
+    } else if (context?.provenanceNames && !context.provenanceNames.has(provTrimmed)) {
+      errors.push({
+        path: `${prefix}.provenance_source_name`,
+        message: `Missing or unregistered provenance source for sequence node: ${provTrimmed}`
+      });
+    }
+  }
+
+  // 6. Patch Isolation
+  if (context?.patchVersion && rawPatch && typeof rawPatch === 'string') {
+    if (rawPatch !== context.patchVersion) {
+      errors.push({
+        path: `${prefix}.patch_version`,
+        message: `Cross-patch reference rejected: sequence node belongs to patch '${rawPatch}' but current dataset is '${context.patchVersion}'`
+      });
+    }
+  }
+
+  // 7. Effects
+  if (n.effects !== undefined && n.effects !== null) {
+    if (!Array.isArray(n.effects)) {
+      errors.push({ path: `${prefix}.effects`, message: 'effects must be an array' });
+    } else {
+      const effectOrders = new Set<number>();
+      n.effects.forEach((eff: unknown, effIdx: number) => {
+        const effPath = `${prefix}.effects[${effIdx}]`;
+        if (!eff || typeof eff !== 'object') {
+          errors.push({ path: effPath, message: 'GameplayEffect must be an object' });
+          return;
+        }
+
+        const e = eff as Record<string, unknown>;
+        if (!VALID_EFFECT_CATEGORIES.has(e.category as GameplayEffectCategory)) {
+          errors.push({ path: `${effPath}.category`, message: `Invalid gameplay effect category: ${e.category}` });
+        }
+        if (!VALID_EFFECT_TARGETS.has(e.target as GameplayEffectTarget)) {
+          errors.push({ path: `${effPath}.target`, message: `Invalid gameplay effect target: ${e.target}` });
+        }
+
+        const effProv = e.provenance_source_name ?? e.provenanceSourceName ?? rawProv;
+        if (!effProv || typeof effProv !== 'string' || (effProv as string).trim().length === 0) {
+          errors.push({ path: `${effPath}.provenance_source_name`, message: 'Gameplay effect provenance is required' });
+        } else {
+          const effProvTrimmed = (effProv as string).trim();
+          if (FORBIDDEN_PROVENANCE_NAMES.has(effProvTrimmed.toLowerCase())) {
+            errors.push({
+              path: `${effPath}.provenance_source_name`,
+              message: `Forbidden fake/placeholder provenance source: '${effProvTrimmed}'`
+            });
+          } else if (context?.provenanceNames && !context.provenanceNames.has(effProvTrimmed)) {
+            errors.push({
+              path: `${effPath}.provenance_source_name`,
+              message: `Missing or unregistered provenance source for gameplay effect: ${effProvTrimmed}`
+            });
+          }
+        }
+
+        const order = typeof e.effect_order === 'number' ? e.effect_order : effIdx + 1;
+        if (order <= 0 || !Number.isInteger(order)) {
+          errors.push({ path: `${effPath}.effect_order`, message: 'effect_order must be an integer > 0' });
+        } else {
+          if (effectOrders.has(order)) {
+            errors.push({ path: `${effPath}.effect_order`, message: `Duplicate effect_order ${order} in sequence node` });
+          }
+          effectOrders.add(order);
+        }
+
+        const effPatch = e.patch_version ?? e.patch_id ?? e.patchId;
+        if (context?.patchVersion && effPatch && typeof effPatch === 'string') {
+          if (effPatch !== context.patchVersion) {
+            errors.push({
+              path: `${effPath}.patch_version`,
+              message: `Cross-patch effect reference rejected: effect belongs to patch '${effPatch}' but sequence node belongs to patch '${context.patchVersion}'`
+            });
+          }
+        }
+      });
+    }
+  }
+
+  return errors;
+}
+
+export function validateSequenceNodes(
+  nodes: unknown,
+  context?: {
+    patchVersion?: string;
+    provenanceNames?: Set<string>;
+    resonatorName?: string;
+    pathPrefix?: string;
+  }
+): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const prefix = context?.pathPrefix ?? 'sequence_nodes';
+  const resName = context?.resonatorName ?? 'resonator';
+
+  if (nodes === undefined || nodes === null) {
+    return errors;
+  }
+
+  if (!Array.isArray(nodes)) {
+    errors.push({ path: prefix, message: 'sequence_nodes must be an array' });
+    return errors;
+  }
+
+  const seenOrders = new Set<number>();
+  const seenCodes = new Set<string>();
+
+  nodes.forEach((node, idx) => {
+    const nodePrefix = `${prefix}[${idx}]`;
+    const nodeErrors = validateSequenceNode(node, {
+      ...context,
+      pathPrefix: nodePrefix,
+    });
+    errors.push(...nodeErrors);
+
+    if (node && typeof node === 'object') {
+      const n = node as Record<string, unknown>;
+      const order = n.node_order ?? n.nodeOrder;
+      const code = n.node_code ?? n.nodeCode;
+
+      if (typeof order === 'number' && Number.isInteger(order)) {
+        if (seenOrders.has(order)) {
+          errors.push({
+            path: `${nodePrefix}.node_order`,
+            message: `Duplicate node_order ${order} for resonator ${resName}`
+          });
+        }
+        seenOrders.add(order);
+      }
+
+      if (typeof code === 'string') {
+        if (seenCodes.has(code)) {
+          errors.push({
+            path: `${nodePrefix}.node_code`,
+            message: `Duplicate node_code '${code}' for resonator ${resName}`
+          });
+        }
+        seenCodes.add(code);
+      }
+    }
+  });
+
+  return errors;
+}
+
+export function validateRefinementScaling(
+  scaling: unknown,
+  context?: {
+    weaponName?: string;
+    pathPrefix?: string;
+  }
+): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const prefix = context?.pathPrefix ?? 'refinement_scaling';
+  const wName = context?.weaponName ?? 'weapon';
+
+  if (scaling === undefined || scaling === null) {
+    return errors;
+  }
+
+  if (typeof scaling !== 'object' || Array.isArray(scaling)) {
+    errors.push({ path: prefix, message: `refinement_scaling for ${wName} must be an object` });
+    return errors;
+  }
+
+  const ranks = Object.keys(scaling);
+  if (ranks.length === 0) {
+    errors.push({
+      path: prefix,
+      message: `refinement_scaling for ${wName} claims numerical scaling but contains no rank definitions`
+    });
+    return errors;
+  }
+
+  const FORBIDDEN_FLAGS = ['inferred', 'derived', 'synthetic', 'interpolated', 'extrapolated', 'estimated'];
+  const FORBIDDEN_PARAM_KEYS = ['multiplier', 'scale_factor', 'power_multiplier', 'power_mult'];
+
+  for (const rankKey of ranks) {
+    const rankPath = `${prefix}.${rankKey}`;
+
+    if (!VALID_REFINEMENT_RANKS.has(rankKey as RefinementRank)) {
+      errors.push({
+        path: rankPath,
+        message: `Invalid refinement rank '${rankKey}'. Valid ranks are R1, R2, R3, R4, R5.`
+      });
+      continue;
+    }
+
+    const rankValue = (scaling as Record<string, unknown>)[rankKey];
+    if (!rankValue || typeof rankValue !== 'object' || Array.isArray(rankValue)) {
+      errors.push({
+        path: rankPath,
+        message: `Refinement rank ${rankKey} for ${wName} must be a non-null object of verified parameters`
+      });
+      continue;
+    }
+
+    const rankObj = rankValue as Record<string, unknown>;
+    const paramEntries = Object.entries(rankObj);
+
+    if (paramEntries.length === 0) {
+      errors.push({
+        path: rankPath,
+        message: `Refinement rank ${rankKey} for ${wName} cannot be empty`
+      });
+      continue;
+    }
+
+    // Check for derived / inferred flags
+    for (const flag of FORBIDDEN_FLAGS) {
+      if (flag in rankObj && Boolean(rankObj[flag])) {
+        errors.push({
+          path: `${rankPath}.${flag}`,
+          message: `Refinement rank ${rankKey} for ${wName} contains forbidden '${flag}' flag. Only explicit verified source values are allowed.`
+        });
+      }
+    }
+
+    // Check for synthetic multiplier keys or formulas
+    for (const [paramKey, paramVal] of paramEntries) {
+      const lowerKey = paramKey.toLowerCase();
+      if (FORBIDDEN_PARAM_KEYS.includes(lowerKey)) {
+        errors.push({
+          path: `${rankPath}.${paramKey}`,
+          message: `Refinement rank ${rankKey} for ${wName} contains forbidden synthetic multiplier '${paramKey}'`
+        });
+      }
+
+      if (typeof paramVal === 'string') {
+        if (paramVal.includes('${') || paramVal.includes('*') || paramVal.includes('+')) {
+          errors.push({
+            path: `${rankPath}.${paramKey}`,
+            message: `Refinement rank ${rankKey} for ${wName} contains unverified formula expression '${paramVal}'. Concrete numerical values required.`
+          });
+        }
+      }
+    }
+  }
+
+  return errors;
+}
 
 export interface ValidationError {
   path: string;
@@ -393,6 +746,18 @@ export function validatePatchDataset(data: unknown): ValidationResult {
           }
         });
       }
+
+      // Sequence Nodes Validation (Optional: undefined supported, validated if present)
+      const seqNodes = res.sequence_nodes ?? res.sequences;
+      if (seqNodes !== undefined && seqNodes !== null) {
+        const seqErrors = validateSequenceNodes(seqNodes, {
+          patchVersion: dataset.patch?.version,
+          provenanceNames,
+          resonatorName: res.name,
+          pathPrefix: `${resPath}.sequence_nodes`
+        });
+        errors.push(...seqErrors);
+      }
     });
   }
 
@@ -445,6 +810,21 @@ export function validatePatchDataset(data: unknown): ValidationResult {
             });
           }
 
+          // Refinement Scaling Validation on patch_data
+          if (pd.refinement_scaling) {
+            const refErrors = validateRefinementScaling(pd.refinement_scaling, {
+              weaponName: w.name,
+              pathPrefix: `${wPath}.patch_data.refinement_scaling`
+            });
+            errors.push(...refErrors);
+            if (!pd.passive_effect) {
+              errors.push({
+                path: `${wPath}.patch_data.refinement_scaling`,
+                message: `Weapon ${w.name} specifies refinement_scaling but has no passive_effect to scale`
+              });
+            }
+          }
+
           if (pd.passive_effect) {
             const eff = pd.passive_effect;
             if (!VALID_EFFECT_CATEGORIES.has(eff.category)) {
@@ -458,6 +838,24 @@ export function validatePatchDataset(data: unknown): ValidationResult {
                 path: `${wPath}.patch_data.passive_effect.provenance_source_name`,
                 message: `Missing or unregistered provenance source for weapon passive effect: ${eff.provenance_source_name}`
               });
+            }
+
+            // Refinement Scaling in detail_expression
+            if (eff.detail_expression && eff.detail_expression.refinement_scaling) {
+              const refErrors = validateRefinementScaling(eff.detail_expression.refinement_scaling, {
+                weaponName: w.name,
+                pathPrefix: `${wPath}.patch_data.passive_effect.detail_expression.refinement_scaling`
+              });
+              errors.push(...refErrors);
+
+              if (pd.refinement_scaling) {
+                if (JSON.stringify(pd.refinement_scaling) !== JSON.stringify(eff.detail_expression.refinement_scaling)) {
+                  errors.push({
+                    path: `${wPath}.patch_data.refinement_scaling`,
+                    message: `Conflicting refinement_scaling definitions between weapon patch_data and passive_effect detail_expression for ${w.name}`
+                  });
+                }
+              }
             }
           }
         }
