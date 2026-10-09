@@ -431,6 +431,87 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"resonator_sequence_effects": {
+                  Row: {
+                    "effect_id": string,"effect_order": number,"id": string,"patch_id": string,"sequence_patch_id": string
+                  }
+                  Insert: {
+                    "effect_id": string,"effect_order"?: number,"id"?: string,"patch_id": string,"sequence_patch_id": string
+                  }
+                  Update: {
+                    "effect_id"?: string,"effect_order"?: number,"id"?: string,"patch_id"?: string,"sequence_patch_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "resonator_sequence_effects_gameplay_effect_fkey"
+      columns: ["effect_id","patch_id"]
+isOneToOne: false
+      referencedRelation: "gameplay_effects"
+      referencedColumns: ["id","patch_id"]
+    },{
+      foreignKeyName: "resonator_sequence_effects_patch_id_fkey"
+      columns: ["patch_id"]
+isOneToOne: false
+      referencedRelation: "patches"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "resonator_sequence_effects_sequence_patch_fkey"
+      columns: ["sequence_patch_id","patch_id"]
+isOneToOne: false
+      referencedRelation: "resonator_sequence_patch_data"
+      referencedColumns: ["id","patch_id"]
+    }
+                  ]
+                },"resonator_sequence_patch_data": {
+                  Row: {
+                    "created_at": string,"description": string,"id": string,"name": string,"patch_id": string,"provenance_id": string | null,"sequence_id": string
+                  }
+                  Insert: {
+                    "created_at"?: string,"description": string,"id"?: string,"name": string,"patch_id": string,"provenance_id"?: string | null,"sequence_id": string
+                  }
+                  Update: {
+                    "created_at"?: string,"description"?: string,"id"?: string,"name"?: string,"patch_id"?: string,"provenance_id"?: string | null,"sequence_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "resonator_sequence_patch_data_patch_id_fkey"
+      columns: ["patch_id"]
+isOneToOne: false
+      referencedRelation: "patches"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "resonator_sequence_patch_data_provenance_id_fkey"
+      columns: ["provenance_id"]
+isOneToOne: false
+      referencedRelation: "provenance_sources"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "resonator_sequence_patch_data_sequence_id_fkey"
+      columns: ["sequence_id"]
+isOneToOne: false
+      referencedRelation: "resonator_sequences"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"resonator_sequences": {
+                  Row: {
+                    "created_at": string,"id": string,"node_code": string,"node_order": number,"resonator_id": string
+                  }
+                  Insert: {
+                    "created_at"?: string,"id"?: string,"node_code": string,"node_order": number,"resonator_id": string
+                  }
+                  Update: {
+                    "created_at"?: string,"id"?: string,"node_code"?: string,"node_order"?: number,"resonator_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "resonator_sequences_resonator_id_fkey"
+      columns: ["resonator_id"]
+isOneToOne: false
+      referencedRelation: "resonators"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"resonators": {
                   Row: {
                     "created_at": string,"element": string,"id": string,"name": string,"rarity": number,"release_date": string,"weapon_type": string
