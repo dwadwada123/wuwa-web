@@ -21,15 +21,26 @@ async function triggerRevalidate() {
   }
 }
 
+export interface DefaultBuildInput {
+  level?: number;
+  waveband?: number;
+  weaponId?: string;
+  weaponLevel?: number;
+  weaponRefinement?: number;
+  sonataId?: string;
+}
+
 /**
  * Server action to toggle ownership of a Resonator for the authenticated user.
  * Authorizes user via Supabase session claims; client cannot spoof userId.
+ * When adding, automatically configures intelligent default builds (Level 90, signature weapon Lv 90, sonata).
  */
 export async function toggleResonatorOwnership(
   resonatorId: string,
   currentlyOwned: boolean,
+  defaultBuild?: DefaultBuildInput,
   options?: { supabase?: any }
-): Promise<{ success: boolean; error?: string }> {
+): Promise<{ success: boolean; error?: string; userResonatorId?: string }> {
   try {
     const supabase = await getSupabaseClient(options);
     const { data, error: authError } = await supabase.auth.getClaims();
@@ -46,17 +57,155 @@ export async function toggleResonatorOwnership(
 
     if (currentlyOwned) {
       await repo.removeOwnedResonator(userId, resonatorId);
+      await triggerRevalidate();
+      return { success: true };
     } else {
-      await repo.addOwnedResonator(userId, resonatorId);
-    }
+      // Default to Max level 90 when added
+      const charLevel = defaultBuild?.level ?? 90;
+      const charWaveband = defaultBuild?.waveband ?? 0;
 
-    await triggerRevalidate();
-    return { success: true };
+      const userRes = await repo.addOwnedResonator(userId, resonatorId, {
+        level: charLevel,
+        waveband: charWaveband,
+      });
+
+      // Auto-equip signature or fallback weapon at level 90 if provided
+      let weaponInstanceId: string | null = null;
+      if (defaultBuild?.weaponId) {
+        const wep = await repo.addOwnedWeapon(userId, defaultBuild.weaponId, {
+          level: defaultBuild.weaponLevel ?? 90,
+          refinement: defaultBuild.weaponRefinement ?? 1,
+        });
+        weaponInstanceId = wep.id;
+      }
+
+      // Auto-equip optimal sonata if provided
+      if (weaponInstanceId || defaultBuild?.sonataId) {
+        await repo.saveResonatorLoadout(userId, {
+          userResonatorId: userRes.id,
+          weaponInstanceId,
+          sonataId: defaultBuild?.sonataId ?? null,
+        });
+      }
+
+      await triggerRevalidate();
+      return { success: true, userResonatorId: userRes.id };
+    }
   } catch (err: any) {
     console.error('[toggleResonatorOwnership] Error:', err);
     return {
       success: false,
       error: 'Failed to update resonator ownership. Please try again.',
+    };
+  }
+}
+
+/**
+ * Server action to batch remove resonators from user inventory.
+ * Guarantees atomic deletion and immediately cascades loadout cleanup.
+ */
+export async function batchRemoveResonatorsAction(
+  resonatorIds: string[],
+  options?: { supabase?: any }
+): Promise<{ success: boolean; count?: number; error?: string }> {
+  try {
+    const supabase = await getSupabaseClient(options);
+    const { data, error: authError } = await supabase.auth.getClaims();
+
+    if (authError || !data?.claims?.sub) {
+      return { success: false, error: 'Unauthorized: active session required.' };
+    }
+
+    const userId = data.claims.sub as string;
+    if (!Array.isArray(resonatorIds) || resonatorIds.length === 0) {
+      return { success: false, error: 'No resonators selected for removal.' };
+    }
+
+    const { error: deleteError } = await supabase
+      .from('user_resonators')
+      .delete()
+      .eq('user_id', userId)
+      .in('resonator_id', resonatorIds);
+
+    if (deleteError) {
+      return { success: false, error: deleteError.message };
+    }
+
+    await triggerRevalidate();
+    return { success: true, count: resonatorIds.length };
+  } catch (err: any) {
+    console.error('[batchRemoveResonatorsAction] Error:', err);
+    return {
+      success: false,
+      error: err.message || 'Failed to batch remove resonators.',
+    };
+  }
+}
+
+/**
+ * Server action to batch add multiple resonators with intelligent default builds.
+ */
+export async function batchAddResonatorsAction(
+  items: Array<{
+    resonatorId: string;
+    level?: number;
+    waveband?: number;
+    weaponId?: string;
+    weaponLevel?: number;
+    weaponRefinement?: number;
+    sonataId?: string;
+  }>,
+  options?: { supabase?: any }
+): Promise<{ success: boolean; count?: number; error?: string }> {
+  try {
+    const supabase = await getSupabaseClient(options);
+    const { data, error: authError } = await supabase.auth.getClaims();
+
+    if (authError || !data?.claims?.sub) {
+      return { success: false, error: 'Unauthorized: active session required.' };
+    }
+
+    const userId = data.claims.sub as string;
+    if (!Array.isArray(items) || items.length === 0) {
+      return { success: false, error: 'No resonators provided for batch addition.' };
+    }
+
+    const { SupabaseUserInventoryRepository } = await import(
+      '../../lib/data-access/repositories/user-inventory-repository.ts'
+    );
+    const repo = new SupabaseUserInventoryRepository(supabase);
+
+    for (const item of items) {
+      const userRes = await repo.addOwnedResonator(userId, item.resonatorId, {
+        level: item.level ?? 90,
+        waveband: item.waveband ?? 0,
+      });
+
+      let weaponInstanceId: string | null = null;
+      if (item.weaponId) {
+        const wep = await repo.addOwnedWeapon(userId, item.weaponId, {
+          level: item.weaponLevel ?? 90,
+          refinement: item.weaponRefinement ?? 1,
+        });
+        weaponInstanceId = wep.id;
+      }
+
+      if (weaponInstanceId || item.sonataId) {
+        await repo.saveResonatorLoadout(userId, {
+          userResonatorId: userRes.id,
+          weaponInstanceId,
+          sonataId: item.sonataId ?? null,
+        });
+      }
+    }
+
+    await triggerRevalidate();
+    return { success: true, count: items.length };
+  } catch (err: any) {
+    console.error('[batchAddResonatorsAction] Error:', err);
+    return {
+      success: false,
+      error: err.message || 'Failed to batch add resonators.',
     };
   }
 }

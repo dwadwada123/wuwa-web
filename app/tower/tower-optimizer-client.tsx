@@ -110,24 +110,23 @@ export function TowerOptimizerClient({
 
       {/* Insufficient Inventory Warning Banner */}
       {isInventoryInsufficient && (
-        <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-5 space-y-3">
+        <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-5 space-y-3 shadow-sm">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-3 w-3 rounded-full bg-amber-400" />
+            <span className="flex h-3 w-3 rounded-full bg-amber-400 animate-ping" />
             <h3 className="text-sm font-bold text-amber-300">
-              Insufficient Resonators in Roster
+              Roster Chưa Đủ Nhân Vật Để Tạo Đội Hình
             </h3>
           </div>
           <p className="text-xs text-amber-200/90 leading-relaxed">
-            You currently have only <strong>{ownedResonatorsCount}</strong> Resonator(s) marked
-            as owned in your inventory. A valid Tower of Adversity team requires at least 3 Resonators. Please add
-            more Resonators to your inventory before optimizing.
+            Bạn hiện chỉ có <strong>{ownedResonatorsCount}</strong> nhân vật trong Roster. Tower of Adversity yêu cầu tối thiểu <strong>3 nhân vật</strong> để lập thành 1 đội hình hợp lệ tham gia chiến đấu. Vui lòng bổ sung thêm ít nhất <strong>{3 - ownedResonatorsCount} nhân vật</strong> nữa vào Roster trước khi thực hiện tối ưu hóa tự động.
           </p>
           <div>
             <Link
               href="/inventory"
-              className="inline-flex items-center rounded-lg bg-amber-500 px-3.5 py-2 text-xs font-bold text-background hover:bg-amber-400 transition-colors shadow-sm"
+              prefetch={true}
+              className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2 text-xs font-bold text-background hover:bg-amber-400 transition-colors shadow-sm"
             >
-              Add Resonators in Inventory →
+              <span>+ Thêm Nhân Vật Trong Kho Roster →</span>
             </Link>
           </div>
         </div>
@@ -137,7 +136,7 @@ export function TowerOptimizerClient({
       {errorMessage && (
         <div className="rounded-xl border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="font-bold">Error:</span>
+            <span className="font-bold">Lỗi:</span>
             <span>{errorMessage}</span>
           </div>
           <button
@@ -145,7 +144,7 @@ export function TowerOptimizerClient({
             onClick={() => setErrorMessage(null)}
             className="text-xs underline hover:text-destructive/80 shrink-0 ml-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive rounded"
           >
-            Dismiss
+            Đóng
           </button>
         </div>
       )}
@@ -172,41 +171,45 @@ export function TowerOptimizerClient({
           disabled={isPending}
         />
 
-        {/* Action Execution Bar */}
-        <div className="rounded-xl border border-border/80 bg-card p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-sm">
-          <div>
-            <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              Recommendation Engine Execution
+        {/* Dedicated Auto-Build Team from Roster Section (Requirement 4) */}
+        <div className="rounded-2xl border-2 border-primary/40 bg-gradient-to-r from-card via-card/90 to-primary/10 p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-5 shadow-lg shadow-primary/5">
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-2 rounded-full bg-primary/15 border border-primary/30 px-3 py-0.5 text-xs font-bold text-primary">
+              <span>⚡ TÍNH NĂNG CHỦ ĐẠO</span>
             </div>
-            <div className="text-sm font-semibold text-foreground flex items-center gap-2 mt-0.5">
-              <span>Deterministic Rule Pipeline</span>
-              <span className="text-xs text-muted-foreground font-normal">
-                (Steps 13, 19–24 Integrated)
-              </span>
-            </div>
+            <h2 className="text-lg sm:text-xl font-extrabold text-foreground tracking-tight">
+              Tự Động Xây Team Từ Roster Đang Sở Hữu
+            </h2>
+            <p className="text-xs text-muted-foreground max-w-xl leading-relaxed">
+              Sử dụng danh sách {ownedResonatorsCount} nhân vật bạn thực sự sở hữu và Recommendation Engine Phase 7 để tự động phân bổ đội hình tối ưu, gán vai trò từng thành viên và tính toán thể lực Vigor cho từng tầng tháp.
+            </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 shrink-0">
             {isPending && (
               <span className="text-xs text-primary animate-pulse font-medium">
-                {loadingStep || 'Evaluating…'}
+                {loadingStep || 'Đang tính toán đề xuất…'}
               </span>
             )}
 
             <button
               type="button"
+              id="btn-auto-build-team"
               onClick={handleRunOptimization}
               disabled={isPending || isInventoryInsufficient}
-              aria-label="Run Optimization"
-              className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-xs font-bold text-primary-foreground hover:bg-primary/90 transition-all shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Tự động xây team từ roster"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground hover:bg-primary/90 transition-all shadow-lg shadow-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {isPending ? (
                 <span className="flex items-center gap-2">
-                  <span className="h-3 w-3 rounded-full border-2 border-primary-foreground border-t-transparent animate-spin" />
-                  Running Optimization…
+                  <span className="h-4 w-4 rounded-full border-2 border-primary-foreground border-t-transparent animate-spin" />
+                  Đang tạo team tự động…
                 </span>
               ) : (
-                'Run Optimization →'
+                <>
+                  <span>⚡ Tự động xây team từ Roster</span>
+                  <span>→</span>
+                </>
               )}
             </button>
           </div>

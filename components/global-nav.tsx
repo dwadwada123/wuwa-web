@@ -76,6 +76,7 @@ export function GlobalNav() {
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={true}
                 aria-current={isActive ? 'page' : undefined}
                 className={`rounded-lg px-3.5 py-2 text-xs font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                   isActive
@@ -94,6 +95,7 @@ export function GlobalNav() {
           {pathname !== '/tower' && (
             <Link
               href="/tower"
+              prefetch={true}
               className="inline-flex items-center justify-center rounded-lg bg-primary px-3.5 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               Tower Solver →

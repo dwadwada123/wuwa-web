@@ -28,6 +28,9 @@ const ELEMENT_COLORS: Record<string, { bg: string; text: string; border: string 
   Havoc: { bg: 'bg-fuchsia-500/10', text: 'text-fuchsia-400', border: 'border-fuchsia-500/30' },
 };
 
+import { ElementIcon } from '@/components/element-icon';
+import { resolveResonatorDefaultBuild } from '@/lib/inventory/default-builds';
+
 export function ResonatorEditDrawer({
   resonator,
   availableWeapons,
@@ -37,28 +40,44 @@ export function ResonatorEditDrawer({
   onClose,
   onSaved,
 }: ResonatorEditDrawerProps) {
-  // Form states initialized strictly from saved investment without assuming level 90
+  const defaultBuild = resolveResonatorDefaultBuild(resonator, availableWeapons, availableSonatas);
+
+  // Form states initialized strictly from saved investment or smart default Lv.90
   const [characterLevel, setCharacterLevel] = useState<number>(
-    currentInvestment?.level ?? 1
+    currentInvestment?.level ?? 90
   );
   const [sequenceLevel, setSequenceLevel] = useState<number>(
     currentInvestment?.waveband ?? 0
   );
   const [selectedWeaponId, setSelectedWeaponId] = useState<string>(
-    currentInvestment?.weapon?.weaponId ?? ''
+    currentInvestment?.weapon?.weaponId ?? defaultBuild.weapon?.id ?? ''
   );
   const [weaponLevel, setWeaponLevel] = useState<number>(
-    currentInvestment?.weapon?.level ?? 1
+    currentInvestment?.weapon?.level ?? 90
   );
   const [weaponRefinement, setWeaponRefinement] = useState<number>(
-    currentInvestment?.weapon?.refinement ?? 1
+    currentInvestment?.weapon?.refinement ?? (defaultBuild.weapon?.rarity === 5 ? 1 : 5)
   );
   const [selectedSonataId, setSelectedSonataId] = useState<string>(
-    currentInvestment?.sonata?.sonataId ?? ''
+    currentInvestment?.sonata?.sonataId ?? defaultBuild.sonata?.id ?? ''
   );
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  const handleApplyDefaultBuild = () => {
+    setCharacterLevel(90);
+    setSequenceLevel(currentInvestment?.waveband ?? 0);
+    if (defaultBuild.weapon) {
+      setSelectedWeaponId(defaultBuild.weapon.id);
+      setWeaponLevel(90);
+      setWeaponRefinement(defaultBuild.weapon.rarity === 5 ? 1 : 5);
+    }
+    if (defaultBuild.sonata) {
+      setSelectedSonataId(defaultBuild.sonata.id);
+    }
+  };
+
 
   // Re-sync form state whenever the target resonator or currentInvestment changes
   useEffect(() => {
@@ -247,6 +266,25 @@ export function ResonatorEditDrawer({
         {/* Form */}
         <form onSubmit={handleSubmit} className="mt-6 space-y-6 flex-1 flex flex-col justify-between">
           <div className="space-y-6">
+            {/* Quick Auto-Fill Default Build Banner */}
+            <div className="rounded-xl border border-primary/30 bg-primary/10 p-3.5 flex items-center justify-between gap-3 shadow-xs">
+              <div>
+                <div className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                  <span>⚡ Build Mặc Định Đề Xuất</span>
+                </div>
+                <div className="text-[11px] text-muted-foreground mt-0.5">
+                  Lv.90 • {defaultBuild.weapon?.name || 'Vũ khí 5★'} ({defaultBuild.weaponLabel}) • {defaultBuild.sonata?.name || 'Sonata'}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={handleApplyDefaultBuild}
+                className="shrink-0 rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground hover:bg-primary/90 transition-all shadow-xs"
+              >
+                Áp dụng ngay
+              </button>
+            </div>
+
             {/* Section 1: Character Investment */}
             <div className="space-y-4 rounded-xl border border-border/70 bg-secondary/20 p-4">
               <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
