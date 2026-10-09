@@ -7,3 +7,4 @@ export * from './toa.ts';
 export * from './team.ts';
 export * from './rules.ts';
 export * from './user-inventory.ts';
+export * from './semantics.ts';

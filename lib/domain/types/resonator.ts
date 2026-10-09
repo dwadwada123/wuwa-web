@@ -27,6 +27,21 @@ export interface ResonatorAbility {
   effects: GameplayEffect[];
 }
 
+export type SequenceOrder = 1 | 2 | 3 | 4 | 5 | 6;
+
+export interface ResonanceSequence {
+  id: string;
+  resonatorId: string;
+  nodeOrder: SequenceOrder;
+  nodeCode: string;
+  name: string;
+  description: string;
+  provenanceId?: string | null;
+  effects: GameplayEffect[];
+}
+
+export type ResonanceSequenceNode = ResonanceSequence;
+
 export interface Resonator {
   id: string;
   name: string;
@@ -40,6 +55,7 @@ export interface Resonator {
   roles: FunctionalRole[];
   combatTags: CombatTag[];
   abilities: ResonatorAbility[];
+  sequenceNodes?: ResonanceSequence[];
 }
 
 export interface ResonatorBuild {
