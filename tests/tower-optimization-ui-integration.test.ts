@@ -15,9 +15,9 @@ import type {
 } from '../lib/domain/types/index.ts';
 import type { ToAOptimizationContext } from '../lib/engine/optimization/types.ts';
 import type {
-  TowerOptimizationViewModel,
-  TowerGroupViewModel,
-  StageCardViewModel,
+  LegacyTowerOptimizationViewModel as TowerOptimizationViewModel,
+  LegacyTowerGroupViewModel as TowerGroupViewModel,
+  LegacyStageCardViewModel as StageCardViewModel,
 } from '../app/tower/types.ts';
 
 import {
