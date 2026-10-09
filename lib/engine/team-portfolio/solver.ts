@@ -171,6 +171,43 @@ export function solveTeamPortfolio(
     }
 
     const synEval = synergyMap?.get(team.teamCandidateId);
+    let resolvedSynergyScore = synEval?.totalScore ?? null;
+    if (resolvedSynergyScore === null && synEval) {
+      const p = synEval.matchedPairCount;
+      const e = synEval.directionalEdgeCount;
+      if (p > 0 || e > 0) {
+        let roleBonus = 0;
+        const members = [mA, mB, mC];
+        const healers = ['Verina', 'Shorekeeper', 'The Shorekeeper', 'Baizhi', 'Youhu', 'Jianxin', 'Lucilla', 'Buling'];
+        const mainDps = ['Jinhsi', 'Camellya', 'Changli', 'Encore', 'Rover: Havoc', 'Rover: Spectro', 'Rover: Aero', 'Jiyan', 'Xiangli Yao', 'Calcharo', 'Lingyang', 'Chixia', 'Carlotta', 'Phoebe', 'Brant', 'Augusta', 'Aemeath', 'Phrolova', 'Danjin'];
+        const buffers = ['Yinlin', 'Sanhua', 'Zhezhi', 'Mortefi', 'Yangyang', 'Yangyang: Xuanling', 'Changli', 'Danjin', 'Taoqi', 'Aalto', 'Yuanwu', 'Lumi', 'Cantarella'];
+
+        let hCount = 0, dCount = 0, bCount = 0;
+        for (const m of members) {
+          if (healers.includes(m)) hCount++;
+          if (mainDps.includes(m)) dCount++;
+          if (buffers.includes(m)) bCount++;
+        }
+
+        if (hCount === 1 && dCount >= 1 && bCount >= 1) roleBonus += 50;
+        else if (hCount === 1 && dCount >= 1) roleBonus += 30;
+        else if (hCount > 1) roleBonus -= 60;
+        else if (dCount === 0) roleBonus -= 60;
+        else if (dCount > 2) roleBonus -= 40;
+
+        const has = (name: string) => members.includes(name);
+        if (has('Jinhsi') && has('Yinlin')) roleBonus += 35;
+        if (has('Jinhsi') && has('Zhezhi')) roleBonus += 35;
+        if (has('Camellya') && has('Sanhua')) roleBonus += 35;
+        if (has('Changli') && has('Encore')) roleBonus += 30;
+        if (has('Rover: Havoc') && has('Danjin')) roleBonus += 30;
+        if (has('Jiyan') && has('Mortefi')) roleBonus += 35;
+        if (has('Encore') && has('Sanhua')) roleBonus += 25;
+
+        resolvedSynergyScore = Math.max(0, p * 15 + e * 3 + roleBonus);
+      }
+    }
+
     eligibleItems.push({
       teamBuild: team,
       synergyEval: synEval,
@@ -181,7 +218,7 @@ export function solveTeamPortfolio(
       isFullyEquipped: team.status === 'FULLY_EQUIPPED',
       isPartiallyEquipped: team.status === 'PARTIALLY_EQUIPPED',
       knownAspects: team.completeness.knownTeamAspects,
-      synergyScore: synEval?.totalScore ?? null,
+      synergyScore: resolvedSynergyScore,
       matchedPairs: synEval?.matchedPairCount ?? 0,
       directionalEdges: synEval?.directionalEdgeCount ?? 0
     });

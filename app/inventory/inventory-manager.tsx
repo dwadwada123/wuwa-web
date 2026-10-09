@@ -14,6 +14,7 @@ import {
   getResonatorAvatarUrl,
   resolveResonatorDefaultBuild,
 } from '@/lib/inventory/default-builds';
+import { RosterTeamRecommendations } from './components/roster-team-recommendations';
 import type {
   CanonicalResonatorItem,
   CanonicalWeaponItem,
@@ -411,6 +412,11 @@ export function InventoryManager({
     return resonators.filter((r) => selectedIds.has(r.id) && ownedIds.has(r.id));
   }, [resonators, selectedIds, ownedIds]);
 
+  // All owned characters for reactive 3-character team recommendations
+  const ownedResonatorsList = useMemo(() => {
+    return resonators.filter((r) => ownedIds.has(r.id));
+  }, [resonators, ownedIds]);
+
   return (
     <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
       {/* Top Header Bar */}
@@ -481,6 +487,9 @@ export function InventoryManager({
           </button>
         </div>
       )}
+
+      {/* 3-Character Roster Team Recommendations Section (Requirement) */}
+      <RosterTeamRecommendations ownedResonators={ownedResonatorsList} />
 
       {/* Control Toolbar: Search, Filters, Sorting, Batch Actions */}
       <div className="space-y-4 rounded-xl border border-border/80 bg-card/60 backdrop-blur-xs p-4 sm:p-5 shadow-xs">

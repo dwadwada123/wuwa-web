@@ -41,17 +41,14 @@ function getBuildStatusBadge(status: string) {
   }
 }
 
-function getCharacterRole(name: string, memberIdx: number): { role: string; roleColor: string } {
+function getCharacterRole(name: string): { role: string; roleColor: string } {
   if (HEALER_RESONATORS.has(name)) {
-    return { role: 'Hồi phục (Sustainer)', roleColor: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30' };
+    return { role: '💚 Hồi phục (Sustainer)', roleColor: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30' };
   }
   if (BUFFER_RESONATORS.has(name)) {
-    return { role: 'Hỗ trợ (Sub-DPS / Buffer)', roleColor: 'text-sky-400 bg-sky-500/10 border-sky-500/30' };
+    return { role: '⚡ Hỗ trợ (Sub-DPS / Buffer)', roleColor: 'text-sky-400 bg-sky-500/10 border-sky-500/30' };
   }
-  if (memberIdx === 0) {
-    return { role: 'Sát thương chính (Main DPS)', roleColor: 'text-rose-400 bg-rose-500/10 border-rose-500/30' };
-  }
-  return { role: 'Sát thương phụ (Sub-DPS)', roleColor: 'text-amber-400 bg-amber-500/10 border-amber-500/30' };
+  return { role: '👑 Sát thương chính (Main DPS)', roleColor: 'text-rose-400 bg-rose-500/10 border-rose-500/30' };
 }
 
 export function TeamDisplay({ members }: TeamDisplayProps) {
@@ -65,14 +62,24 @@ export function TeamDisplay({ members }: TeamDisplayProps) {
     );
   }
 
+  // Sort members logically into standard combat order: Main DPS -> Sub-DPS -> Sustainer
+  const orderedMembers = [...members].sort((a, b) => {
+    const getPriority = (name: string) => {
+      if (HEALER_RESONATORS.has(name)) return 3;
+      if (BUFFER_RESONATORS.has(name)) return 2;
+      return 1;
+    };
+    return getPriority(a.resonatorId) - getPriority(b.resonatorId);
+  });
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-      {members.map((m, idx) => {
+      {orderedMembers.map((m, idx) => {
         const buildBadge = getBuildStatusBadge(m.buildStatus);
         const meta = CANONICAL_RESONATOR_METADATA[m.resonatorId];
         const element = meta?.element || 'Glacio';
         const is5Star = meta?.rarity === 5;
-        const roleInfo = getCharacterRole(m.resonatorId, idx);
+        const roleInfo = getCharacterRole(m.resonatorId);
         const avatarUrl = getResonatorAvatarUrl(m.resonatorId);
         const hasError = avatarErrors.has(m.resonatorId);
 
